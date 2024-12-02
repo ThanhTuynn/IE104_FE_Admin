@@ -4,7 +4,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
-}
 
 body {
     min-height: 100vh;
@@ -15,7 +14,7 @@ body {
     width: 270px;
     position: fixed;
     margin: 16px;
-    background:  #E87428;
+    background: #091057;
     height: calc(100vh - 32px);
     border-radius: 20px;
 }
@@ -40,7 +39,7 @@ body {
     height: 35px;
     width: 35px;
     border: none;
-    color:#E87428;
+    color:#091057;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,11 +76,12 @@ body {
     transition: 0.4s ease;
     margin-top: -5px;
     margin-bottom: 5px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
-.sidebar-nav .nav-link:hover {
-    color:#E87428;
+.sidebar-nav .nav-link:hover, 
+    .sidebar-nav .nav-link:active {
+    color:#091057;
     background: #FFFFFF;
 }
 
@@ -89,4 +89,5 @@ body {
     position: absolute;
     bottom: 10px;
     width: 100%;
+}
 }

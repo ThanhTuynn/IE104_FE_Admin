@@ -13,16 +13,17 @@
     align-items: center;
     margin-bottom: 20px; 
     .export-button {
-        background-color:  #ffe3d0;
-        color: #E87428;
+        background-color:  #cdd1ff;
+        color: #091057;
         border: none;
         margin-left: 10px;
         margin-right: 10px;
     }
     .export-button:hover {
       border-color:white;
-      background-color: #E87428;
+      background-color:#091057;
       color:  white;
+      color:#feedc7
     }
     .delete-all-button.active {
       color: white;
@@ -37,29 +38,30 @@
     align-items: center;
     margin-top: 20px;
     .filter-toggle-button {
-        background-color: #E87428;
-        border-color:  #E87428;
+        background-color: #091057;
+        border-color: #091057;
         color: white;
         margin-left: 10px;
     }
     .filter-toggle-button:hover {
-        background-color:  #ffe3d0;
-        color: #E87428;
+        background-color: #9fa6ef;
+        color:#091057;
         font-weight: bold;
         border: none;
     }
     .filter-btn {
-      margin-right: 10px;
+      margin-right: 2px;
     }
     .filter-btn:hover {
-      border-color: #E87428;
-      color:  #E87428;
+      border-color: #091057;
+      color:  #091057;
      }
     .filter-btn.active {
-        background-color: #ffe3d0;
-        border-color: #ffe3d0;
-        color:  #E87428;
+        background-color:  #cdd1ff;
+        border-color: #cdd1ff;
+        color: #091057;
         font-weight: bold;
+        color: rgb(221, 213, 199)
     }
   }
 .form-order-content {
@@ -76,19 +78,19 @@
   
   .product-section {
     flex: 1;
-    border-left: 1px solid #f0f0f0;
+    border-left: 1px solid  #cdd1ff;
     padding-left: 20px;
   }
 }
 
 .cancel-button {
-  background-color: #f0f0f0;
-  color: #E87428;
+  background-color: #cdd1ff;
+  color:  #091057;
   border: none;
 }
 
 .create-button {
-  background-color: #E87428;
+  background-color: #091057;
   color: white;
   border: none;
   margin-left: 20px;

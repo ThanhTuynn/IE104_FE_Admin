@@ -1,7 +1,7 @@
 .customer-page {
     margin-left: 270px;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #cdd1ff;
     min-height: 100vh;
     .customer-header {
       display: flex;
@@ -11,25 +11,25 @@
     }
     
     .add-order-button {
-      background-color: #E87428;
+      background-color:#091057;
       color:white;
       border: none;
     }
     .add-order-button:hover {
       background-color:white;
-      color:#E87428;
+      color: #091057;
       border: none;
     }
     
     .export-button {
-        background-color:  #ffe3d0;
-        color: #E87428;
+        background-color: #cdd1ff;
+        color:#091057;
         border: none;
         margin-left: 10px;
     }
     .export-button:hover {
       border-color:white;
-      background-color: #E87428;
+      background-color:#091057;
       color:  white;
     }
     
@@ -44,14 +44,14 @@
       margin-bottom: 20px;
 
         .filter-toggle-button {
-            background-color: #E87428;
-            border-color:  #E87428;
+            background-color:#091057;
+            border-color:  #091057;
             color: white;
             margin-left: 10px;
         }
         .filter-toggle-button:hover {
-            background-color:  #ffe3d0;
-            color: #E87428;
+            background-color: #cdd1ff;
+            color: #091057;
             font-weight: bold;
             border: none;
         }
@@ -60,13 +60,13 @@
             margin-right: 10px;
         }
         .filter-btn:hover {
-            border-color: #E87428;
-            color:  #E87428;
+            border-color:#091057;
+            color: #091057;
         }
         .filter-btn.active {
-            background-color: #ffe3d0;
-            border-color: #ffe3d0;
-            color:  #E87428;
+            background-color:#cdd1ff;
+            border-color: #cdd1ff;
+            color: #091057;
             font-weight: bold;
         }
         .delete-all-button.active {
@@ -84,7 +84,7 @@
     padding: 16px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color:#cdd1ff;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -121,6 +121,7 @@
         display: block;
         text-align: left;
         margin-top: 8px;
+        margin-left: -30px;
     }
   
     .card-details .info-row p {
@@ -138,13 +139,13 @@
         gap: 20%;
         margin-top:20px;
     .cancel-button {
-        background-color: #f0f0f0;
-        color:#E87428;
+        background-color:#cdd1ff;
+        color:#091057;
         border: none;
     }
     
     .create-button {
-        background-color: #E87428;
+        background-color: #091057;
         color: white;
         border: none;
         margin-left: 20px;
