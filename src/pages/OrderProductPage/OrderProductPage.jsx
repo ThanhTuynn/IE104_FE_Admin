@@ -1,74 +1,72 @@
 import React, { useState } from "react";
-import { Table, Button, Input, DatePicker, Select, Checkbox } from "antd";
+import { Table, Button, Input, DatePicker, Checkbox } from "antd";
 import { ExportOutlined, MenuOutlined, DeleteOutlined } from "@ant-design/icons";
 import Topbar from '../../components/TopbarComponent/TopbarComponent';
 import './OrderProductPage.css';
 
-const { Option } = Select;
-
 const OrderProduct = () => {
   const [filters, setFilters] = useState({
-    orderType: 'All order',
+    orderType: 'Tất cả đơn hàng',
     date: null,
     dateString: '',
   });
 
-  const [expandedRows, setExpandedRows] = useState({});
   const [selectedOrders, setSelectedOrders] = useState([]);
-  
-  const handleActionChange = (id, newAction) => {
-    const updatedData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, action: newAction };
-      }
-      return item;
-    });
-    setData(updatedData);
-  };
 
   const [data, setData] = useState([
     {
       id: "302012",
-      products: ["Nhẫn Kim Cương Vàng", "Dây chuyền Bạc"],
+      products: "Nhẫn Kim Cương Vàng, Lắc Tay Mạ Bạc, Vòng Tay Kim Cương",
       date: "29 Dec 2022",
       customer: "John Bushmill",
       total: "13,000,000",
       payment: "Mastercard",
-      action: "Xác nhận",
+      action: "Chờ xác nhận",
     },
     {
       id: "302011",
-      products: ["Nhẫn Cưới Vàng", "Vòng Tay Kim Cương"],
+      products: "Vòng Tay Kim Cương",
       date: "24 Dec 2022",
       customer: "Linda Blair",
       total: "10,000,000",
       payment: "Visa",
-      action: "Hủy",
+      action: "Đã hủy",
     },
     {
       id: "301901",
-      products: ["Lắc Tay Bạc"],
+      products: "Lắc Tay Bạc",
       date: "12 Dec 2022",
       customer: "M Karim",
       total: "5,000,000",
       payment: "Mastercard",
-      action: "Xác nhận",
+      action: "Đang vận chuyển",
+    },
+    {
+      id: "301911",
+      products: "Lắc Tay Bạc",
+      date: "12 Dec 2022",
+      customer: "M Karim",
+      total: "5,000,000",
+      payment: "Mastercard",
+      action: "Hoàn thành",
+    },
+    {
+      id: "301912",
+      products: "Lắc Tay Bạc",
+      date: "12 Dec 2022",
+      customer: "M Karim",
+      total: "5,000,000",
+      payment: "Mastercard",
+      action: "Trả hàng/Hoàn tiền",
     },
   ]);
 
   const filteredData = data.filter((item) => {
     return (
-      (filters.orderType === 'All order' || item.action === filters.orderType) &&
+      (filters.orderType === 'Tất cả đơn hàng' || item.action === filters.orderType) &&
       (filters.dateString ? item.date.includes(filters.dateString) : true)
     );
   });
-
-  const toggleExpandRow = (id) => {
-    setExpandedRows((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -79,7 +77,7 @@ const OrderProduct = () => {
   };
 
   const handleSelectOrder = (id) => {
-    setSelectedOrders((prev) => 
+    setSelectedOrders((prev) =>
       prev.includes(id) ? prev.filter((orderId) => orderId !== id) : [...prev, id]
     );
   };
@@ -110,28 +108,6 @@ const OrderProduct = () => {
       title: "Sản phẩm",
       dataIndex: "products",
       key: "products",
-      render: (products, record) => {
-        const isExpanded = expandedRows[record.id];
-        const displayedProducts = isExpanded ? products : products.slice(0, 1);
-        return (
-          <>
-            <ul>
-              {displayedProducts.map((product, index) => (
-                <li key={index}>{product}</li>
-              ))}
-            </ul>
-            {products.length > 1 && (
-              <Button
-                type="link"
-                onClick={() => toggleExpandRow(record.id)}
-                style={{ padding: 0, color: '#E87428' }}
-              >
-                {isExpanded ? "Thu gọn" : "Xem thêm"}
-              </Button>
-            )}
-          </>
-        );
-      },
     },
     {
       title: "Ngày",
@@ -144,31 +120,38 @@ const OrderProduct = () => {
       key: "customer",
     },
     {
-      title: "Tổng tiền",
-      dataIndex: "total",
-      key: "total",
-    },
-    {
       title: "Hình thức",
       dataIndex: "payment",
       key: "payment",
     },
     {
+      title: "Tổng tiền",
+      dataIndex: "total",
+      key: "total",
+    },
+    {
       title: "Xử lý",
       dataIndex: "action",
       key: "action",
-      render: (action, record) => {
-        const actionStyle = action === 'Xác nhận' ? { color: 'blue' } : action === 'Hủy' ? { color: 'red' } : { color: 'gray' };
-        
+      render: (action) => {
+        const actionStyle = {
+          'Chờ xác nhận': { color: '#E8A300', backgroundColor: '#feedc7' },
+          'Đang vận chuyển': { color: 'blue', backgroundColor: 'rgb(215, 215, 255)' },
+          'Hoàn thành': { color: 'green', backgroundColor: 'rgb(224, 251, 224)' },
+          'Đã hủy': { color: 'red', backgroundColor: 'rgb(255, 236, 236)' },
+          'Trả hàng/Hoàn tiền': { color: 'gray', backgroundColor: 'rgb(221, 213, 199)' },
+        };
+
         return (
-          <Select
-            value={action}
-            onChange={(value) => handleActionChange(record.id, value)}
-            style={{ width: "120px", ...actionStyle }}
-          >
-            <Option value="Xác nhận" style={{ color: 'blue' }}>Xác nhận</Option>
-            <Option value="Hủy" style={{ color: 'red' }}>Hủy</Option>
-          </Select>
+          <Button
+          style={{
+            ...actionStyle[action],
+            cursor: 'default', // Chặn pointer
+          }}
+          disabled // Không thể nhấp
+        >
+          {action}
+        </Button>
         );
       },
     },
@@ -209,19 +192,28 @@ const OrderProduct = () => {
               Xóa tất cả
             </Button>
             <div className="filter-section">
-              <Button onClick={() => handleOrderTypeChange('All order')} className={`filter-btn ${filters.orderType === 'All order' ? 'active' : ''}`}>
-                All order
+              <Button onClick={() => handleOrderTypeChange('Tất cả đơn hàng')} className={`filter-btn ${filters.orderType === 'Tất cả đơn hàng' ? 'active' : ''}`}>
+                Tất cả đơn hàng
               </Button>
-              <Button onClick={() => handleOrderTypeChange('Xác nhận')} className={`filter-btn ${filters.orderType === 'Xác nhận' ? 'active' : ''}`}>
-                Xác nhận
+              <Button onClick={() => handleOrderTypeChange('Chờ xác nhận')} className={`filter-btn ${filters.orderType === 'Chờ xác nhận' ? 'active' : ''}`}>
+                Chờ xác nhận
               </Button>
-              <Button onClick={() => handleOrderTypeChange('Hủy')} className={`filter-btn ${filters.orderType === 'Hủy' ? 'active' : ''}`}>
-                Hủy
+              <Button onClick={() => handleOrderTypeChange('Đang vận chuyển')} className={`filter-btn ${filters.orderType === 'Đang vận chuyển' ? 'active' : ''}`}>
+                Đang vận chuyển
+              </Button>
+              <Button onClick={() => handleOrderTypeChange('Hoàn thành')} className={`filter-btn ${filters.orderType === 'Hoàn thành' ? 'active' : ''}`}>
+                Hoàn thành
+              </Button>
+              <Button onClick={() => handleOrderTypeChange('Đã hủy')} className={`filter-btn ${filters.orderType === 'Đã hủy' ? 'active' : ''}`}>
+                Đã hủy
+              </Button>
+              <Button onClick={() => handleOrderTypeChange('Trả hàng/Hoàn tiền')} className={`filter-btn ${filters.orderType === 'Trả hàng/ Hoàn tiền' ? 'active' : ''}`}>
+                Trả hàng/Hoàn tiền
               </Button>
               <div>
                 <DatePicker
                   placeholder="Chọn ngày"
-                  style={{ width: 120, marginRight: '10px' }}
+                  style={{ width: 120, marginLeft: '20px', marginRight: '10px' }}
                   onChange={handleDateChange}
                 />
                 <Button
@@ -229,7 +221,6 @@ const OrderProduct = () => {
                   icon={<MenuOutlined />}
                   className="filter-toggle-button"
                 >
-                  Bộ lọc
                 </Button>
               </div>
             </div>

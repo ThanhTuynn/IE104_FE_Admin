@@ -4,11 +4,8 @@ import {
   AppstoreOutlined,
   FileAddOutlined,
   ShoppingCartOutlined,
-  FileOutlined,
   TeamOutlined,
   UserOutlined,
-  MonitorOutlined,
-  
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -44,12 +41,6 @@ const SidebarComponent = () => {
              </Link>
             </li>
             <li>
-            <Link to="/track-order-product" className="nav-link">
-                <MonitorOutlined />
-                <span>Theo dõi đơn hàng</span>
-             </Link>
-            </li>
-            <li>
             <Link to="/list-customer" className="nav-link">
                 <TeamOutlined />
                 <span>Quản lý khách hàng</span>
@@ -77,8 +68,8 @@ const SidebarComponent = () => {
             </li>
             <li>
               <a href="#" className="nav-link">
-                <LogoutOutlined />
-                <span>Đăng xuất</span>
+                <LogoutOutlined style = {{ color: 'red' }}/>
+                <span style={{color: 'red'}}>Đăng xuất</span>
               </a>
             </li>
           </ul>

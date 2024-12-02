@@ -118,7 +118,7 @@ const StaffList = () => {
 
   // Bộ lọc
   const [filters, setFilters] = useState({
-    roleType: "All role",
+    roleType: "Tất cả chức vụ",
   });
 
   // Pagination state
@@ -161,7 +161,7 @@ const StaffList = () => {
   // Dữ liệu hiển thị theo trang và lọc
   const filteredCustomers = customers.filter((customer) => {
     const roleMatch =
-      filters.roleType === "All role" || customer.role === filters.roleType; 
+      filters.roleType === "Tất cả chức vụ" || customer.role === filters.roleType; 
     return roleMatch;
   });
 
@@ -234,7 +234,7 @@ const StaffList = () => {
         {/* Bộ lọc */}
         <div className="filter-section">
           <div className="filter-buttons">
-            {["All role", "Quản lý", "Nhân viên"].map((type) => (
+            {["Tất cả chức vụ", "Quản lý", "Nhân viên"].map((type) => (
               <Button
                 key={type}
                 onClick={() => handleRoleTypeChange(type)}
@@ -252,7 +252,6 @@ const StaffList = () => {
               icon={<MenuOutlined />}
               className="filter-toggle-button"
             >
-              Bộ lọc
             </Button>
             <Checkbox onChange={handleSelectAll} style={{ marginRight: 10, marginLeft: '10px' }}>
             </Checkbox>

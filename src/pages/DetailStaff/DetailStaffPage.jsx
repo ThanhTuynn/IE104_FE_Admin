@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './DetailCustomerPage.css';
+import './DetailStaffPage.css';
 import Topbar from '../../components/TopbarComponent/TopbarComponent';
 import avatar from '../../assets/avatar_customer/customer1.jpg';
 import {
@@ -10,12 +10,13 @@ import {
   ShoppingCartOutlined,
   ClockCircleOutlined,
   LockOutlined,
+  MenuOutlined,
   ShoppingOutlined,
-  MenuOutlined
+  UserOutlined
 } from '@ant-design/icons';
 import { DatePicker, Button } from "antd";
 
-const CustomerDetail = () => {
+const StaffDetail = () => {
   const orders = [
     {
       id: '302002',
@@ -93,7 +94,7 @@ const CustomerDetail = () => {
   return (
     <div>
       <div style={{ marginLeft: '270px' }}>
-        <Topbar title="Thông tin chi tiết khách hàng" />
+        <Topbar title="Thông tin chi tiết nhân viên" />
       </div>
 
       <div className="customer-detail">
@@ -110,7 +111,19 @@ const CustomerDetail = () => {
               <div className="info-item">
                 <CopyOutlined className="info-icon" />
                 <span>
-                  <strong>Mã khách hàng:</strong> ID-011221
+                  <strong>Mã nhân viên:</strong> ID-011221
+                </span>
+              </div>
+              <div className="info-item">
+                <UserOutlined className="info-icon" />
+                <span>
+                  <strong>Tên đăng nhập:</strong> stafflinda@123
+                </span>
+              </div>
+              <div className="info-item">
+                <LockOutlined className="info-icon" />
+                <span>
+                  <strong>Mật khẩu:</strong> **********
                 </span>
               </div>
               <div className="info-item">
@@ -132,12 +145,6 @@ const CustomerDetail = () => {
                 </span>
               </div>
               <div className="info-item">
-                <ShoppingCartOutlined className="info-icon" />
-                <span>
-                  <strong>Lượt mua gần nhất:</strong> 12/10/2024
-                </span>
-              </div>
-              <div className="info-item">
                 <ClockCircleOutlined className="info-icon" />
                 <span>
                   <strong>Hoạt động gần nhất:</strong> 1 ngày trước
@@ -153,11 +160,11 @@ const CustomerDetail = () => {
             <div className="stat-card">
               <div className="header">
                 <div className="icon-wrapper">
-                  <ClockCircleOutlined className="icon" />
+                  <ShoppingOutlined className="icon" />
                 </div>
               </div>
               <div>
-                <div className="stat-title">Chi tiêu</div>
+                <div className="stat-title">Doanh thu</div>
                 <div className="stat-value">120.000.000 đồng</div>
               </div>
             </div>
@@ -166,11 +173,11 @@ const CustomerDetail = () => {
             <div className="stat-card">
               <div className="header">
                 <div className="icon-wrapper">
-                  <ShoppingCartOutlined className="icon" />
+                  <ShoppingOutlined  className="icon" />
                 </div>
               </div>
               <div>
-                <div className="stat-title">Điểm</div>
+                <div className="stat-title">Điểm thưởng</div>
                 <div className="stat-value">12.000</div>
               </div>
             </div>
@@ -233,7 +240,7 @@ const CustomerDetail = () => {
         {/* Purchase History */}
         <div className="purchase-history">
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <h3>Lịch sử mua hàng</h3>
+          <h3>Lịch sử bán hàng</h3>
           <div style = {{ display: 'flex', alignItems: 'center', marginBottom: '10px'}}>
           <DatePicker
                 placeholder="Chọn ngày"
@@ -283,4 +290,4 @@ const CustomerDetail = () => {
   );
 };
 
-export default CustomerDetail;
+export default StaffDetail;

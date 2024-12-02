@@ -17,96 +17,96 @@ const CustomerList = () => {
       id: 1,
       name: "John Bushmill",
       status: "Hoạt động",
-      email: "john@example.com",
-      phone: "123-456-7890",
+      customerCode: "CUST001",
+      points: 150,
       avatar: customer1,
     },
     {
       id: 2,
       name: "Laura Prichett",
       status: "Hoạt động",
-      email: "laura@example.com",
-      phone: "234-567-8901",
+      customerCode: "CUST002",
+      points: 250,
       avatar: customer2,
     },
     {
       id: 3,
       name: "Mohammad Karim",
       status: "Đã khóa",
-      email: "mohammad@example.com",
-      phone: "345-678-9012",
+      customerCode: "CUST003",
+      points: 350,
       avatar: customer3,
     },
     {
       id: 4,
       name: "Sarah Connor",
       status: "Hoạt động",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      customerCode: "CUST004",
+      points: 150,
       avatar: customer4,
     },
     {
       id: 5,
       name: "Sarah Connor",
       status: "Hoạt động",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      customerCode: "CUST005",
+      points: 100,
       avatar: customer4,
     },
     {
       id: 6,
       name: "John Bushmill",
       status: "Hoạt động",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      customerCode: "CUST011",
+      points: 120,
       avatar: customer1,
     },
     {
       id: 7,
       name: "Laura Prichett",
       status: "Hoạt động",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      customerCode: "CUST012",
+      points: 80,
       avatar: customer2,
     },
     {
       id: 8,
       name: "Mohammad Karim",
       status: "Đã khóa",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      customerCode: "CUST013",
+      points: 220,
       avatar: customer3,
     },
     {
       id: 9,
       name: "Sarah Connor",
       status: "Hoạt động",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      customerCode: "CUST014",
+      points: 150,
       avatar: customer4,
     },
     {
       id: 10,
       name: "Sarah Connor",
-      status: "Hoạt động",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      status: "Mới",
+      customerCode: "CUST015",
+      points: 150,
       avatar: customer4,
     },
     {
       id: 11,
       name: "Sarah Connor",
-      status: "Hoạt động",
-      email: "sarah@example.com",
-      phone: "456-789-0123",
+      status: "Mới",
+      customerCode: "CUST0116",
+      points: 150,
       avatar: customer4,
     },
     {
         id: 12,
         name: "Sarah Connor",
         status: "Hoạt động",
-        email: "sarah@example.com",
-        phone: "456-789-0123",
+        customerCode: "CUST017",
+        points: 500,
         avatar: customer4,
       },
   ]);
@@ -118,7 +118,7 @@ const CustomerList = () => {
 
   // Bộ lọc
   const [filters, setFilters] = useState({
-    statusType: "All status",
+    statusType: "Tất cả trạng thái",
   });
 
   // Pagination state
@@ -161,7 +161,7 @@ const CustomerList = () => {
   // Dữ liệu hiển thị theo trang và lọc
   const filteredCustomers = customers.filter((customer) => {
     const statusMatch =
-      filters.statusType === "All status" || customer.status === filters.statusType;
+      filters.statusType === "Tất cả trạng thái" || customer.status === filters.statusType;
     return statusMatch;
   });
 
@@ -234,7 +234,7 @@ const CustomerList = () => {
         {/* Bộ lọc */}
         <div className="filter-section">
           <div className="filter-buttons">
-            {["All status", "Hoạt động", "Đã khóa"].map((type) => (
+            {["Tất cả trạng thái", "Hoạt động","Mới", "Đã khóa"].map((type) => (
               <Button
                 key={type}
                 onClick={() => handleStatusTypeChange(type)}
@@ -252,7 +252,6 @@ const CustomerList = () => {
               icon={<MenuOutlined />}
               className="filter-toggle-button"
             >
-              Bộ lọc
             </Button>
             <Checkbox onChange={handleSelectAll} style={{ marginRight: 10, marginLeft: '10px' }}>
             </Checkbox>
@@ -306,14 +305,22 @@ const CustomerList = () => {
               {/* Thông tin chi tiết */}
               <div className="card-details">
                 <h3>{customer.name}</h3>
-                <Tag color={customer.status === "Hoạt động" ? "blue" : "red"}>
+                <Tag 
+                  color={
+                    customer.status === "Hoạt động" 
+                      ? "blue" 
+                      : customer.status === "Mới" 
+                        ? "gold" 
+                        : "red"
+                  }
+                >
                   {customer.status}
                 </Tag>
                 <div className="info-row">
-                    <p style={{ fontWeight: "bold" }}>Email:</p>
-                    <p>{customer.email}</p>
-                    <p style={{ fontWeight: "bold" }}>Số điện thoại:</p>
-                    <p>{customer.phone}</p>
+                    <p style={{ fontWeight: "bold" }}>Mã khách hàng:</p>
+                    <p>{customer.customerCode}</p>
+                    <p style={{ fontWeight: "bold" }}>Điểm:</p>
+                    <p>{customer.points}</p>
                 </div>
 
               </div>
