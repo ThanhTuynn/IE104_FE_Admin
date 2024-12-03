@@ -23,7 +23,6 @@
       border-color:white;
       background-color:#091057;
       color:  white;
-      color:#feedc7
     }
     .delete-all-button.active {
       color: white;
@@ -61,7 +60,6 @@
         border-color: #cdd1ff;
         color: #091057;
         font-weight: bold;
-        color: rgb(221, 213, 199)
     }
   }
 .form-order-content {

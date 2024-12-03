@@ -59,12 +59,6 @@ const SidebarComponent = () => {
                 <span>Quản lý cửa hàng</span>
               </a>
             </li>
-            <li>
-              <a href="#" className="nav-link">
-              <WechatWorkOutlined />
-                <span>Quản lý feedback</span>
-              </a>
-            </li>
           </ul>
           <ul className="nav-list secondary-nav">
             <li>

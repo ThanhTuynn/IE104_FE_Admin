@@ -3,20 +3,15 @@ import { Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './SignInPage.css';
 
-type initData = {
-  username?: string;
-  password?: string;
-};
-
-const Login: React.FC = () => {
+const Login = () => {
   const navigate = useNavigate(); // Sử dụng hook useNavigate để điều hướng
 
-  const onFinish = (values: initData) => {
+  const onFinish = (values) => {
     console.log('Success:', values);
     navigate('/dashboard'); // Điều hướng đến trang Dashboard
   };
 
-  const onFinishFailed = (errorInfo: any) => {
+  const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
 
@@ -31,8 +26,8 @@ const Login: React.FC = () => {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
-          labelAlign="top" 
-          layout="vertical" 
+          labelAlign="top"
+          layout="vertical"
         >
           <Form.Item
             label="Tên đăng nhập"
