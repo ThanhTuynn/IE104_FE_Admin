@@ -1,7 +1,7 @@
 import NotFoundPage from '../pages/NotFoundPage/NotFoundPage'
 import OrderProductPage from '../pages/OrderProductPage/OrderProductPage'
-import ListConsumerPage from '../pages/ListCusmerPage/ListCusmerPage'
-import ListStaffPage from '../pages/ListStaffPage/ListStaffPage'
+import ListConsumerPage from '../pages/ListCustomerPage/ListCustomerPage'
+import ListEmployeePage from '../pages/ListEmployeePage/ListEmployeePage'
 import DetailCustomerPage from '../pages/DetailCustomerPage/DetailCustomerPage'
 import DetailStaffPage from '../pages/DetailStaff/DetailStaffPage'
 import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
@@ -24,18 +24,18 @@ const routes = [
         isShowHeader: true
     },
     {
-        path: 'customer-detail',
+        path: 'customer-detail/1',
         page: DetailCustomerPage,
         isShowHeader: true
     },
     {
-        path: 'staff-detail',
+        path: 'employee-detail/1',
         page: DetailStaffPage,
         isShowHeader: true
     },
     {
         path: 'list-staff',
-        page: ListStaffPage,
+        page: ListEmployeePage,
         isShowHeader: true
     },
     {
