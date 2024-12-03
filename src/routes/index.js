@@ -5,6 +5,7 @@ import ListStaffPage from '../pages/ListStaffPage/ListStaffPage'
 import DetailCustomerPage from '../pages/DetailCustomerPage/DetailCustomerPage'
 import DetailStaffPage from '../pages/DetailStaff/DetailStaffPage'
 import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
+import SignInPage from '../pages/SignInPage/SignInPage'
 
 const routes = [
     {
@@ -13,7 +14,7 @@ const routes = [
         isShowHeader: true
     },
     {
-        path: 'detail-order',
+        path: 'order-detail',
         page: DetailOrderPage,
         isShowHeader: true
     },
@@ -23,12 +24,12 @@ const routes = [
         isShowHeader: true
     },
     {
-        path: 'detail-customer',
+        path: 'customer-detail',
         page: DetailCustomerPage,
         isShowHeader: true
     },
     {
-        path: 'detail-staff',
+        path: 'staff-detail',
         page: DetailStaffPage,
         isShowHeader: true
     },
@@ -36,6 +37,10 @@ const routes = [
         path: 'list-staff',
         page: ListStaffPage,
         isShowHeader: true
+    },
+    {
+        path: 'sign-in',
+        page: SignInPage,
     },
     {
         path: '*',

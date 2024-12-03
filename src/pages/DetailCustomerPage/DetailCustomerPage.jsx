@@ -9,7 +9,6 @@ import {
   PhoneOutlined,
   ShoppingCartOutlined,
   ClockCircleOutlined,
-  LockOutlined,
   ShoppingOutlined,
   MenuOutlined
 } from '@ant-design/icons';
