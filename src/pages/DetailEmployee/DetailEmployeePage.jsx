@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './DetailStaffPage.css';
+import './DetailEmployeePage.css';
 import Topbar from '../../components/TopbarComponent/TopbarComponent';
 import avatar from '../../assets/avatar_customer/customer1.jpg';
 import {
@@ -7,7 +7,6 @@ import {
   MailOutlined,
   EnvironmentOutlined,
   PhoneOutlined,
-  ShoppingCartOutlined,
   ClockCircleOutlined,
   LockOutlined,
   MenuOutlined,

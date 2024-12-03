@@ -3,9 +3,12 @@ import OrderProductPage from '../pages/OrderProductPage/OrderProductPage'
 import ListConsumerPage from '../pages/ListCustomerPage/ListCustomerPage'
 import ListEmployeePage from '../pages/ListEmployeePage/ListEmployeePage'
 import DetailCustomerPage from '../pages/DetailCustomerPage/DetailCustomerPage'
-import DetailStaffPage from '../pages/DetailStaff/DetailStaffPage'
+import DetailEmployeePage from '../pages/DetailEmployee/DetailEmployeePage'
 import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
 import SignInPage from '../pages/SignInPage/SignInPage'
+import Dashboard from '../pages/Dashboard/Dashboard'
+import ListProductPage from '../pages/ListProductPage/ListProductPage'
+import Storeinfo from '../pages/StoreInfoPage/StoreInfoPage'
 
 const routes = [
     {
@@ -13,8 +16,18 @@ const routes = [
         page: OrderProductPage,
         isShowHeader: true
     },
+    // {
+    //     path: 'list-product',
+    //     page: ListProductPage,
+    //     isShowHeader: true
+    // },
     {
-        path: 'order-detail',
+        path: 'store-info',
+        page: Storeinfo,
+        isShowHeader: true
+    },
+    {
+        path: 'order-detail/1',
         page: DetailOrderPage,
         isShowHeader: true
     },
@@ -30,12 +43,17 @@ const routes = [
     },
     {
         path: 'employee-detail/1',
-        page: DetailStaffPage,
+        page: DetailEmployeePage,
         isShowHeader: true
     },
     {
-        path: 'list-staff',
+        path: 'list-employee',
         page: ListEmployeePage,
+        isShowHeader: true
+    },
+    {
+        path: 'dashboard',
+        page: Dashboard,
         isShowHeader: true
     },
     {

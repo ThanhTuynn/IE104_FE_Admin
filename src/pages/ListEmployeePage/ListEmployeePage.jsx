@@ -139,7 +139,7 @@ const EmployeeList = () => {
         {/* Header */}
         <header className="employee-header">
           <div className="header-actions">
-            <Input.Search placeholder="Tìm kiếm nhân viên..." style={{ width: 800 }} />
+            <Input.Search placeholder="Tìm kiếm nhân viên..." style={{ width: 795 }} />
             <Button type="primary" icon={<ExportOutlined />} className="export-button">
               Xuất file
             </Button>
@@ -242,12 +242,25 @@ const EmployeeList = () => {
             <Form.Item
               label="Xác nhận mật khẩu"
               name="confirmPassword"
-              rules={[
-                { required: true, message: "Vui lòng xác nhận mật khẩu" },
-              ]}
+              rules={[{ required: true, message: "Vui lòng xác nhận mật khẩu" }]}
               hasFeedback
             >
               <Input.Password placeholder="Xác nhận mật khẩu..." />
+            </Form.Item>
+            {/* Thêm trường Quyền hạn */}
+            <Form.Item
+              label="Quyền hạn"
+              name="permissions"
+              rules={[{ required: true, message: "Vui lòng chọn quyền hạn" }]}
+            >
+              <Select mode="multiple"  placeholder="Chọn quyền hạn" options={[
+                { label: 'Quản trị viên', value: 'Admin' },
+                { label: 'Quản lý sản phẩm', value: 'Product Manager' },
+                { label: 'Quản lý cửa hàng', value: 'Store Manager' },
+                { label: 'Quản lý nhân viên', value: 'Employee Manager' },
+                { label: 'Quản lý đơn hàng', value: 'Order Manager' },
+                { label: 'Quản lý khách hàng', value: 'Customer Manager' },
+              ]} />
             </Form.Item>
             <Form.Item>
               <Button
@@ -261,6 +274,7 @@ const EmployeeList = () => {
             </Form.Item>
           </Form>
         </Modal>
+
 
         {/* Table */}
         <Table

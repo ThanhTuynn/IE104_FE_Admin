@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Table, Button, Input, DatePicker, Checkbox } from "antd";
 import { ExportOutlined, MenuOutlined, DeleteOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Topbar from '../../components/TopbarComponent/TopbarComponent';
 import './OrderProductPage.css';
 
 const OrderProduct = () => {
+  const navigate = useNavigate(); // Hook điều hướng
   const [filters, setFilters] = useState({
     orderType: 'Tất cả đơn hàng',
     date: null,
@@ -15,7 +17,7 @@ const OrderProduct = () => {
 
   const [data, setData] = useState([
     {
-      id: "302012",
+      id: "1",
       products: "Nhẫn Kim Cương Vàng, Lắc Tay Mạ Bạc, Vòng Tay Kim Cương",
       date: "29 Dec 2022",
       customer: "John Bushmill",
@@ -24,7 +26,7 @@ const OrderProduct = () => {
       action: "Chờ xác nhận",
     },
     {
-      id: "302011",
+      id: "2",
       products: "Vòng Tay Kim Cương",
       date: "24 Dec 2022",
       customer: "Linda Blair",
@@ -33,7 +35,7 @@ const OrderProduct = () => {
       action: "Đã hủy",
     },
     {
-      id: "301901",
+      id: "3",
       products: "Lắc Tay Bạc",
       date: "12 Dec 2022",
       customer: "M Karim",
@@ -42,7 +44,7 @@ const OrderProduct = () => {
       action: "Đang vận chuyển",
     },
     {
-      id: "301911",
+      id: "4",
       products: "Lắc Tay Bạc",
       date: "12 Dec 2022",
       customer: "M Karim",
@@ -51,7 +53,7 @@ const OrderProduct = () => {
       action: "Hoàn thành",
     },
     {
-      id: "301912",
+      id: "5",
       products: "Lắc Tay Bạc",
       date: "12 Dec 2022",
       customer: "M Karim",
@@ -144,14 +146,14 @@ const OrderProduct = () => {
 
         return (
           <Button
-          style={{
-            ...actionStyle[action],
-            cursor: 'default', // Chặn pointer
-          }}
-          disabled // Không thể nhấp
-        >
-          {action}
-        </Button>
+            style={{
+              ...actionStyle[action],
+              cursor: 'default', // Chặn pointer
+            }}
+            disabled // Không thể nhấp
+          >
+            {action}
+          </Button>
         );
       },
     },
@@ -173,14 +175,14 @@ const OrderProduct = () => {
   };
 
   return (
-    <div className="order-page">
+    <div>
       <div style={{ marginLeft: '270px' }}>
         <Topbar title="Quản lý đơn hàng" />
       </div>
       <div className="order-table-container">
         <header className="order-header">
           <div className="header-actions">
-            <Input.Search placeholder="Tìm kiếm đơn hàng..." style={{ width: 840 }} />
+            <Input.Search placeholder="Tìm kiếm đơn hàng..." style={{ width: 830 }} />
             <Button type="primary" className="export-button" icon={<ExportOutlined />}>Xuất file</Button>
             <Button
               type="primary"
@@ -189,48 +191,51 @@ const OrderProduct = () => {
               onClick={handleDeleteSelected}
               disabled={selectedOrders.length === 0}
             >
-              Xóa tất cả
+              Xóa đã chọn
             </Button>
-            <div className="filter-section">
-              <Button onClick={() => handleOrderTypeChange('Tất cả đơn hàng')} className={`filter-btn ${filters.orderType === 'Tất cả đơn hàng' ? 'active' : ''}`}>
-                Tất cả đơn hàng
-              </Button>
-              <Button onClick={() => handleOrderTypeChange('Chờ xác nhận')} className={`filter-btn ${filters.orderType === 'Chờ xác nhận' ? 'active' : ''}`}>
-                Chờ xác nhận
-              </Button>
-              <Button onClick={() => handleOrderTypeChange('Đang vận chuyển')} className={`filter-btn ${filters.orderType === 'Đang vận chuyển' ? 'active' : ''}`}>
-                Đang vận chuyển
-              </Button>
-              <Button onClick={() => handleOrderTypeChange('Hoàn thành')} className={`filter-btn ${filters.orderType === 'Hoàn thành' ? 'active' : ''}`}>
-                Hoàn thành
-              </Button>
-              <Button onClick={() => handleOrderTypeChange('Đã hủy')} className={`filter-btn ${filters.orderType === 'Đã hủy' ? 'active' : ''}`}>
-                Đã hủy
-              </Button>
-              <Button onClick={() => handleOrderTypeChange('Trả hàng/Hoàn tiền')} className={`filter-btn ${filters.orderType === 'Trả hàng/ Hoàn tiền' ? 'active' : ''}`}>
-                Trả hàng/Hoàn tiền
-              </Button>
-              <div>
-                <DatePicker
-                  placeholder="Chọn ngày"
-                  style={{ width: 120, marginLeft: '20px', marginRight: '10px' }}
-                  onChange={handleDateChange}
-                />
-                <Button
-                  type="primary"
-                  icon={<MenuOutlined />}
-                  className="filter-toggle-button"
-                >
-                </Button>
-              </div>
-            </div>
           </div>
         </header>
+        <div className="filter-section">
+          <Button onClick={() => handleOrderTypeChange('Tất cả đơn hàng')} className={`filter-btn ${filters.orderType === 'Tất cả đơn hàng' ? 'active' : ''}`}>
+            Tất cả đơn hàng
+          </Button>
+          <Button onClick={() => handleOrderTypeChange('Chờ xác nhận')} className={`filter-btn ${filters.orderType === 'Chờ xác nhận' ? 'active' : ''}`}>
+            Chờ xác nhận
+          </Button>
+          <Button onClick={() => handleOrderTypeChange('Đang vận chuyển')} className={`filter-btn ${filters.orderType === 'Đang vận chuyển' ? 'active' : ''}`}>
+            Đang vận chuyển
+          </Button>
+          <Button onClick={() => handleOrderTypeChange('Hoàn thành')} className={`filter-btn ${filters.orderType === 'Hoàn thành' ? 'active' : ''}`}>
+            Hoàn thành
+          </Button>
+          <Button onClick={() => handleOrderTypeChange('Đã hủy')} className={`filter-btn ${filters.orderType === 'Đã hủy' ? 'active' : ''}`}>
+            Đã hủy
+          </Button>
+          <Button onClick={() => handleOrderTypeChange('Trả hàng/Hoàn tiền')} className={`filter-btn ${filters.orderType === 'Trả hàng/Hoàn tiền' ? 'active' : ''}`}>
+            Trả hàng/Hoàn tiền
+          </Button>
+          <div>
+            <DatePicker
+              placeholder="Chọn ngày"
+              style={{ width: 120, marginLeft: '20px', marginRight: '10px' }}
+              onChange={handleDateChange}
+            />
+            <Button
+              type="primary"
+              icon={<MenuOutlined />}
+              className="filter-toggle-button"
+            >
+            </Button>
+          </div>
+        </div>
         <Table
           columns={columns}
           dataSource={filteredData}
           pagination={{ pageSize: 10 }}
           rowKey="id"
+          onRow={(record) => ({
+            onClick: () => navigate(`/order-detail/${record.id}`), // Chuyển hướng khi nhấp vào hàng
+          })}
         />
       </div>
     </div>
