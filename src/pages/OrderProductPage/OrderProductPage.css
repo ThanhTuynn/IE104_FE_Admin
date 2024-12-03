@@ -5,6 +5,7 @@
     padding: 20px;
     background-color: #f9f9f9;
     min-height: 100vh;
+  }
   
   .order-header {
     display: flex;
@@ -22,6 +23,11 @@
       border-color:white;
       background-color:#091057;
       color:  white;
+    }
+    .delete-all-button {
+      background-color: rgb(173, 4, 4);
+      color: white;
+      border: none;
     }
     .delete-all-button.active {
       color: white;
@@ -91,6 +97,4 @@
   color: white;
   border: none;
   margin-left: 20px;
-}
-
 }
