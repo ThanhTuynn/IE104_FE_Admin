@@ -6,11 +6,24 @@ import DetailCustomerPage from '../pages/DetailCustomerPage/DetailCustomerPage'
 import DetailStaffPage from '../pages/DetailStaff/DetailStaffPage'
 import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
 import SignInPage from '../pages/SignInPage/SignInPage'
+import Dashboard from '../pages/DashboardPage/Dashboard'
+//import ListProductPage from '../pages/ListProductPage/ListProductPage'
+import Storeinfo from '../pages/StoreinfoPage/Storeinfo'
 
 const routes = [
     {
         path: 'list-order-product',
         page: OrderProductPage,
+        isShowHeader: true
+    },
+    // {
+    //     path: 'list-product',
+    //     page: ListProductPage,
+    //     isShowHeader: true
+    // },
+    {
+        path: 'store-info',
+        page: Storeinfo,
         isShowHeader: true
     },
     {
@@ -36,6 +49,11 @@ const routes = [
     {
         path: 'list-staff',
         page: ListEmployeePage,
+        isShowHeader: true
+    },
+    {
+        path: 'dashboard',
+        page: Dashboard,
         isShowHeader: true
     },
     {

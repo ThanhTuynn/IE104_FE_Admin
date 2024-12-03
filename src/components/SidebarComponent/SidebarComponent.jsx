@@ -6,7 +6,6 @@ import {
   ShoppingCartOutlined,
   TeamOutlined,
   UserOutlined,
-  WechatWorkOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -24,13 +23,13 @@ const SidebarComponent = () => {
         <nav className="sidebar-nav">
           <ul className="nav-list primary-nav">
             <li>
-            <Link to="/" className="nav-link">
+            <Link to="/dashboard" className="nav-link">
                 <DashboardOutlined />
                 <span>Dashboard</span>
             </Link>
             </li>
             <li>
-            <Link to="/.." className="nav-link">
+            <Link to="/list-product" className="nav-link">
                 <AppstoreOutlined />
                 <span>Quản lý sản phẩm</span>
             </Link>
@@ -54,7 +53,7 @@ const SidebarComponent = () => {
             </Link>
             </li>
             <li>
-              <a href="#" className="nav-link">
+              <a href="store-info" className="nav-link">
               <ShoppingCartOutlined />
                 <span>Quản lý cửa hàng</span>
               </a>
