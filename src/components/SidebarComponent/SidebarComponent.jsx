@@ -47,7 +47,7 @@ const SidebarComponent = () => {
             </Link>
             </li>
             <li>
-            <Link to="/list-staff" className="nav-link">
+            <Link to="/list-employee" className="nav-link">
                 <TeamOutlined />
                 <span>Quản lý nhân viên</span>
             </Link>

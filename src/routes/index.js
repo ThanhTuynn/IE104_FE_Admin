@@ -3,7 +3,7 @@ import OrderProductPage from '../pages/OrderProductPage/OrderProductPage'
 import ListConsumerPage from '../pages/ListCustomerPage/ListCustomerPage'
 import ListEmployeePage from '../pages/ListEmployeePage/ListEmployeePage'
 import DetailCustomerPage from '../pages/DetailCustomerPage/DetailCustomerPage'
-import DetailStaffPage from '../pages/DetailStaff/DetailStaffPage'
+import DetailEmployeePage from '../pages/DetailEmployee/DetailEmployeePage'
 import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
 import SignInPage from '../pages/SignInPage/SignInPage'
 import Dashboard from '../pages/DashboardPage/Dashboard'
@@ -27,7 +27,12 @@ const routes = [
         isShowHeader: true
     },
     {
-        path: 'order-detail',
+        path: 'store-info',
+        page: Storeinfo,
+        isShowHeader: true
+    },
+    {
+        path: 'order-detail/1',
         page: DetailOrderPage,
         isShowHeader: true
     },
@@ -43,11 +48,11 @@ const routes = [
     },
     {
         path: 'employee-detail/1',
-        page: DetailStaffPage,
+        page: DetailEmployeePage,
         isShowHeader: true
     },
     {
-        path: 'list-staff',
+        path: 'list-employee',
         page: ListEmployeePage,
         isShowHeader: true
     },
