@@ -6,9 +6,9 @@ import DetailCustomerPage from '../pages/DetailCustomerPage/DetailCustomerPage'
 import DetailEmployeePage from '../pages/DetailEmployee/DetailEmployeePage'
 import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
 import SignInPage from '../pages/SignInPage/SignInPage'
-import Dashboard from '../pages/Dashboard/Dashboard'
-import ListProductPage from '../pages/ListProductPage/ListProductPage'
-import Storeinfo from '../pages/StoreInfoPage/StoreInfoPage'
+import Dashboard from '../pages/DashboardPage/Dashboard'
+//import ListProductPage from '../pages/ListProductPage/ListProductPage'
+import Storeinfo from '../pages/StoreinfoPage/Storeinfo'
 
 const routes = [
     {
@@ -21,6 +21,11 @@ const routes = [
     //     page: ListProductPage,
     //     isShowHeader: true
     // },
+    {
+        path: 'store-info',
+        page: Storeinfo,
+        isShowHeader: true
+    },
     {
         path: 'store-info',
         page: Storeinfo,
