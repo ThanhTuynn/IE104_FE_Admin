@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import './SignInPage.css';
 
 const Login = () => {
-  const navigate = useNavigate(); // Sử dụng hook useNavigate để điều hướng
+  const navigate = useNavigate();
 
   const onFinish = (values) => {
     console.log('Success:', values);
-    navigate('/dashboard'); // Điều hướng đến trang Dashboard
+    navigate('/dashboard');
   };
 
   const onFinishFailed = (errorInfo) => {
