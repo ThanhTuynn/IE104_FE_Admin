@@ -9,6 +9,8 @@ import SignInPage from '../pages/SignInPage/SignInPage'
 import Dashboard from '../pages/DashboardPage/Dashboard'
 //import ListProductPage from '../pages/ListProductPage/ListProductPage'
 import Storeinfo from '../pages/StoreinfoPage/Storeinfo'
+import AdminInfo from '../pages/AdminInfoPage/AdminInfoPage'
+import EmployeeInfo from '../pages/EmployeeInfoPage/EmployeeInfoPage'
 
 const routes = [
     {
@@ -65,6 +67,21 @@ const routes = [
         path: 'sign-in',
         page: SignInPage,
     },
+    {
+        path: 'admin-info',
+        page: AdminInfo,
+    },
+    {
+    
+        path: 'admin-info',
+        page: AdminInfo,
+    },
+    {
+    
+        path: 'employee-info',
+        page: EmployeeInfo,
+    },
+
     {
         path: '*',
         page: NotFoundPage,
