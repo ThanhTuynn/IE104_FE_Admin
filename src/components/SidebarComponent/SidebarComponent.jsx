@@ -23,7 +23,7 @@ const SidebarComponent = () => {
         <nav className="sidebar-nav">
           <ul className="nav-list primary-nav">
             <li>
-            <Link to="/dashboard" className="nav-link">
+            <Link to="/" className="nav-link">
                 <DashboardOutlined />
                 <span>Dashboard</span>
             </Link>
