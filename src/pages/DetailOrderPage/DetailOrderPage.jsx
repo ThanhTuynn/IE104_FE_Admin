@@ -140,12 +140,28 @@ const DetailOrderPage = () => {
             <p className="cost-label">Phí vận chuyển:</p>
             <p className="cost-value">50,000 VNĐ</p>
             </div>
+            <div className="cost-item">
+            <p className="cost-label">Voucher của cửa hàng:</p>
+            <p className="cost-value">-250,000 VNĐ</p>
+            </div>
             <div className="cost-item total">
             <p className="cost-label">Tổng tiền mua hàng:</p>
-            <p className="cost-value total-amount">7,500,000 VNĐ</p>
+            <p className="cost-value total-amount">7,250,000 VNĐ</p>
             </div>
         </div>
         </div>
+
+        <div className="feedback-section-container">
+        <h3>Đánh giá sản phẩm</h3>
+        <div className="info-card">
+          <p>
+            <strong>
+              "Sữa tắm SOS thực sự rất thơm, tắm xong mà thơm mấy ngày liền. Bé cún nhà mình có da nhạy cảm, trước đây hay bị ngứa sau khi tắm nhưng từ khi dùng SOS thì không còn bị nữa. Lông mượt mà, sạch sẽ, ôm lúc nào cũng thích!"
+            </strong>
+          </p>
+          <textarea placeholder="Phản hồi..." className="note-input"></textarea>
+        </div>
+      </div>
 
         {/* Buttons */}
         <div className="form-footer">

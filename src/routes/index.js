@@ -8,12 +8,22 @@ import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
 import SignInPage from '../pages/SignInPage/SignInPage'
 import ListProductPage from '../pages/ListProductPage/ListProductPage'
 import DetailProductPage from '../pages/DetailProductPage/DetailProductPage'
+import Dashboard from '../pages/DashboardPage/Dashboard'
+import Storeinfo from '../pages/StoreinfoPage/Storeinfo'
+import AdminInfo from '../pages/AdminInfoPage/AdminInfoPage'
+import EmployeeInfo from '../pages/EmployeeInfoPage/EmployeeInfoPage'
+
 const routes = [
     {
         path: 'list-order-product',
         page: OrderProductPage,
         isShowHeader: true
     },  
+    {
+        path: 'store-info',
+        page: Storeinfo,
+        isShowHeader: true
+    },
     {
         path: 'order-detail/1',
         page: DetailOrderPage,
@@ -53,6 +63,21 @@ const routes = [
         path: 'sign-in',
         page: SignInPage,
     },
+    {
+        path: 'admin-info',
+        page: AdminInfo,
+    },
+    {
+    
+        path: 'dashboard',
+        page: Dashboard,
+    },
+    {
+    
+        path: 'employee-info',
+        page: EmployeeInfo,
+    },
+
     {
         path: '*',
         page: NotFoundPage,
