@@ -15,6 +15,12 @@ import EmployeeInfo from '../pages/EmployeeInfoPage/EmployeeInfoPage'
 
 const routes = [
     {
+    
+        path: '/',
+        page: Dashboard,
+        isShowHeader: true
+    },
+    {
         path: 'list-order-product',
         page: OrderProductPage,
         isShowHeader: true
@@ -66,16 +72,13 @@ const routes = [
     {
         path: 'admin-info',
         page: AdminInfo,
-    },
-    {
-    
-        path: 'dashboard',
-        page: Dashboard,
+        isShowHeader: true
     },
     {
     
         path: 'employee-info',
         page: EmployeeInfo,
+        isShowHeader: true
     },
 
     {
