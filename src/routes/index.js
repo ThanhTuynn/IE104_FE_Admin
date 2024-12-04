@@ -6,8 +6,9 @@ import DetailCustomerPage from '../pages/DetailCustomerPage/DetailCustomerPage'
 import DetailEmployeePage from '../pages/DetailEmployee/DetailEmployeePage'
 import DetailOrderPage from '../pages/DetailOrderPage/DetailOrderPage'
 import SignInPage from '../pages/SignInPage/SignInPage'
+import ListProductPage from '../pages/ListProductPage/ListProductPage'
+import DetailProductPage from '../pages/DetailProductPage/DetailProductPage'
 import Dashboard from '../pages/DashboardPage/Dashboard'
-//import ListProductPage from '../pages/ListProductPage/ListProductPage'
 import Storeinfo from '../pages/StoreinfoPage/Storeinfo'
 import AdminInfo from '../pages/AdminInfoPage/AdminInfoPage'
 import EmployeeInfo from '../pages/EmployeeInfoPage/EmployeeInfoPage'
@@ -17,17 +18,7 @@ const routes = [
         path: 'list-order-product',
         page: OrderProductPage,
         isShowHeader: true
-    },
-    // {
-    //     path: 'list-product',
-    //     page: ListProductPage,
-    //     isShowHeader: true
-    // },
-    {
-        path: 'store-info',
-        page: Storeinfo,
-        isShowHeader: true
-    },
+    },  
     {
         path: 'store-info',
         page: Storeinfo,
@@ -36,6 +27,16 @@ const routes = [
     {
         path: 'order-detail/1',
         page: DetailOrderPage,
+        isShowHeader: true
+    },
+    {
+        path: 'list-product',
+        page: ListProductPage,
+        isShowHeader: true
+    },
+    {
+        path: 'product-detail/1',
+        page: DetailProductPage,
         isShowHeader: true
     },
     {
@@ -49,18 +50,13 @@ const routes = [
         isShowHeader: true
     },
     {
-        path: 'employee-detail/1',
-        page: DetailEmployeePage,
-        isShowHeader: true
-    },
-    {
         path: 'list-employee',
         page: ListEmployeePage,
         isShowHeader: true
     },
     {
-        path: 'dashboard',
-        page: Dashboard,
+        path: 'employee-detail/1',
+        page: DetailEmployeePage,
         isShowHeader: true
     },
     {
@@ -73,8 +69,8 @@ const routes = [
     },
     {
     
-        path: 'admin-info',
-        page: AdminInfo,
+        path: 'dashboard',
+        page: Dashboard,
     },
     {
     

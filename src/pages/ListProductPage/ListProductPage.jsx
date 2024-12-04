@@ -1,667 +1,323 @@
-// import React, { useState, useEffect } from "react";
-// import Topbar from "../../components/TopbarComponent/TopbarComponent";
-// import { useNavigate } from 'react-router-dom';
-// import ModalDeleteConfirm from "../../components/ModalDeleteConfirm/ModalDeleteConfirm"
-// import {
-//   EditOutlined,
-//   EyeOutlined,
-//   DeleteOutlined,
-//   DownOutlined,
-// } from "@ant-design/icons";
-// import { Table, Tag, Space, DatePicker, Dropdown, Menu} from "antd";
-
-// import "./ListProductPage.css";
-
-
-// const ListProductPage = () => {
-//   const navigate = useNavigate();
-
-
-//   const handleCreateProduct = () => {
-//     navigate('/add-product');
-//   };
-//   const [activeTab, setActiveTab] = useState("Tất cả");
-//   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-//   const handleExpandRow = (record) => {
-//     const isRowExpanded = expandedRowKeys.includes(record.key);
-//     setExpandedRowKeys(isRowExpanded
-//       ? expandedRowKeys.filter((key) => key !== record.key)
-//       : [...expandedRowKeys, record.key]);
-//   };  
-//   const tabs = ["Tất cả", "Đã đăng", "Tồn kho thấp", "Nháp"];
-//   const [data, setData] = useState([
-//     {
-//       key: "1",
-//       productName: "Áo Dài Tết Cho Chó Mèo Vải Lụa",
-//       productCode: "123876",
-//       category: "2 phân loại",
-//       classification: "Quần áo cho chó",
-//       stock: 2,
-//       price: "100.000",
-//       status: "Tồn kho thấp",
-//       postedDate: "29 Dec 2022",
-//       checked: true,
-//       expanded: false,
-//       image: "./ListProductPage-images/aochomeo.jpg",
-//       details: [
-//         { type: "Màu vàng", stock: 1 },
-//         { type: "Màu đỏ", stock: 1 },
-//       ],
-//     },
-//     {
-//       key: "1",
-//       productName: "Áo Dài Tết Cho Chó Mèo Vải Lụa",
-//       productCode: "123876",
-//       category: "2 phân loại",
-//       classification: "Quần áo cho chó",
-//       stock: 2,
-//       price: "100.000",
-//       status: "Tồn kho thấp",
-//       postedDate: "29 Dec 2022",
-//       checked: true,
-//       expanded: false,
-//       image: "./ListProductPage-images/aochomeo.jpg",
-//       details: [
-//         { type: "Màu vàng", stock: 1 },
-//         { type: "Màu đỏ", stock: 1 },
-//       ],
-//     },
-
-
-//     {
-//         key: "1",
-//         productName: "Áo Dài Tết Cho Chó Mèo Vải Lụa",
-//         productCode: "123876",
-//         category: "2 phân loại",
-//         classification: "Quần áo cho chó",
-//         stock: 43,
-//         price: "100.000",
-//         status: "Nháp",
-//         postedDate: "29 Dec 2022",
-//         checked: false,
-//         expanded: false,
-//         image: "./ListProductPage-images/aochomeo.jpg",
-//         details: [
-//           { type: "Màu vàng", stock: 20 },
-//           { type: "Màu đỏ", stock: 23 },
-//         ],
-//       },
-//   ]);
-//   const menu = (
-//     <Menu>
-//       <Menu.Item key="1">Sắp xếp tên</Menu.Item>
-//       <Menu.Item key="2">Sắp xếp theo</Menu.Item>
-//       <Menu.Item key="3">Sắp xếp theo lượng tồn</Menu.Item>
-//     </Menu>
-//   );
-
-
-//   const menu1 = (
-//     <Menu>
-//       <Menu.Item key="1">Sắp xếp tăng dần</Menu.Item>
-//       <Menu.Item key="2">Sắp xếp giảm dần</Menu.Item>
-//     </Menu>
-//   );
-
-
-//   const menu2 = (
-//     <Menu>
-//       <Menu.Item key="1">Tồn kho thấp</Menu.Item>
-//       <Menu.Item key="2">Đã đăng</Menu.Item>
-//       <Menu.Item key="3">Nháp</Menu.Item>
-//     </Menu>
-//   );
-//   const handleCheckboxChange = (key) => {
-//     const updatedData = data.map((item) =>
-//       item.key === key ? { ...item, checked: !item.checked } : item
-//     );
-//     setData(updatedData);
-//   };
-
-
- 
-//   const navigate1 = useNavigate();
-//   const handleEditProduct = (key) => {
-//     navigate1(`/adjust-product/${key}`);
-//   };
-//   const columns = [
-//     {
-//       title: (
-//         <Dropdown overlay={menu} trigger={["click"]}>
-//           <span style={{ cursor: "pointer" }}>
-//             Tên sản phẩm <DownOutlined />
-//           </span>
-//         </Dropdown>
-//       ),
-//       dataIndex: "productName",
-//       key: "productName",
-//       width: "25%",
-//       render: (text, record) => (
-//         <div className="checkbb" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-//           <input
-//             type="checkbox"
-//             checked={record.checked}
-//             onChange={(e) => handleCheckboxChange(record.key)}
-//           />
-//           <img
-//             src={record.imagqe}
-//             alt={record.productName || "Product Image"}
-//             className="image_productt"
-//           />
-//           <div className="content-tssp">
-//             <strong>{record.productName}</strong>
-//             <br />
-//             <span>{record.category}</span>
-//           </div>
-//         </div>
-//       ),
-//     },
-//     {
-//       title: "Mã SP",
-//       dataIndex: "productCode",
-//       key: "productCode",
-//       width: 80,
-//     },
-//     {
-
-
-//       title: "Phân loại",
-//       dataIndex: "classification",
-//       key: "classification",
-//       width: "10%",
-//     },
-//     {
-//       title: "Lượng tồn",
-//       dataIndex: "stock",
-//       key: "stock",
-//       width: "12%",
-//     },
-//     {
-//       title: (
-//         <Dropdown overlay={menu1} trigger={["click"]}>
-//           <span style={{ cursor: "pointer" }}>
-//             Giá <DownOutlined />
-//           </span>
-//         </Dropdown>
-//       ),
-//       dataIndex: "price",
-//       key: "price",
-//       width: "10%",
-//     },
-//     {
-//       title: (
-//         <Dropdown overlay={menu2} trigger={["click"]}>
-//           <span style={{ cursor: "pointer" }}>
-//             Tình Trạng<DownOutlined />
-//           </span>
-//         </Dropdown>
-//       ),
-//       dataIndex: "status",
-//       key: "status",
-//       width: "12%",
-//       render: (status) => {
-//         let color = "";
-//         switch (status) {
-//           case "Tồn kho thấp":
-//             color = "red";
-//             break;
-//           case "Đã đăng":
-//             color = "orange";
-//             break;
-//           case "Nháp":
-//             color = "gray";
-//             break;
-//           default:
-//             color = "blue";
-//         }
-//         return <Tag color={color}>{status}</Tag>;
-//       },
-//     },
-//     {
-//       title: (
-//         <Dropdown
-//           overlay={
-//             <Menu>
-//               <Menu.Item key="1">
-//                 <DatePicker
-//                   onChange={(date, dateString) => console.log("Chọn ngày:", dateString)}
-//                   style={{ width: "100%" }}
-//                 />
-//               </Menu.Item>
-//             </Menu>
-//           }
-//           trigger={["click"]}
-//         >
-//           <span style={{ cursor: "pointer" }}>
-//             Đăng vào <DownOutlined />
-//           </span>
-//         </Dropdown>
-//       ),
-//       dataIndex: "postedDate",
-//       key: "postedDate",
-//       width: "13%",
-//     },
-//     {
-//       title: "Hành động",
-//       key: "action",
-//       width: "13%",
-//       render: (text, record) => (
-//         <Space size="middle" style={{ paddingLeft: "0", marginLeft: "0px" }}>
-//           <EditOutlined
-//             style={{ color: "#1890ff", cursor: "pointer" }}
-//             onClick={() => handleEditProduct(record.key)} // Thêm sự kiện onClick để điều hướng
-//           />
-//           <EyeOutlined
-//             style={{ color: "#52c41a", cursor: "pointer" }}
-//             onClick={() => handleExpandRow(record)}
-//           />
-//           <DeleteOutlined
-//             style={{ color: "#ff4d4f", cursor: "pointer" }}
-//             onClick={() => handleDeleteClick(record)}
-//           />
-//         </Space>
-//       ),
-//     }
-//   ];
-//   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-//   const [isModalVisible, setIsModalVisible] = useState(false);
-//   const [selectedOrder, setSelectedOrder] = useState(null);
-//   const [selectedDeleteOrder, setSelectedDeleteOrder] = useState(null); // Lưu đơn hàng được chọn để xóa
-//   const handleDeleteClick = (order) => {
-//     setSelectedDeleteOrder(order); // Lưu đơn hàng được chọn để xóa
-//     setIsDeleteModalVisible(true); // Hiển thị modal xác nhận
-//   };
-//   const handleViewDetails = (record) => {
-//     setSelectedOrder(record); // Lưu thông tin đơn hàng được chọn
-//     setIsModalVisible(true);  // Hiển thị modal
-//   };
-//   const handleDeleteConfirm = () => {
-//     const updatedData = data.filter((item) => item.key !== selectedDeleteOrder.key); // Lọc bỏ đơn hàng được chọn
-//     setData(updatedData); // Cập nhật danh sách
-//     setIsDeleteModalVisible(false); // Đóng modal
-//     setSelectedDeleteOrder(null); // Xóa thông tin đơn hàng đã chọn
-//   };
-//   const handleCancel = () => {
-//     setIsModalVisible(false); // Đóng modal
-//   };
-//   const onSearch = (value) => {
-//     console.log("Tìm kiếm:", value);
-//   };
-
-
-//   const handleTabClick = (tabName) => {
-//     setActiveTab(tabName);
-//   };
-//   const handleDateChange = (date, dateString, key) => {
-//     const updatedData = data.map((item) =>
-//       item.key === key ? { ...item, postedDate: dateString } : item
-//     );
-//     setData(updatedData);
-//   };
-//   useEffect(() => {
-//     if (activeTab === "Tất cả") {
-//       setFilteredData(data); // Hiển thị tất cả
-//     } else {
-//       const filtered = data.filter((item) => item.status === activeTab);
-//       setFilteredData(filtered);
-//     }
-//   }, [data, activeTab]);
-//   useEffect(() => {
-//     setFilteredData(data); // Hiển thị tất cả khi load lần đầu
-//   }, []);
-//   const [filteredData, setFilteredData] = useState([]);
-//   return (
-//     <div className="order-page">
-//         <div style={{ marginLeft: '270px' }}>
-//         <Topbar title="Quản lý đơn hàng" />
-//       </div>
-
-//       <main className="order-table-container">
-//       <header className="order-header">
-//         <div className="header-actions">
-//             <Input.Search placeholder="Tìm kiếm đơn hàng..." style={{ width: 840 }} />
-//                 <Button type="primary" className="export-button" icon={<ExportOutlined />}>Xuất file</Button>
-//                 <Button
-//                 type="primary"
-//                 className="delete-all-button"
-//                 icon={<DeleteOutlined />}
-//                 onClick={handleDeleteSelected}
-//                 disabled={selectedOrders.length === 0}
-//                 >
-//                 Xóa tất cả
-//                 </Button>
-        
-//           <Table
-//             className="table-containerr"
-//             columns={columns}
-//             dataSource={filteredData}
-//             tableLayout="fixed"
-//             expandable={{
-//               expandedRowKeys,
-//               onExpand: (expanded, record) => handleExpandRow(record),
-//               expandedRowRender: (record) => (
-//                 <div className="detail">
-//                   {record.details.map((detail, index) => (
-//                     <p key={index}>
-//                       {detail.type}: {detail.stock} sản phẩm
-//                     </p>
-//                   ))}
-//                 </div>
-//               ),
-//               rowExpandable: (record) => record.details.length > 0,
-//               showExpandColumn: false,
-//               expandIcon: () => null
-//             }}
-//             scroll={{
-//               y: 300,
-//             }}
-//           />
-//         </header>
-//         <ModalDeleteConfirm
-//                 isVisible={isDeleteModalVisible}
-//                 onConfirm={handleDeleteConfirm}
-//                 onCancel={() => setIsDeleteModalVisible(false)}
-//                 order={selectedDeleteOrder}
-//         />
-//       </main>
-//     </div>
-//   );
-// };
-
-
-// export default ListProductPage ;
-import React, { useState, useEffect } from "react";
-import Topbar from "../../components/TopbarComponent/TopbarComponent";
+import React, { useState, useMemo } from "react";
+import { Input, Button, Table, Tag, DatePicker, Modal, Form, Select, InputNumber, Upload } from "antd";
+import { ExportOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import {
-  EditOutlined,
-  EyeOutlined,
-  DeleteOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
-import { Table, Tag, Space, Input, Button, Dropdown, Menu } from "antd";
-import { ExportOutlined } from "@ant-design/icons";
 import "./ListProductPage.css";
+import Topbar from "../../components/TopbarComponent/TopbarComponent";
 
-const ListProductPage = () => {
+// Sample product data initialization
+const initData = () => [
+  {
+    id: 1,
+    productCode: "PRO0076",
+    name: "Nhẫn Kim cương Vàng",
+    image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
+    category: "Nhẫn",
+    stock: 120,
+    soldQuantity: 30,
+    originalPrice: 15000000,
+    discount: 20, // Giảm giá 20%
+    updatedPrice: 12000000,
+    status: "Tồn kho",
+    date: "29 Dec 2022",
+  },
+  {
+    id: 2,
+    productCode: "PRO0079",
+    name: "Nhẫn Kim cương Vàng",
+    image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
+    category: "Nhẫn",
+    stock: 43,
+    soldQuantity: 20,
+    originalPrice: 15000000,
+    discount: 10, // Giảm giá 10%
+    updatedPrice: 13500000,
+    status: "Nhập",
+    date: "12 Dec 2022",
+  },
+  {
+    id: 3,
+    productCode: "PRO0076",
+    name: "Nhẫn Kim cương Vàng",
+    image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
+    category: "Nhẫn",
+    stock: 111,
+    soldQuantity: 50,
+    originalPrice: 15000000,
+    discount: 15, // Giảm giá 15%
+    updatedPrice: 12750000,
+    status: "Hết hàng",
+    date: "21 Oct 2022",
+  },
+  // Additional product data
+];
+
+const ProductList = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Tất cả");
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-  const [data, setData] = useState([
-    {
-      key: "1",
-      productName: "Áo Dài Tết Cho Chó Mèo Vải Lụa",
-      productCode: "123876",
-      category: "2 phân loại",
-      classification: "Quần áo cho chó",
-      stock: 2,
-      price: "100.000",
-      status: "Tồn kho thấp",
-      postedDate: "29 Dec 2022",
-      checked: true,
-      expanded: false,
-      image: "./ListProductPage-images/aochomeo.jpg",
-      details: [
-        { type: "Màu vàng", stock: 1 },
-        { type: "Màu đỏ", stock: 1 },
-      ],
-    },
-    {
-      key: "2",
-      productName: "Áo Dài Tết Cho Chó Mèo Vải Lụa",
-      productCode: "123877",
-      category: "2 phân loại",
-      classification: "Quần áo cho chó",
-      stock: 2,
-      price: "100.000",
-      status: "Tồn kho thấp",
-      postedDate: "29 Dec 2022",
-      checked: true,
-      expanded: false,
-      image: "./ListProductPage-images/aochomeo.jpg",
-      details: [
-        { type: "Màu vàng", stock: 1 },
-        { type: "Màu đỏ", stock: 1 },
-      ],
-    },
-    {
-      key: "3",
-      productName: "Áo Dài Tết Cho Chó Mèo Vải Lụa",
-      productCode: "123878",
-      category: "2 phân loại",
-      classification: "Quần áo cho chó",
-      stock: 43,
-      price: "100.000",
-      status: "Nháp",
-      postedDate: "29 Dec 2022",
-      checked: false,
-      expanded: false,
-      image: "./ListProductPage-images/aochomeo.jpg",
-      details: [
-        { type: "Màu vàng", stock: 20 },
-        { type: "Màu đỏ", stock: 23 },
-      ],
-    },
-  ]);
-  const [filteredData, setFilteredData] = useState(data);
+  const [products, setProducts] = useState(initData());
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [filters, setFilters] = useState("Tất cả trạng thái");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [image, setImage] = useState(null); // State for product image
 
-  useEffect(() => {
-    if (activeTab === "Tất cả") {
-      setFilteredData(data); // Hiển thị tất cả
-    } else {
-      const filtered = data.filter((item) => item.status === activeTab);
-      setFilteredData(filtered);
-    }
-  }, [activeTab, data]);
+  const handleStatusFilterChange = (status) => setFilters(status);
 
-  const handleExpandRow = (record) => {
-    const isRowExpanded = expandedRowKeys.includes(record.key);
-    setExpandedRowKeys(isRowExpanded
-      ? expandedRowKeys.filter((key) => key !== record.key)
-      : [...expandedRowKeys, record.key]);
-  };
-
-  const handleEditProduct = (key) => {
-        navigate(`/adjust-product/${key}`);
-      };
-
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-  };
-
-  const handleDeleteClick = (order) => {
-    // Xóa trực tiếp sản phẩm khi nhấn nút xóa
-    const updatedData = data.filter((item) => item.key !== order.key);
-    setData(updatedData);
-  };
-
-  const handleCheckboxChange = (key) => {
-    const updatedData = data.map((item) =>
-      item.key === key ? { ...item, checked: !item.checked } : item
+  const handleDeleteSelected = () => {
+    const remainingProducts = products.filter(
+      (product) => !selectedRowKeys.includes(product.id)
     );
-    setData(updatedData);
+    setProducts(remainingProducts);
+    setSelectedRowKeys([]);
+    alert("Đã xóa sản phẩm đã chọn.");
+  };
+
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
+
+  const handleDateChange = (date, dateString) => setSelectedDate(dateString);
+
+  const filteredProducts = useMemo(() => {
+    let filtered = products;
+    if (filters !== "Tất cả trạng thái") {
+      filtered = filtered.filter((product) => product.status === filters);
+    }
+    if (searchTerm) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (selectedDate) {
+      filtered = filtered.filter((product) => product.date === selectedDate);
+    }
+    return filtered;
+  }, [products, filters, searchTerm, selectedDate]);
+
+  const handleAddProduct = (values) => {
+    const { name, category, stock, soldQuantity, originalPrice, discount, status, date } = values;
+    const newProduct = {
+      id: products.length + 1, // Generate new ID for product
+      productCode: `PRO00${products.length + 1}`,
+      name,
+      category,
+      stock,
+      soldQuantity,
+      originalPrice,
+      discount,
+      updatedPrice: originalPrice - (originalPrice * discount) / 100,
+      status,
+      date,
+      image: image || "https://example.com/default-product-image.jpg", // Default image URL (could be modified by user)
+    };
+    setProducts([...products, newProduct]);
+    alert("Đã thêm sản phẩm mới.");
+    setIsModalVisible(false);
   };
 
   const columns = [
+    { title: "Mã sản phẩm", dataIndex: "productCode", key: "productCode" },
     {
-      title: (
-        <Dropdown overlay={menu} trigger={["click"]}>
-          <span style={{ cursor: "pointer" }}>
-            Tên sản phẩm <DownOutlined />
-          </span>
-        </Dropdown>
-      ),
-      dataIndex: "productName",
-      key: "productName",
-      width: "25%",
+      title: "Tên sản phẩm",
+      dataIndex: "name",
+      key: "name",
       render: (text, record) => (
-        <div
-          style={{ display: "flex", alignItems: "center", gap: "10px" }}
-        >
-          <input
-            type="checkbox"
-            checked={record.checked}
-            onChange={() => handleCheckboxChange(record.key)}
-          />
+        <div style={{ display: "flex", alignItems: "center" }}>
           <img
             src={record.image}
-            alt={record.productName || "Product Image"}
-            className="image_productt"
+            alt="product"
+            style={{ width: "50px", height: "50px", marginRight: "10px" }}
           />
-          <div className="content-tssp">
-            <strong>{record.productName}</strong>
-            <br />
-            <span>{record.category}</span>
-          </div>
+          {text}
         </div>
       ),
     },
+    { title: "Danh mục", dataIndex: "category", key: "category" },
+    { title: "Số lượng tồn", dataIndex: "stock", key: "stock" },
+    { title: "Số lượng đã bán", dataIndex: "soldQuantity", key: "soldQuantity" },
+    { title: "Giá gốc", dataIndex: "originalPrice", key: "originalPrice", render: (price) => `${price.toLocaleString()} VND` },
+    { title: "Giảm giá (%)", dataIndex: "discount", key: "discount", render: (discount) => `${discount}%` },
+    { title: "Giá cập nhật", dataIndex: "updatedPrice", key: "updatedPrice", render: (price) => `${price.toLocaleString()} VND` },
     {
-      title: "Mã SP",
-      dataIndex: "productCode",
-      key: "productCode",
-      width: 80,
-    },
-    {
-      title: "Phân loại",
-      dataIndex: "classification",
-      key: "classification",
-      width: "10%",
-    },
-    {
-      title: "Lượng tồn",
-      dataIndex: "stock",
-      key: "stock",
-      width: "12%",
-    },
-    {
-      title: (
-        <Dropdown overlay={menu1} trigger={["click"]}>
-          <span style={{ cursor: "pointer" }}>
-            Giá <DownOutlined />
-          </span>
-        </Dropdown>
-      ),
-      dataIndex: "price",
-      key: "price",
-      width: "10%",
-    },
-    {
-      title: (
-        <Dropdown overlay={menu2} trigger={["click"]}>
-          <span style={{ cursor: "pointer" }}>
-            Tình Trạng <DownOutlined />
-          </span>
-        </Dropdown>
-      ),
+      title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: "12%",
-      render: (status) => {
-        let color = "";
-        switch (status) {
-          case "Tồn kho thấp":
-            color = "red";
-            break;
-          case "Đã đăng":
-            color = "orange";
-            break;
-          case "Nháp":
-            color = "gray";
-            break;
-          default:
-            color = "blue";
-        }
-        return <Tag color={color}>{status}</Tag>;
-      },
-    },
-    {
-      title: "Hành động",
-      key: "action",
-      width: "13%",
-      render: (text, record) => (
-        <Space size="middle">
-          <EditOutlined
-            style={{ color: "#1890ff", cursor: "pointer" }}
-            onClick={() => handleEditProduct(record.key)}
-          />
-          <EyeOutlined
-            style={{ color: "#52c41a", cursor: "pointer" }}
-            onClick={() => handleExpandRow(record)}
-          />
-          <DeleteOutlined
-            style={{ color: "#ff4d4f", cursor: "pointer" }}
-            onClick={() => handleDeleteClick(record)}
-          />
-        </Space>
+      render: (status) => (
+        <Tag color={status === "Tồn kho" ? "green" : status === "Nhập" ? "gold" : "red"}>{status}</Tag>
       ),
     },
+    { title: "Ngày đăng", dataIndex: "date", key: "date" },
   ];
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">Sắp xếp tên</Menu.Item>
-      <Menu.Item key="2">Sắp xếp theo</Menu.Item>
-      <Menu.Item key="3">Sắp xếp theo lượng tồn</Menu.Item>
-    </Menu>
-  );
+  const handleRowClick = (record) => {
+    navigate(`/product-detail/${record.id}`);
+  };
 
-  const menu1 = (
-    <Menu>
-      <Menu.Item key="1">Sắp xếp tăng dần</Menu.Item>
-      <Menu.Item key="2">Sắp xếp giảm dần</Menu.Item>
-    </Menu>
-  );
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
-  const menu2 = (
-    <Menu>
-      <Menu.Item key="1">Sắp xếp tình trạng</Menu.Item>
-    </Menu>
-  );
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedRowKeys) => {
+      setSelectedRowKeys(selectedRowKeys); 
+    },
+  };
+
+  const handleImageChange = (file) => {
+    setImage(file?.url || file?.preview); // Set image from uploaded file or preview
+    return false; // Prevent automatic upload
+  };
 
   return (
-    <div className="list-product-page">
-      <Topbar />
-      <main>
-        <header>
-          <div className="d-flex-between">
-            <Input placeholder="Tìm kiếm sản phẩm" style={{ width: 300 }} />
+    <div>
+      <div style={{ marginLeft: "270px" }}>
+        <Topbar title="Danh sách sản phẩm" />
+      </div>
+      <div className="product-page">
+        {/* Header */}
+        <header className="product-header">
+          <div className="header-actions">
+            <Input.Search
+              placeholder="Tìm kiếm sản phẩm..."
+              style={{ width: 790 }}
+              onChange={handleSearchChange}
+              value={searchTerm}
+            />
+            <Button type="primary" className="export-button" icon={<ExportOutlined />}>
+              Xuất file
+            </Button>
             <Button
               type="primary"
-              onClick={() => navigate("/add-product")}
+              icon={<PlusOutlined />}
+              className="add-product-button"
+              onClick={showModal}
             >
               Thêm sản phẩm
             </Button>
-            <Dropdown overlay={menu} trigger={["click"]}>
-              <Button
-                style={{ background: "#f0f2f5", borderColor: "#d9d9d9" }}
-                icon={<ExportOutlined />}
-              >
-                Xuất Excel
-              </Button>
-            </Dropdown>
           </div>
         </header>
+
+        {/* Filters */}
+        <div className="filter-section">
+          <div className="filter-left">
+            <Button
+              onClick={() => handleStatusFilterChange("Tất cả trạng thái")}
+              className={`filter-btn ${filters === "Tất cả trạng thái" ? "active" : ""}`}
+            >
+              Tất cả trạng thái
+            </Button>
+            <Button
+              onClick={() => handleStatusFilterChange("Tồn kho")}
+              className={`filter-btn ${filters === "Tồn kho" ? "active" : ""}`}
+            >
+              Tồn kho
+            </Button>
+            <Button
+              onClick={() => handleStatusFilterChange("Nhập")}
+              className={`filter-btn ${filters === "Nhập" ? "active" : ""}`}
+            >
+              Nhập
+            </Button>
+            <Button
+              onClick={() => handleStatusFilterChange("Hết hàng")}
+              className={`filter-btn ${filters === "Hết hàng" ? "active" : ""}`}
+            >
+              Hết hàng
+            </Button>
+          </div>
+
+          
+          <div className="filter-right">
+            <DatePicker
+              placeholder="Chọn ngày"
+              style={{ width: 120, marginRight: "10px" }}
+              onChange={handleDateChange}
+            />
+            <Button
+              type="danger"
+              icon={<DeleteOutlined />}
+              onClick={handleDeleteSelected}
+              disabled={selectedRowKeys.length === 0}
+            >
+              Xóa đã chọn
+            </Button>
+          </div>
+        </div>
+
+        {/* Product Table */}
         <Table
+          rowSelection={rowSelection}
           columns={columns}
-          dataSource={filteredData}
-          pagination={{ pageSize: 10 }}
-          expandedRowKeys={expandedRowKeys}
-          onExpand={(expanded, record) => handleExpandRow(record)}
-          expandable={{
-            expandedRowRender: (record) => (
-              <Table
-                columns={columns}
-                dataSource={record.details}
-                pagination={false}
-              />
-            ),
-            rowExpandable: (record) => record.details.length > 0,
-          }}
+          dataSource={filteredProducts}
+          rowKey="id"
+          pagination={{ pageSize: 5 }}
+          style={{ marginTop: 20 }}
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+          })}
         />
-      </main>
+
+        {/* Modal to add a new product */}
+        <Modal
+          title="Thêm sản phẩm mới"
+          visible={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={null}
+          centered
+        >
+          <Form form={form} onFinish={handleAddProduct} layout="vertical">
+            <Form.Item name="name" label="Tên sản phẩm" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="category" label="Danh mục" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="stock" label="Số lượng tồn" rules={[{ required: true }]}>
+              <InputNumber min={1} />
+            </Form.Item>
+            <Form.Item name="soldQuantity" label="Số lượng đã bán" rules={[{ required: true }]}>
+              <InputNumber min={0} />
+            </Form.Item>
+            <Form.Item name="originalPrice" label="Giá gốc" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="discount" label="Giảm giá (%)" rules={[{ required: true }]}>
+              <InputNumber min={0} max={100} />
+            </Form.Item>
+            <Form.Item name="status" label="Trạng thái" rules={[{ required: true }]}>
+              <Select>
+                <Select.Option value="Tồn kho">Tồn kho</Select.Option>
+                <Select.Option value="Nhập">Nhập</Select.Option>
+                <Select.Option value="Hết hàng">Hết hàng</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="date" label="Ngày đăng" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Hình ảnh sản phẩm">
+              <Upload
+                showUploadList={false}
+                beforeUpload={handleImageChange}
+              >
+                <Button>Chọn hình ảnh</Button>
+              </Upload>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                style={{ display: "flex", justifyContent: "center", backgroundColor:'#091057' }}
+              >
+                Thêm nhân viên
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
     </div>
   );
 };
 
-export default ListProductPage;
+export default ProductList;
