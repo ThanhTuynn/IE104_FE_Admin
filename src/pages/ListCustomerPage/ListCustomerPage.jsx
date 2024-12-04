@@ -64,10 +64,10 @@ const CustomerList = () => {
   }, [customers, filters]);
 
   const columns = [
-    { title: "Mã KH", dataIndex: "customerCode", key: "customerCode" },
+    { title: "Mã khách hàng", dataIndex: "customerCode", key: "customerCode" },
     { title: "Họ tên", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
-    { title: "SĐT", dataIndex: "phone", key: "phone" },
+    { title: "Số điện thoại", dataIndex: "phone", key: "phone" },
     {
       title: "Trạng thái",
       dataIndex: "status",

@@ -88,6 +88,7 @@ const DetailOrderPage = () => {
               <tr>
                 <th>Mã sản phẩm</th>
                 <th>Tên sản phẩm</th>
+                <th>Loại sản phẩm</th>
                 <th>Số lượng đặt</th>
                 <th>Đơn giá (VNĐ)</th>
                 <th>Thành tiền (VNĐ)</th>
@@ -106,6 +107,7 @@ const DetailOrderPage = () => {
                     <span>Sữa tắm SOS cực thơm và lành tính dành cho thú cưng nhà iu</span>
                   </div>
                 </td>
+                <td>Hương bưởi</td>
                 <td>100</td>
                 <td>600,000 VNĐ</td>
                 <td>6,000,000 VNĐ</td>
@@ -135,8 +137,8 @@ const DetailOrderPage = () => {
             <p className="cost-value">1,000,000 VNĐ</p>
             </div>
             <div className="cost-item">
-            <p className="cost-label">Nhân công:</p>
-            <p className="cost-value">500,000 VNĐ</p>
+            <p className="cost-label">Phí vận chuyển:</p>
+            <p className="cost-value">50,000 VNĐ</p>
             </div>
             <div className="cost-item total">
             <p className="cost-label">Tổng tiền mua hàng:</p>

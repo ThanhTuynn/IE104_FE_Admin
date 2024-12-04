@@ -1,9 +1,58 @@
-import React, { useState } from "react";
-import { Table, Button, Input, DatePicker, Checkbox } from "antd";
+import React, { useState, useMemo } from "react";
+import { Table, Button, Input, DatePicker} from "antd";
 import { ExportOutlined, MenuOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Topbar from '../../components/TopbarComponent/TopbarComponent';
 import './OrderProductPage.css';
+
+// Initialize data outside useState
+const initData = () => [
+  {
+    id: "1",
+    products: "Nhẫn Kim Cương Vàng, Lắc Tay Mạ Bạc, Vòng Tay Kim Cương",
+    date: "29 Dec 2022",
+    customer: "John Bushmill",
+    total: "13,000,000",
+    payment: "Mastercard",
+    action: "Chờ xác nhận",
+  },
+  {
+    id: "2",
+    products: "Vòng Tay Kim Cương",
+    date: "24 Dec 2022",
+    customer: "Linda Blair",
+    total: "10,000,000",
+    payment: "Visa",
+    action: "Đã hủy",
+  },
+  {
+    id: "3",
+    products: "Lắc Tay Bạc",
+    date: "12 Dec 2022",
+    customer: "M Karim",
+    total: "5,000,000",
+    payment: "Mastercard",
+    action: "Đang vận chuyển",
+  },
+  {
+    id: "4",
+    products: "Lắc Tay Bạc",
+    date: "12 Dec 2022",
+    customer: "M Karim",
+    total: "5,000,000",
+    payment: "Mastercard",
+    action: "Hoàn thành",
+  },
+  {
+    id: "5",
+    products: "Lắc Tay Bạc",
+    date: "12 Dec 2022",
+    customer: "M Karim",
+    total: "5,000,000",
+    payment: "Mastercard",
+    action: "Trả hàng/Hoàn tiền",
+  },
+];
 
 const OrderProduct = () => {
   const navigate = useNavigate(); // Hook điều hướng
@@ -14,93 +63,40 @@ const OrderProduct = () => {
   });
 
   const [selectedOrders, setSelectedOrders] = useState([]);
+  const [data, setData] = useState(initData()); // Initialize data using initData function
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
-  const [data, setData] = useState([
-    {
-      id: "1",
-      products: "Nhẫn Kim Cương Vàng, Lắc Tay Mạ Bạc, Vòng Tay Kim Cương",
-      date: "29 Dec 2022",
-      customer: "John Bushmill",
-      total: "13,000,000",
-      payment: "Mastercard",
-      action: "Chờ xác nhận",
-    },
-    {
-      id: "2",
-      products: "Vòng Tay Kim Cương",
-      date: "24 Dec 2022",
-      customer: "Linda Blair",
-      total: "10,000,000",
-      payment: "Visa",
-      action: "Đã hủy",
-    },
-    {
-      id: "3",
-      products: "Lắc Tay Bạc",
-      date: "12 Dec 2022",
-      customer: "M Karim",
-      total: "5,000,000",
-      payment: "Mastercard",
-      action: "Đang vận chuyển",
-    },
-    {
-      id: "4",
-      products: "Lắc Tay Bạc",
-      date: "12 Dec 2022",
-      customer: "M Karim",
-      total: "5,000,000",
-      payment: "Mastercard",
-      action: "Hoàn thành",
-    },
-    {
-      id: "5",
-      products: "Lắc Tay Bạc",
-      date: "12 Dec 2022",
-      customer: "M Karim",
-      total: "5,000,000",
-      payment: "Mastercard",
-      action: "Trả hàng/Hoàn tiền",
-    },
-  ]);
+  const filteredData = useMemo(() => {
+    return data.filter((item) => {
+      const matchesSearchQuery = item.products.toLowerCase().includes(searchQuery.toLowerCase());
+      return (
+        (filters.orderType === 'Tất cả đơn hàng' || item.action === filters.orderType) &&
+        (filters.dateString ? item.date.includes(filters.dateString) : true) &&
+        matchesSearchQuery
+      );
+    });
+  }, [data, filters, searchQuery]);
 
-  const filteredData = data.filter((item) => {
-    return (
-      (filters.orderType === 'Tất cả đơn hàng' || item.action === filters.orderType) &&
-      (filters.dateString ? item.date.includes(filters.dateString) : true)
-    );
-  });
-
-  const handleSelectAll = (e) => {
-    if (e.target.checked) {
-      setSelectedOrders(filteredData.map((order) => order.id));
-    } else {
-      setSelectedOrders([]);
-    }
-  };
-
-  const handleSelectOrder = (id) => {
-    setSelectedOrders((prev) =>
-      prev.includes(id) ? prev.filter((orderId) => orderId !== id) : [...prev, id]
-    );
-  };
 
   const handleDeleteSelected = () => {
-    setData((prev) => prev.filter((item) => !selectedOrders.includes(item.id)));
-    setSelectedOrders([]); // Reset selected orders after deletion
+    const remainingOrders = data.filter(
+      (order) => !selectedOrders.includes(order.id)
+    );
+    setData(remainingOrders); // Update the data state with remaining orders
+    setSelectedOrders([]); // Reset selected orders
+    alert("Đã xóa đơn hàng đã chọn.");
+  };
+
+  const handleRowClick = (record) => {
+    navigate(`/order-detail/${record.id}`); // Navigate to the detail page of the order
+  };
+
+  const rowSelection = {
+    selectedOrders, 
+    onChange: setSelectedOrders,
   };
 
   const columns = [
-    {
-      title: <Checkbox onChange={handleSelectAll} checked={filteredData.length > 0 && selectedOrders.length === filteredData.length} />,
-      dataIndex: "select",
-      key: "select",
-      render: (text, record) => (
-        <Checkbox
-          checked={selectedOrders.includes(record.id)}
-          onChange={() => handleSelectOrder(record.id)}
-        />
-      ),
-    },
     {
       title: "Mã đơn",
       dataIndex: "id",
@@ -182,14 +178,21 @@ const OrderProduct = () => {
       <div className="order-table-container">
         <header className="order-header">
           <div className="header-actions">
-            <Input.Search placeholder="Tìm kiếm đơn hàng..." style={{ width: 830 }} />
+            <Input.Search
+              placeholder="Tìm kiếm đơn hàng..."
+              style={{ width: 830 }}
+              onSearch={(value) => setSearchQuery(value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+            />
             <Button type="primary" className="export-button" icon={<ExportOutlined />}>Xuất file</Button>
             <Button
               type="primary"
-              className="delete-all-button"
+              danger
               icon={<DeleteOutlined />}
-              onClick={handleDeleteSelected}
               disabled={selectedOrders.length === 0}
+              onClick={handleDeleteSelected}
+              className="delete-all-button"
             >
               Xóa đã chọn
             </Button>
@@ -229,12 +232,13 @@ const OrderProduct = () => {
           </div>
         </div>
         <Table
+          rowSelection={rowSelection}
           columns={columns}
           dataSource={filteredData}
           pagination={{ pageSize: 10 }}
           rowKey="id"
           onRow={(record) => ({
-            onClick: () => navigate(`/order-detail/${record.id}`), // Chuyển hướng khi nhấp vào hàng
+            onClick: () => handleRowClick(record),
           })}
         />
       </div>
