@@ -1,6 +1,10 @@
 import React, { useState, useMemo } from "react";
 import { Input, Button, Tag, Table, message, Modal, Form, Select } from "antd";
-import { ExportOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  ExportOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./ListEmployeePage.css";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
@@ -15,7 +19,7 @@ const initData = () => [
     email: "john.bushmill@example.com",
     phone: "0123456789",
     role: "Quản lý",
-    password: "password123",  // Added password field
+    password: "password123", // Added password field
   },
   {
     id: 2,
@@ -25,7 +29,7 @@ const initData = () => [
     email: "laura.prichett@example.com",
     phone: "0987654321",
     role: "Nhân viên",
-    password: "password123",  // Added password field
+    password: "password123", // Added password field
   },
   {
     id: 3,
@@ -35,7 +39,7 @@ const initData = () => [
     email: "mohammad.karim@example.com",
     phone: "0933456789",
     role: "Nhân viên",
-    password: "password123",  // Added password field
+    password: "password123", // Added password field
   },
   {
     id: 4,
@@ -45,7 +49,7 @@ const initData = () => [
     email: "sarah.connor@example.com",
     phone: "0912345678",
     role: "Quản lý",
-    password: "password123",  // Added password field
+    password: "password123", // Added password field
   },
 ];
 
@@ -56,16 +60,22 @@ const EmployeeList = () => {
   const [filters, setFilters] = useState("Tất cả chức vụ");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   const handleRoleFilterChange = (value) => setFilters(value);
 
   const handleDeleteSelected = () => {
+    setIsDeleteModalVisible(true); // Show delete confirmation modal
+  };
+
+  const handleConfirmDelete = () => {
     const remainingEmployees = employees.filter(
       (employee) => !selectedRowKeys.includes(employee.id)
     );
     setEmployees(remainingEmployees);
     setSelectedRowKeys([]);
-    message.success("Đã xóa nhân viên đã chọn.");
+    setIsDeleteModalVisible(false); // Close the delete confirmation modal
+    alert("Đã xóa nhân viên đã chọn.");
   };
 
   const handleAddEmployee = (values) => {
@@ -105,9 +115,7 @@ const EmployeeList = () => {
       dataIndex: "role",
       key: "role",
       render: (role) => (
-        <Tag color={role === "Quản lý" ? "blue" : "red"}>
-          {role}
-        </Tag>
+        <Tag color={role === "Quản lý" ? "blue" : "red"}>{role}</Tag>
       ),
     },
   ];
@@ -130,6 +138,10 @@ const EmployeeList = () => {
     setIsModalVisible(false);
   };
 
+  const handleCancelDelete = () => {
+    setIsDeleteModalVisible(false); // Close the delete confirmation modal
+  };
+
   return (
     <div>
       <div style={{ marginLeft: "270px" }}>
@@ -139,8 +151,12 @@ const EmployeeList = () => {
         {/* Header */}
         <header className="employee-header">
           <div className="header-actions">
-            <Input.Search placeholder="Tìm kiếm nhân viên..." style={{ width: 795 }} />
-            <Button type="primary" icon={<ExportOutlined />} className="export-button">
+            <Input.Search placeholder="Tìm kiếm nhân viên..." />
+            <Button
+              type="primary"
+              icon={<ExportOutlined />}
+              className="export-button"
+            >
               Xuất file
             </Button>
             {/* Thêm nhân viên button next to Export file */}
@@ -217,7 +233,9 @@ const EmployeeList = () => {
             <Form.Item
               label="Số điện thoại"
               name="phone"
-              rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
+              rules={[
+                { required: true, message: "Vui lòng nhập số điện thoại" },
+              ]}
             >
               <Input placeholder="Nhập số điện thoại..." />
             </Form.Item>
@@ -226,10 +244,13 @@ const EmployeeList = () => {
               name="role"
               rules={[{ required: true, message: "Vui lòng chọn chức vụ" }]}
             >
-              <Select placeholder="Chọn chức vụ" options={[
-                { label: 'Quản lý', value: 'Quản lý' },
-                { label: 'Nhân viên', value: 'Nhân viên' }
-              ]} />
+              <Select
+                placeholder="Chọn chức vụ"
+                options={[
+                  { label: "Quản lý", value: "Quản lý" },
+                  { label: "Nhân viên", value: "Nhân viên" },
+                ]}
+              />
             </Form.Item>
             <Form.Item
               label="Mật khẩu"
@@ -242,7 +263,9 @@ const EmployeeList = () => {
             <Form.Item
               label="Xác nhận mật khẩu"
               name="confirmPassword"
-              rules={[{ required: true, message: "Vui lòng xác nhận mật khẩu" }]}
+              rules={[
+                { required: true, message: "Vui lòng xác nhận mật khẩu" },
+              ]}
               hasFeedback
             >
               <Input.Password placeholder="Xác nhận mật khẩu..." />
@@ -253,21 +276,29 @@ const EmployeeList = () => {
               name="permissions"
               rules={[{ required: true, message: "Vui lòng chọn quyền hạn" }]}
             >
-              <Select mode="multiple"  placeholder="Chọn quyền hạn" options={[
-                { label: 'Quản trị viên', value: 'Admin' },
-                { label: 'Quản lý sản phẩm', value: 'Product Manager' },
-                { label: 'Quản lý cửa hàng', value: 'Store Manager' },
-                { label: 'Quản lý nhân viên', value: 'Employee Manager' },
-                { label: 'Quản lý đơn hàng', value: 'Order Manager' },
-                { label: 'Quản lý khách hàng', value: 'Customer Manager' },
-              ]} />
+              <Select
+                mode="multiple"
+                placeholder="Chọn quyền hạn"
+                options={[
+                  { label: "Quản trị viên", value: "Admin" },
+                  { label: "Quản lý sản phẩm", value: "Product Manager" },
+                  { label: "Quản lý cửa hàng", value: "Store Manager" },
+                  { label: "Quản lý nhân viên", value: "Employee Manager" },
+                  { label: "Quản lý đơn hàng", value: "Order Manager" },
+                  { label: "Quản lý khách hàng", value: "Customer Manager" },
+                ]}
+              />
             </Form.Item>
             <Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
                 block
-                style={{ display: "flex", justifyContent: "center", backgroundColor:'#091057' }}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  backgroundColor: "#091057",
+                }}
               >
                 Thêm nhân viên
               </Button>
@@ -275,6 +306,17 @@ const EmployeeList = () => {
           </Form>
         </Modal>
 
+        {/* Delete Confirmation Modal */}
+        <Modal
+          title="Xác nhận xóa"
+          visible={isDeleteModalVisible}
+          onOk={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          okText="Xóa"
+          cancelText="Hủy"
+        >
+          <p>Bạn có chắc chắn muốn xóa nhân viên đã chọn?</p>
+        </Modal>
 
         {/* Table */}
         <Table

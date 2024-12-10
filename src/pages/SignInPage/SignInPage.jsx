@@ -1,18 +1,18 @@
-import React from 'react';
-import { Button, Form, Input } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import './SignInPage.css';
+import React from "react";
+import { Button, Form, Input } from "antd";
+import { useNavigate } from "react-router-dom";
+import "./SignInPage.css";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const onFinish = (values) => {
-    console.log('Success:', values);
-    navigate('/dashboard');
+    console.log("Success:", values);
+    navigate("/dashboard");
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   return (
@@ -32,7 +32,9 @@ const Login = () => {
           <Form.Item
             label="Tên đăng nhập"
             name="username"
-            rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+            ]}
           >
             <Input placeholder="Nhập tên đăng nhập" />
           </Form.Item>
@@ -40,7 +42,7 @@ const Login = () => {
           <Form.Item
             label="Mật khẩu"
             name="password"
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
           >
             <Input.Password placeholder="Nhập mật khẩu" />
           </Form.Item>

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { DatePicker } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, DatePicker } from "antd";
 import "./DetailOrderPage.css";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 
 const DetailOrderPage = () => {
@@ -10,7 +11,10 @@ const DetailOrderPage = () => {
     "Đang vận chuyển": { color: "blue", backgroundColor: "rgb(215, 215, 255)" },
     "Hoàn thành": { color: "green", backgroundColor: "rgb(224, 251, 224)" },
     "Đã hủy": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
-    "Trả hàng/Hoàn tiền": { color: "gray", backgroundColor: "rgb(221, 213, 199)" },
+    "Trả hàng/Hoàn tiền": {
+      color: "gray",
+      backgroundColor: "rgb(221, 213, 199)",
+    },
   };
 
   // Dữ liệu khởi tạo
@@ -22,7 +26,8 @@ const DetailOrderPage = () => {
       name: "Vân Mây",
       email: "vanmay.nguyenngoc@gmail.com",
       phone: "0987654321",
-      address: "Số 08, đường Hàn Thuyên, phường Linh Trung, TP. Thủ Đức, TP.HCM",
+      address:
+        "Số 08, đường Hàn Thuyên, phường Linh Trung, TP. Thủ Đức, TP.HCM",
       note: "Mong shop có thể chuẩn bị và vận chuyển hàng trước 21/11/2024 giúp mình nhé!",
     },
     employee: {
@@ -41,7 +46,8 @@ const DetailOrderPage = () => {
         quantity: 100,
         unitPrice: 600000,
         voucherPercent: 10,
-        imageUrl: "https://sieupet.com/sites/default/files/pictures/images/sua-tam-SOS.jpg",
+        imageUrl:
+          "https://sieupet.com/sites/default/files/pictures/images/sua-tam-SOS.jpg",
       },
       {
         id: "IT00013",
@@ -52,23 +58,38 @@ const DetailOrderPage = () => {
         quantity: 50,
         unitPrice: 300000,
         voucherPercent: 5,
-        imageUrl: "https://th.bing.com/th/id/OIP.F_8k-Ec1I5YDIEdLs-NoTQHaHa?rs=1&pid=ImgDetMain",
+        imageUrl:
+          "https://th.bing.com/th/id/OIP.F_8k-Ec1I5YDIEdLs-NoTQHaHa?rs=1&pid=ImgDetMain",
       },
     ],
     feedback:
       "Sữa tắm SOS thực sự rất thơm, tắm xong mà thơm mấy ngày liền. Bé cún nhà mình có da nhạy cảm, trước đây hay bị ngứa sau khi tắm nhưng từ khi dùng SOS thì không còn bị nữa. Lông mượt mà, sạch sẽ, ôm lúc nào cũng thích!",
-    cost: 
-    {
-      shippingFee: 20000, // Phí vận chuyển
+    cost: {
+      shippingFee: 20000,
       handlingFee: 15000,
-      orderDiscount: 50000, // Giảm giá cho đơn hàng
-    }
+      orderDiscount: 50000,
+    },
   };
+  const navigate = useNavigate();
 
   const [status, setStatus] = useState(initData.status); // Trạng thái mặc định
   const [customerNote, setCustomerNote] = useState(initData.customer.note); // Ghi chú khách hàng
   const [employeeNote, setEmployeeNote] = useState(initData.employee.note); // Ghi chú nhân viên
-  const [expectedDate, setExpectedDate] = useState(initData.employee.expectedDate); // Ngày nhận hàng dự kiến
+  const [expectedDate, setExpectedDate] = useState(
+    initData.employee.expectedDate
+  ); // Ngày nhận hàng dự kiến
+  const [isChanged, setIsChanged] = useState(false);
+
+  useEffect(() => {
+    // Kiểm tra nếu có thay đổi so với dữ liệu ban đầu
+    const isModified =
+      status !== initData.status ||
+      customerNote !== initData.customer.note ||
+      employeeNote !== initData.employee.note ||
+      expectedDate !== initData.employee.expectedDate;
+
+    setIsChanged(isModified);
+  }, [status, customerNote, employeeNote, expectedDate]);
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
@@ -82,28 +103,44 @@ const DetailOrderPage = () => {
     setEmployeeNote(event.target.value);
   };
 
-  const handleDateChange = (dateString) => {
-    setExpectedDate(dateString); 
+  const handleSaveOrder = () => {
+    // Xử lý lưu đơn hàng
+    console.log("Đã lưu đơn hàng với dữ liệu:", {
+      status,
+      customerNote,
+      employeeNote,
+      expectedDate,
+    });
+    navigate("/list-order-product"); // Chuyển về trang ./order-page
   };
 
-  const totalCost = initData.products.reduce((acc, product) => {
-    const productTotal = product.unitPrice * product.quantity;
-    const productVoucher = (productTotal * product.voucherPercent) / 100;
+  const handleExit = () => navigate(-1);
 
-    // Cộng dồn tổng tiền sản phẩm
-    acc.totalPrice += productTotal;
-    acc.totalVoucher += productVoucher;
-    acc.totalAmount += productTotal - productVoucher;
+  const totalCost = initData.products.reduce(
+    (acc, product) => {
+      const productTotal = product.unitPrice * product.quantity;
+      const productVoucher = (productTotal * product.voucherPercent) / 100;
 
-    return acc;
-  }, {
-    totalPrice: 0,
-    totalVoucher: 0,
-    totalAmount: 0,
-  });
+      // Cộng dồn tổng tiền sản phẩm
+      acc.totalPrice += productTotal;
+      acc.totalVoucher += productVoucher;
+      acc.totalAmount += productTotal - productVoucher;
+
+      return acc;
+    },
+    {
+      totalPrice: 0,
+      totalVoucher: 0,
+      totalAmount: 0,
+    }
+  );
 
   // Thêm chi phí vận chuyển và phí xử lý
-  const finalAmount = totalCost.totalAmount + initData.cost.shippingFee + initData.cost.handlingFee - initData.cost.orderDiscount;
+  const finalAmount =
+    totalCost.totalAmount +
+    initData.cost.shippingFee +
+    initData.cost.handlingFee -
+    initData.cost.orderDiscount;
 
   return (
     <div>
@@ -152,15 +189,23 @@ const DetailOrderPage = () => {
           <div className="customer-info-section">
             <h3>Thông tin khách hàng</h3>
             <div className="info-card">
-              <p><strong>Họ và tên:</strong> {initData.customer.name}</p>
-              <p><strong>Email:</strong> {initData.customer.email}</p>
-              <p><strong>Số điện thoại:</strong> {initData.customer.phone}</p>
-              <p><strong>Địa chỉ:</strong> {initData.customer.address}</p>
-              <textarea 
-                placeholder="Ghi chú khách hàng" 
+              <p>
+                <strong>Họ và tên:</strong> {initData.customer.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {initData.customer.email}
+              </p>
+              <p>
+                <strong>Số điện thoại:</strong> {initData.customer.phone}
+              </p>
+              <p>
+                <strong>Địa chỉ:</strong> {initData.customer.address}
+              </p>
+              <textarea
+                placeholder="Ghi chú khách hàng"
                 value={customerNote}
-                onChange={handleCustomerNoteChange}>
-              </textarea>
+                onChange={handleCustomerNoteChange}
+              ></textarea>
             </div>
           </div>
 
@@ -168,24 +213,34 @@ const DetailOrderPage = () => {
           <div className="employee-info-section">
             <h3>Nhân viên xử lý</h3>
             <div className="info-card">
-              <p><strong>Họ và tên:</strong> {initData.employee.name}</p>
-              <p><strong>Số điện thoại:</strong> {initData.employee.phone}</p>
-              <p><strong>Ngày nhận hàng dự kiến: </strong>
-                  <DatePicker
-                    placeholder="Chọn ngày"
-                    onChange={(date) => {
-                      setExpectedDate(date ? date.format("DD/MM/YYYY") : null); 
-                    }}
-                    format="DD/MM/YYYY"
-                    value={expectedDate ? moment(expectedDate, "DD/MM/YYYY") : null} 
-                  />
-                  </p>
-              <p><strong>Mã tham chiếu:</strong> {initData.employee.referenceCode}</p>
-              <textarea 
-                placeholder="Ghi chú nhân viên xử lý" 
+              <p>
+                <strong>Họ và tên:</strong> {initData.employee.name}
+              </p>
+              <p>
+                <strong>Số điện thoại:</strong> {initData.employee.phone}
+              </p>
+              <p>
+                <strong>Ngày nhận hàng dự kiến: </strong>
+                <DatePicker
+                  placeholder="Chọn ngày"
+                  onChange={(date) => {
+                    setExpectedDate(date ? date.format("DD/MM/YYYY") : null);
+                  }}
+                  format="DD/MM/YYYY"
+                  value={
+                    expectedDate ? moment(expectedDate, "DD/MM/YYYY") : null
+                  }
+                />
+              </p>
+              <p>
+                <strong>Mã tham chiếu:</strong>{" "}
+                {initData.employee.referenceCode}
+              </p>
+              <textarea
+                placeholder="Ghi chú nhân viên xử lý"
                 value={employeeNote}
-                onChange={handleEmployeeNoteChange}>
-              </textarea>
+                onChange={handleEmployeeNoteChange}
+              ></textarea>
             </div>
           </div>
         </div>
@@ -225,7 +280,10 @@ const DetailOrderPage = () => {
                   <td>{product.type}</td>
                   <td>{product.quantity}</td>
                   <td>{product.unitPrice.toLocaleString()} VNĐ</td>
-                  <td>{(product.quantity * product.unitPrice).toLocaleString()} VNĐ</td>
+                  <td>
+                    {(product.quantity * product.unitPrice).toLocaleString()}{" "}
+                    VNĐ
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -236,23 +294,33 @@ const DetailOrderPage = () => {
         <div className="info-card">
           <div className="cost-item">
             <p className="cost-label">Tổng tiền hàng:</p>
-            <p className="cost-value">{totalCost.totalPrice.toLocaleString()} VNĐ</p>
+            <p className="cost-value">
+              {totalCost.totalPrice.toLocaleString()} VNĐ
+            </p>
           </div>
           <div className="cost-item">
             <p className="cost-label">Tổng voucher giảm giá:</p>
-            <p className="cost-value">-{totalCost.totalVoucher.toLocaleString()} VNĐ</p>
+            <p className="cost-value">
+              -{totalCost.totalVoucher.toLocaleString()} VNĐ
+            </p>
           </div>
           <div className="cost-item">
             <p className="cost-label">Phí vận chuyển:</p>
-            <p className="cost-value">{initData.cost.shippingFee.toLocaleString()} VNĐ</p>
+            <p className="cost-value">
+              {initData.cost.shippingFee.toLocaleString()} VNĐ
+            </p>
           </div>
           <div className="cost-item">
             <p className="cost-label">Phí xử lý:</p>
-            <p className="cost-value">{initData.cost.handlingFee.toLocaleString()} VNĐ</p>
+            <p className="cost-value">
+              {initData.cost.handlingFee.toLocaleString()} VNĐ
+            </p>
           </div>
           <div className="cost-item">
             <p className="cost-label">Giảm giá cho đơn hàng:</p>
-            <p className="cost-value">-{initData.cost.orderDiscount.toLocaleString()} VNĐ</p>
+            <p className="cost-value">
+              -{initData.cost.orderDiscount.toLocaleString()} VNĐ
+            </p>
           </div>
           <div className="total-cost">
             <p className="cost-label">Tổng chi phí cuối cùng:</p>
@@ -265,18 +333,30 @@ const DetailOrderPage = () => {
           <div className="feedback-section-container">
             <h3>Đánh giá sản phẩm</h3>
             <div className="info-card">
-              <p><strong>"{initData.feedback}"</strong></p>
-              <textarea placeholder="Phản hồi..." className="note-input"></textarea>
+              <p>
+                <strong>"{initData.feedback}"</strong>
+              </p>
+              <textarea
+                placeholder="Phản hồi..."
+                className="note-input"
+              ></textarea>
             </div>
           </div>
         )}
 
         {/* Buttons */}
         <div className="form-footer">
-          <button className="return-button">Thoát</button>
-          <button className="save-button">Lưu đơn hàng</button>
+          <Button className="return-button" onClick={handleExit}>
+            Thoát
+          </Button>
+          <Button
+            className="save-button"
+            onClick={handleSaveOrder}
+            disabled={!isChanged}
+          >
+            Lưu đơn hàng
+          </Button>
         </div>
-        
       </div>
     </div>
   );
