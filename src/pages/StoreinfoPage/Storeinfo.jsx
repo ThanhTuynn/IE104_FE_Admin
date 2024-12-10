@@ -87,33 +87,10 @@ const Storeinfo = () => {
     <div className='store-info'>
       {/* CONTENT */}
       <section id="content">
-        {/* NAVBAR */}
-        {/* <nav>
-          <div className="form-input">
-            <input type="search" placeholder="Tìm kiếm..." />
-            <button type="submit">
-              <i className="bx bx-search"></i>
-            </button>
-          </div>
-          <a href="#" className="notification">
-            <span className="material-symbols-outlined">notifications</span>
-            <span className="num">8</span>
-          </a>
-          <a href="#" className="profile">
-            <img src={avatar} alt="Profile" />
-          </a>
-        </nav> */}
+        
 
 
-        {/* Thêm nút Đổi mật khẩu */}
-        <div
-          className="ant-row"
-          style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}
-        >
-          <button className="ant-btn ant-btn-secondary" onClick={showModal} type="button">
-            Đổi mật khẩu
-          </button>
-        </div>
+       
 
 
         {/* Account Info Section */}
@@ -144,80 +121,85 @@ const Storeinfo = () => {
                 </div>
               </div>
               <div className="ant-row">
-                <div className="ant-col ant-col-24 ant-col-md-12">
-                  <label className="ant-form-item-label">Số điện thoại cửa hàng</label>
-                  <input
-                    className="ant-input"
-                    type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)} // Cập nhật giá trị khi nhập
-                  />
-                </div>
-                <div className="ant-col ant-col-24 ant-col-md-12">
-                  <label className="ant-form-item-label">Địa chỉ cửa hàng</label>
-                  <input
-                    className="ant-input"
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)} // Cập nhật giá trị khi nhập
-                  />
-                </div>
+  <div className="ant-col ant-col-24">
+    <label className="ant-form-item-label">Số điện thoại cửa hàng</label>
+    <input
+      className="ant-input"
+      type="text"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)} // Cập nhật giá trị khi nhập
+    />
+  </div>
+</div>
+
+<div className="ant-row">
+  <div className="ant-col ant-col-24">
+    <label className="ant-form-item-label">Địa chỉ cửa hàng</label>
+    <input
+      className="ant-input"
+      type="text"
+      value={address}
+      onChange={(e) => setAddress(e.target.value)} // Cập nhật giá trị khi nhập
+    />
+  </div>
+
               </div>
               <div className="ant-row">
-                <div className="ant-col ant-col-24">
-                  <label className="ant-form-item-label">Điều khoản chung</label>
-                  <input
-                    className="ant-input"
-                    type="text"
-                    value={general}
-                    onChange={(e) => setGeneralPolicy(e.target.value)} // Cập nhật giá trị khi nhập
-                  />
-                </div>
+  <div className="ant-col ant-col-24">
+    <label className="ant-form-item-label">Điều khoản chung</label>
+    <textarea
+      className="ant-input"
+      value={general} // Giá trị hiện tại
+      onChange={(e) => setGeneralPolicy(e.target.value)} // Cập nhật giá trị khi nhập
+      rows={4} // Số dòng hiển thị ban đầu
+      placeholder="Nhập điều khoản chung tại đây"
+    />
+  </div>
+</div>
+
+<div className="ant-row">
+  <div className="ant-col ant-col-24">
+    <label className="ant-form-item-label">Chính sách bảo hành</label>
+    <textarea
+      className="ant-input"
+      value={guarantee} // Giá trị hiện tại
+      onChange={(e) => setGuaranteePolicy(e.target.value)} // Cập nhật giá trị khi nhập
+      rows={4} // Số dòng hiển thị ban đầu
+      placeholder="Nhập chính sách bảo hành tại đây"
+    />
+  </div>
+</div>
+
+              <div className="ant-row">
+  <div className="ant-col ant-col-24">
+    <label className="ant-form-item-label">Chính sách đổi trả hàng - hoàn tiền</label>
+    <textarea
+      className="ant-input"
+      value={refund} // Giá trị hiện tại
+      onChange={(e) => setRefundPolicy(e.target.value)} // Cập nhật giá trị khi nhập
+      rows={4} // Số dòng hiển thị ban đầu
+      placeholder="Nhập chính sách đổi trả hàng - hoàn tiền tại đây"
+    />
+  </div>
+
               </div>
               <div className="ant-row">
-                <div className="ant-col ant-col-24">
-                  <label className="ant-form-item-label">Chính sách bảo hành</label>
-                  <input
-                    className="ant-input"
-                    type="text"
-                    value={guarantee}
-                    onChange={(e) => setGuaranteePolicy(e.target.value)} // Cập nhật giá trị khi nhập
-                  />
-                </div>
-              </div>
-              <div className="ant-row">
-                <div className="ant-col ant-col-24">
-                  <label className="ant-form-item-label">Chính sách đổi trả hàng - hoàn tiền</label>
-                  <input
-                    className="ant-input"
-                    type="text"
-                    value={refund}
-                    onChange={(e) => setRefundPolicy(e.target.value)} // Cập nhật giá trị khi nhập
-                  />
-                </div>
-              </div>
-              <div className="ant-row">
-                <div className="ant-col ant-col-24">
-                  <label className="ant-form-item-label">Thông tin giới thiệu - Về chúng tôi</label>
-                  <input
-                    className="ant-input"
-                    type="text"
-                    value={info}
-                    onChange={(e) => setInfo(e.target.value)} // Cập nhật giá trị khi nhập
-                  />
-                </div>
-              </div>
+  <div className="ant-col ant-col-24">
+    <label className="ant-form-item-label">Thông tin giới thiệu - Về chúng tôi</label>
+    <textarea
+      className="ant-input"
+      value={info} // Giá trị hiện tại
+      onChange={(e) => setInfo(e.target.value)} // Cập nhật giá trị khi nhập
+      rows={6} // Số dòng hiển thị ban đầu
+      placeholder="Nhập thông tin giới thiệu về chúng tôi tại đây"
+    />
+  </div>
+</div>
+
 
 
            
-              <div className="ant-row">
-                <div className="ant-col ant-col-24">
-                  <label className="ant-form-item-label">Mật khẩu</label>
-                  <div className="ant-input-password">
-                    <input className="ant-input" type="password" value="******" disabled />
-                  </div>
-                </div>
-              </div>
+             
               <div className="ant-row" style={{ marginTop: '20px' }}>
                 <button className="ant-btn ant-btn-primary" type="submit">
                   Cập nhật
@@ -229,64 +211,7 @@ const Storeinfo = () => {
       </section>
 
 
-      {/* Modal đổi mật khẩu */}
-      {isModalVisible && (
-        <div id="changePasswordModal" style={{ display: 'block'}}>
-          <div className="ant-modal-wrap">
-            <div className="ant-modal">
-              <div className="ant-modal-content">
-                <div className="ant-modal-header">
-                  <div className="ant-modal-title">Đổi mật khẩu</div>
-                </div>
-                <div className="ant-modal-body">
-                  <form id="changePasswordForm" className="ant-form ant-form-horizontal" onSubmit={handleChangePassword}>
-                    <div className="ant-form-item">
-                      <label className="ant-form-item-label">Mật khẩu hiện tại</label>
-                      <input
-                        type="password"
-                        className="ant-input"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)} // Cập nhật giá trị khi nhập
-                        placeholder="Nhập mật khẩu hiện tại"
-                      />
-                    </div>
-                    <div className="ant-form-item">
-                      <label className="ant-form-item-label">Mật khẩu mới</label>
-                      <input
-                        type="password"
-                        className="ant-input"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)} // Cập nhật giá trị khi nhập
-                        placeholder="Nhập mật khẩu mới"
-                      />
-                    </div>
-                    <div className="ant-form-item">
-                      <label className="ant-form-item-label">Xác nhận mật khẩu mới</label>
-                      <input
-                        type="password"
-                        className="ant-input"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)} // Cập nhật giá trị khi nhập
-                        placeholder="Xác nhận mật khẩu mới"
-                      />
-                    </div>
-                    {/* Hiển thị thông báo lỗi nếu có */}
-                    {passwordError && <div className="ant-alert ant-alert-error">{passwordError}</div>}
-                    <div className="ant-modal-footer">
-                      <button type="button" className="ant-btn ant-btn-secondary" onClick={hideModal}>
-                        Đóng
-                      </button>
-                      <button type="submit" className="ant-btn ant-btn-primary">
-                        Đổi mật khẩu
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+
     </div>
     </div>
   );
