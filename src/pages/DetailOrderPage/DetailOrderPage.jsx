@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { DatePicker } from "antd";
 import "./DetailOrderPage.css";
+import moment from "moment";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 
 const DetailOrderPage = () => {
@@ -26,7 +28,6 @@ const DetailOrderPage = () => {
     employee: {
       name: "Ngọc Thị A",
       phone: "0323154625",
-      expectedDate: "19/11/2024",
       referenceCode: "MHN01012345",
       note: "Đơn hàng cần vận chuyển nhanh trước ngày 21/11/2024",
     },
@@ -81,8 +82,8 @@ const DetailOrderPage = () => {
     setEmployeeNote(event.target.value);
   };
 
-  const handleExpectedDateChange = (event) => {
-    setExpectedDate(event.target.value);
+  const handleDateChange = (dateString) => {
+    setExpectedDate(dateString); 
   };
 
   const totalCost = initData.products.reduce((acc, product) => {
@@ -158,8 +159,7 @@ const DetailOrderPage = () => {
               <textarea 
                 placeholder="Ghi chú khách hàng" 
                 value={customerNote}
-                onChange={handleCustomerNoteChange}
-                className="note-input">
+                onChange={handleCustomerNoteChange}>
               </textarea>
             </div>
           </div>
@@ -170,20 +170,21 @@ const DetailOrderPage = () => {
             <div className="info-card">
               <p><strong>Họ và tên:</strong> {initData.employee.name}</p>
               <p><strong>Số điện thoại:</strong> {initData.employee.phone}</p>
-              <p><strong>Ngày nhận hàng dự kiến:</strong>
-                <input
-                  type="date"
-                  value={expectedDate}
-                  onChange={handleExpectedDateChange}
-                  className="date-input"
-                />
-              </p>
+              <p><strong>Ngày nhận hàng dự kiến: </strong>
+                  <DatePicker
+                    placeholder="Chọn ngày"
+                    onChange={(date) => {
+                      setExpectedDate(date ? date.format("DD/MM/YYYY") : null); 
+                    }}
+                    format="DD/MM/YYYY"
+                    value={expectedDate ? moment(expectedDate, "DD/MM/YYYY") : null} 
+                  />
+                  </p>
               <p><strong>Mã tham chiếu:</strong> {initData.employee.referenceCode}</p>
               <textarea 
                 placeholder="Ghi chú nhân viên xử lý" 
                 value={employeeNote}
-                onChange={handleEmployeeNoteChange}
-                className="note-input">
+                onChange={handleEmployeeNoteChange}>
               </textarea>
             </div>
           </div>
@@ -273,7 +274,7 @@ const DetailOrderPage = () => {
         {/* Buttons */}
         <div className="form-footer">
           <button className="return-button">Thoát</button>
-          <button className="save-button">Lưu</button>
+          <button className="save-button">Lưu đơn hàng</button>
         </div>
         
       </div>
