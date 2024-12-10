@@ -64,14 +64,15 @@ const CustomerList = () => {
   }, [customers, filters]);
 
   const columns = [
-    { title: "Mã khách hàng", dataIndex: "customerCode", key: "customerCode" },
-    { title: "Họ tên", dataIndex: "name", key: "name" },
-    { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Số điện thoại", dataIndex: "phone", key: "phone" },
+    { title: "Mã khách hàng", dataIndex: "customerCode", key: "customerCode", width: 150},
+    { title: "Họ tên", dataIndex: "name", key: "name", width: 200 },
+    { title: "Email", dataIndex: "email", key: "email", width: 250 },
+    { title: "Số điện thoại", dataIndex: "phone", key: "phone", width: 150 },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      width: 150,
       render: (status) => (
         <Tag color={status === "Hoạt động" ? "blue" : status === "Mới" ? "gold" : "red"}>
           {status}
@@ -79,7 +80,7 @@ const CustomerList = () => {
       ),
     },
   ];
-
+  
   const handleRowClick = (record) => {
     // Điều hướng đến trang chi tiết khách hàng khi nhấn vào một hàng
     navigate(`/customer-detail/${record.id}`);
