@@ -10,7 +10,6 @@ const AdminInfo = () => {
   const [email, setEmail] = useState('pamela123@gmail.com');
   
 
- 
   // State để kiểm soát việc hiển thị modal và dữ liệu mật khẩu
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
@@ -71,7 +70,7 @@ const AdminInfo = () => {
     hideModal(); // Đóng modal sau khi cập nhật thành công
   };
 
-
+     
   return (
     <div>
         {/* Thanh tiêu đề */}
@@ -107,7 +106,18 @@ const AdminInfo = () => {
         </nav> */}
 
 
-      
+         {/* Thêm nút Đổi mật khẩu */}
+{/* Thêm nút Đổi mật khẩu */}
+<div
+          className="ant-row"
+          style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}
+        >
+          <button className="ant-btn ant-btn-secondary" onClick={showModal} type="button">
+            Đổi mật khẩu
+          </button>
+        </div>
+
+
 
         {/* Account Info Section */}
         <main style={{ marginLeft: '10px', padding: '5px' }}>
@@ -137,7 +147,63 @@ const AdminInfo = () => {
                 </div>
               </div>
               
-
+              {isModalVisible && (
+        <div id="changePasswordModal" style={{ display: 'block'}}>
+          <div className="ant-modal-wrap">
+            <div className="ant-modal">
+              <div className="ant-modal-content">
+                <div className="ant-modal-header">
+                  <div className="ant-modal-title">Đổi mật khẩu</div>
+                </div>
+                <div className="ant-modal-body">
+                  <form id="changePasswordForm" className="ant-form ant-form-horizontal" onSubmit={handleChangePassword}>
+                    <div className="ant-form-item">
+                      <label className="ant-form-item-label">Mật khẩu hiện tại</label>
+                      <input
+                        type="password"
+                        className="ant-input"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)} // Cập nhật giá trị khi nhập
+                        placeholder="Nhập mật khẩu hiện tại"
+                      />
+                    </div>
+                    <div className="ant-form-item">
+                      <label className="ant-form-item-label">Mật khẩu mới</label>
+                      <input
+                        type="password"
+                        className="ant-input"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)} // Cập nhật giá trị khi nhập
+                        placeholder="Nhập mật khẩu mới"
+                      />
+                    </div>
+                    <div className="ant-form-item">
+                      <label className="ant-form-item-label">Xác nhận mật khẩu mới</label>
+                      <input
+                        type="password"
+                        className="ant-input"
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)} // Cập nhật giá trị khi nhập
+                        placeholder="Xác nhận mật khẩu mới"
+                      />
+                    </div>
+                    {/* Hiển thị thông báo lỗi nếu có */}
+                    {passwordError && <div className="ant-alert ant-alert-error">{passwordError}</div>}
+                    <div className="ant-modal-footer">
+                      <button type="button" className="ant-btn ant-btn-secondary" onClick={hideModal}>
+                        Đóng
+                      </button>
+                      <button type="submit" className="ant-btn ant-btn-primary">
+                        Đổi mật khẩu
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
            
               <div className="ant-row">
                 <div className="ant-col ant-col-24">
