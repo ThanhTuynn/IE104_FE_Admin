@@ -78,12 +78,12 @@ body {
     margin-bottom: 5px;
     font-size: 16px;
 }
-
-.sidebar-nav .nav-link:hover, 
-    .sidebar-nav .nav-link:active {
-    color:#091057;
-    background: #FFFFFF;
-}
+.nav-link.active {
+    color: #091057;
+    background: #ffffff;
+    font-weight: bold;
+  }
+  
 
 .sidebar-nav .secondary-nav {
     position: absolute;

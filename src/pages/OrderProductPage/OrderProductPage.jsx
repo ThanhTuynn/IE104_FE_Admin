@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
-import { Table, Button, Input, DatePicker } from "antd";
+import { Table, Button, Input, DatePicker, Modal } from "antd";
 import { ExportOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import Topbar from '../../components/TopbarComponent/TopbarComponent';
-import './OrderProductPage.css';
+import Topbar from "../../components/TopbarComponent/TopbarComponent";
+import "./OrderProductPage.css";
 
 // Initialize data outside useState
 const initData = () => [
@@ -11,7 +11,10 @@ const initData = () => [
     id: "1",
     products: {
       name: "Dầu gội trị viêm da cho thú cưng",
-      otherProducts: ["Dầu dưỡng trị viêm da cho thú cưng", "Dầu gội trị viêm nấm cho thú cưng"],
+      otherProducts: [
+        "Dầu dưỡng trị viêm da cho thú cưng",
+        "Dầu gội trị viêm nấm cho thú cưng",
+      ],
     },
     date: "29 Dec 2022",
     customer: "John Bushmill",
@@ -23,7 +26,10 @@ const initData = () => [
     id: "2",
     products: {
       name: "Vòng Tay Kim Cương",
-      otherProducts: ["Dầu dưỡng trị viêm da cho thú cưng", "Dầu gội trị viêm nấm cho thú cưng"],
+      otherProducts: [
+        "Dầu dưỡng trị viêm da cho thú cưng",
+        "Dầu gội trị viêm nấm cho thú cưng",
+      ],
     },
     date: "24 Dec 2022",
     customer: "Linda Blair",
@@ -72,20 +78,24 @@ const initData = () => [
 const OrderProduct = () => {
   const navigate = useNavigate(); // Hook điều hướng
   const [filters, setFilters] = useState({
-    orderType: 'Tất cả đơn hàng',
+    orderType: "Tất cả đơn hàng",
     date: null,
-    dateString: '',
+    dateString: "",
   });
 
   const [selectedOrders, setSelectedOrders] = useState([]);
-  const [data, setData] = useState(initData()); // Initialize data using initData function
-  const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [data, setData] = useState(initData());
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const filteredData = useMemo(() => {
     return data.filter((item) => {
-      const matchesSearchQuery = item.products.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearchQuery = item.products.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
       return (
-        (filters.orderType === 'Tất cả đơn hàng' || item.action === filters.orderType) &&
+        (filters.orderType === "Tất cả đơn hàng" ||
+          item.action === filters.orderType) &&
         (filters.dateString ? item.date.includes(filters.dateString) : true) &&
         matchesSearchQuery
       );
@@ -93,12 +103,21 @@ const OrderProduct = () => {
   }, [data, filters, searchQuery]);
 
   const handleDeleteSelected = () => {
+    setIsModalVisible(true); // Hiển thị Modal xác nhận xóa
+  };
+
+  const handleConfirmDelete = () => {
     const remainingOrders = data.filter(
       (order) => !selectedOrders.includes(order.id)
     );
-    setData(remainingOrders); // Update the data state with remaining orders
-    setSelectedOrders([]); // Reset selected orders
+    setData(remainingOrders);
+    setSelectedOrders([]);
+    setIsModalVisible(false); // Đóng Modal sau khi xóa
     alert("Đã xóa đơn hàng đã chọn.");
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false); // Đóng Modal nếu người dùng hủy
   };
 
   const handleRowClick = (record) => {
@@ -121,17 +140,17 @@ const OrderProduct = () => {
       dataIndex: "products",
       key: "products",
       render: (products) => {
-        const { name, otherProducts } = products;  // Lấy tên sản phẩm và các sản phẩm khác
+        const { name, otherProducts } = products; // Lấy tên sản phẩm và các sản phẩm khác
         const remainingCount = otherProducts.length; // Số sản phẩm còn lại
 
         return (
           <div>
-              <span>{name}</span>
-              {remainingCount > 0 && (
-                <span style={{ color: "#888", marginLeft: 8 }}>
-                  +{remainingCount} sản phẩm khác
-                </span>
-              )}
+            <span>{name}</span>
+            {remainingCount > 0 && (
+              <span style={{ color: "#888", marginLeft: 8 }}>
+                +{remainingCount} sản phẩm khác
+              </span>
+            )}
           </div>
         );
       },
@@ -162,18 +181,27 @@ const OrderProduct = () => {
       key: "action",
       render: (action) => {
         const actionStyle = {
-          'Chờ xác nhận': { color: '#E8A300', backgroundColor: '#feedc7' },
-          'Đang vận chuyển': { color: 'blue', backgroundColor: 'rgb(215, 215, 255)' },
-          'Hoàn thành': { color: 'green', backgroundColor: 'rgb(224, 251, 224)' },
-          'Đã hủy': { color: 'red', backgroundColor: 'rgb(255, 236, 236)' },
-          'Trả hàng/Hoàn tiền': { color: 'gray', backgroundColor: 'rgb(221, 213, 199)' },
+          "Chờ xác nhận": { color: "#E8A300", backgroundColor: "#feedc7" },
+          "Đang vận chuyển": {
+            color: "blue",
+            backgroundColor: "rgb(215, 215, 255)",
+          },
+          "Hoàn thành": {
+            color: "green",
+            backgroundColor: "rgb(224, 251, 224)",
+          },
+          "Đã hủy": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
+          "Trả hàng/Hoàn tiền": {
+            color: "gray",
+            backgroundColor: "rgb(221, 213, 199)",
+          },
         };
 
         return (
           <Button
             style={{
               ...actionStyle[action],
-              cursor: 'default', // Chặn pointer
+              cursor: "default", // Chặn pointer
             }}
             disabled // Không thể nhấp
           >
@@ -201,7 +229,7 @@ const OrderProduct = () => {
 
   return (
     <div>
-      <div style={{ marginLeft: '270px' }}>
+      <div style={{ marginLeft: "270px" }}>
         <Topbar title="Quản lý đơn hàng" />
       </div>
 
@@ -214,7 +242,13 @@ const OrderProduct = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery}
             />
-            <Button type="primary" className="export-button" icon={<ExportOutlined />}>Xuất file</Button>
+            <Button
+              type="primary"
+              className="export-button"
+              icon={<ExportOutlined />}
+            >
+              Xuất file
+            </Button>
             <Button
               type="primary"
               danger
@@ -230,22 +264,52 @@ const OrderProduct = () => {
 
         <div className="filter-section">
           <div className="filter-left">
-            <Button onClick={() => handleOrderTypeChange('Tất cả đơn hàng')} className={`filter-btn ${filters.orderType === 'Tất cả đơn hàng' ? 'active' : ''}`}>
+            <Button
+              onClick={() => handleOrderTypeChange("Tất cả đơn hàng")}
+              className={`filter-btn ${
+                filters.orderType === "Tất cả đơn hàng" ? "active" : ""
+              }`}
+            >
               Tất cả đơn hàng
             </Button>
-            <Button onClick={() => handleOrderTypeChange('Chờ xác nhận')} className={`filter-btn ${filters.orderType === 'Chờ xác nhận' ? 'active' : ''}`}>
+            <Button
+              onClick={() => handleOrderTypeChange("Chờ xác nhận")}
+              className={`filter-btn ${
+                filters.orderType === "Chờ xác nhận" ? "active" : ""
+              }`}
+            >
               Chờ xác nhận
             </Button>
-            <Button onClick={() => handleOrderTypeChange('Đang vận chuyển')} className={`filter-btn ${filters.orderType === 'Đang vận chuyển' ? 'active' : ''}`}>
+            <Button
+              onClick={() => handleOrderTypeChange("Đang vận chuyển")}
+              className={`filter-btn ${
+                filters.orderType === "Đang vận chuyển" ? "active" : ""
+              }`}
+            >
               Đang vận chuyển
             </Button>
-            <Button onClick={() => handleOrderTypeChange('Hoàn thành')} className={`filter-btn ${filters.orderType === 'Hoàn thành' ? 'active' : ''}`}>
+            <Button
+              onClick={() => handleOrderTypeChange("Hoàn thành")}
+              className={`filter-btn ${
+                filters.orderType === "Hoàn thành" ? "active" : ""
+              }`}
+            >
               Hoàn thành
             </Button>
-            <Button onClick={() => handleOrderTypeChange('Đã hủy')} className={`filter-btn ${filters.orderType === 'Đã hủy' ? 'active' : ''}`}>
+            <Button
+              onClick={() => handleOrderTypeChange("Đã hủy")}
+              className={`filter-btn ${
+                filters.orderType === "Đã hủy" ? "active" : ""
+              }`}
+            >
               Đã hủy
             </Button>
-            <Button onClick={() => handleOrderTypeChange('Trả hàng/Hoàn tiền')} className={`filter-btn ${filters.orderType === 'Trả hàng/Hoàn tiền' ? 'active' : ''}`}>
+            <Button
+              onClick={() => handleOrderTypeChange("Trả hàng/Hoàn tiền")}
+              className={`filter-btn ${
+                filters.orderType === "Trả hàng/Hoàn tiền" ? "active" : ""
+              }`}
+            >
               Trả hàng/Hoàn tiền
             </Button>
           </div>
@@ -269,6 +333,18 @@ const OrderProduct = () => {
           })}
           pagination={{ pageSize: 5 }}
         />
+
+        {/* Modal xác nhận xóa */}
+        <Modal
+          title="Xác nhận xóa"
+          visible={isModalVisible}
+          onOk={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          okText="Xóa"
+          cancelText="Hủy"
+        >
+          <p>Bạn có chắc chắn muốn xóa những đơn hàng đã chọn?</p>
+        </Modal>
       </div>
     </div>
   );

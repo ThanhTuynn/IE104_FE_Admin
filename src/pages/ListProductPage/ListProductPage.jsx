@@ -1,10 +1,16 @@
 import React, { useState, useMemo } from "react";
-import { Input, Button, Table, Tag, Select } from "antd";
-import { ExportOutlined, DeleteOutlined, PlusOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { Input, Button, Table, Tag, Select, Modal } from "antd";
+import {
+  ExportOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  HeartOutlined,
+  HeartFilled,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./ListProductPage.css";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
-import ProductModal from "./AddProductModal.jsx"; 
+import ProductModal from "./AddProductModal.jsx";
 
 // Sample product data initialization
 const initData = () => [
@@ -12,7 +18,8 @@ const initData = () => [
     id: 1,
     productCode: "PRO0076",
     name: "Dầu gội trị viêm da cho thú cưng",
-    image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
+    image:
+      "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
     category: "Mèo",
     subCategory: "Chăm sóc vệ sinh", // Danh mục phụ
     childCategory: "Sữa tắm",
@@ -28,7 +35,8 @@ const initData = () => [
     id: 2,
     productCode: "PRO0079",
     name: "Hạt Mềm Cho Chó Trưởng Thành Zenith Adult",
-    image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
+    image:
+      "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
     category: "Chó",
     subCategory: "Thức ăn",
     childCategory: "Hạt",
@@ -44,7 +52,8 @@ const initData = () => [
     id: 3,
     productCode: "PRO0076",
     name: "Hạt Mềm Cho Chó Trưởng Thành Zenith Adult",
-    image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
+    image:
+      "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
     category: "Chó",
     subCategory: "Thức ăn",
     childCategory: "Hạt",
@@ -66,33 +75,43 @@ const ProductList = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisibleDelete, setIsModalVisibleDelete] = useState(false);
   // const [form] = Form.useForm();
   const [image, setImage] = useState(null);
   const [productDetails, setProductDetails] = useState({
     attributes: [],
-    subCategory: []
+    subCategory: [],
   });
 
   // const [isFormValid, setIsFormValid] = useState(false);
-  
+
   // Lọc theo trạng thái
   const handleStatusFilterChange = (status) => setFilters(status);
 
   // Xóa sản phẩm theo lựa chọn
   const handleDeleteSelected = () => {
-    const remainingProducts = products.filter(
+    setIsModalVisibleDelete(true); // Show confirmation modal
+  };
+
+  const handleConfirmDelete = () => {
+    const newProducts = products.filter(
       (product) => !selectedRowKeys.includes(product.id)
     );
-    setProducts(remainingProducts);
-    setSelectedRowKeys([]);
+    setProducts(newProducts); // Remove selected products from the list
+    setSelectedRowKeys([]); // Reset selected rows
+    setIsModalVisibleDelete(false); // Close modal
     alert("Đã xóa sản phẩm đã chọn.");
   };
-  
+
+  const handleCancelDelete = () => {
+    setIsModalVisibleDelete(false); // Close modal if user cancels
+  };
+
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
   const filteredProducts = useMemo(() => {
     let filtered = products;
-   
+
     // Lọc theo trạng thái
     if (filters !== "Tất cả trạng thái") {
       filtered = filtered.filter((product) => product.status === filters);
@@ -100,7 +119,9 @@ const ProductList = () => {
 
     // Lọc theo danh mục
     if (selectedCategory) {
-      filtered = filtered.filter((product) => product.category === selectedCategory);
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
     }
 
     // Lọc theo tìm kiếm
@@ -111,10 +132,18 @@ const ProductList = () => {
     }
 
     return filtered;
-    }, [products, filters,  selectedCategory, searchTerm ]);
+  }, [products, filters, selectedCategory, searchTerm]);
 
   const handleAddProduct = (values) => {
-    const { name, category, stock, soldQuantity, originalPrice, discount, status } = values;
+    const {
+      name,
+      category,
+      stock,
+      soldQuantity,
+      originalPrice,
+      discount,
+      status,
+    } = values;
     const newProduct = {
       id: products.length + 1, // Tạo new ID mới cho sản phẩm
       productCode: `PRO00${products.length + 1}`,
@@ -127,9 +156,9 @@ const ProductList = () => {
       updatedPrice: originalPrice - (originalPrice * discount) / 100,
       status,
       image: image || "https://example.com/default-product-image.jpg",
-      subCategory: productDetails.subCategory, 
+      subCategory: productDetails.subCategory,
       childCategory: productDetails.childCategory,
-      attributes: productDetails.attributes 
+      attributes: productDetails.attributes,
     };
     setProducts([...products, newProduct]);
     alert("Đã thêm sản phẩm mới.");
@@ -143,39 +172,54 @@ const ProductList = () => {
       value: "Chó",
       subCategories: [
         {
-          label: "Thức ăn",value: "Thức ăn",children: ["Hạt",  "Ướt",  "Hữu cơ", "Sữa"]
+          label: "Thức ăn",
+          value: "Thức ăn",
+          children: ["Hạt", "Ướt", "Hữu cơ", "Sữa"],
         },
         {
-          label: "Trang phục",value: "Trang phục",children: [ "Áo quần",  "Mũ nón", "Vòng cổ & Dây sích"]
+          label: "Trang phục",
+          value: "Trang phục",
+          children: ["Áo quần", "Mũ nón", "Vòng cổ & Dây sích"],
         },
         {
-          label: "Đồ chơi",value: "Đồ chơi",children: ["Xương gặm", "Nhồi bông", "Huấn luyện&Tương tác"]
+          label: "Đồ chơi",
+          value: "Đồ chơi",
+          children: ["Xương gặm", "Nhồi bông", "Huấn luyện&Tương tác"],
         },
         {
-          label: "Chăm sóc vệ sinh",value: "Chăm sóc vệ sinh",children: ["Răng&Miệng", "Tai&Mắt", "Sửa tắm", "Xịt khử mùi"]
-        }
-      ]
+          label: "Chăm sóc vệ sinh",
+          value: "Chăm sóc vệ sinh",
+          children: ["Răng&Miệng", "Tai&Mắt", "Sửa tắm", "Xịt khử mùi"],
+        },
+      ],
     },
     {
       label: "Mèo",
       value: "Mèo",
       subCategories: [
         {
-          label: "Thức ăn", value: "Thức ăn",children: ["Hạt", "Ướt", "Hữu cơ", "Sữa"]
+          label: "Thức ăn",
+          value: "Thức ăn",
+          children: ["Hạt", "Ướt", "Hữu cơ", "Sữa"],
         },
         {
-          label: "Trang phục",value: "Trang phục",children: ["Áo quần", "Mũ nón", "Vòng cổ & Dây sích"]
+          label: "Trang phục",
+          value: "Trang phục",
+          children: ["Áo quần", "Mũ nón", "Vòng cổ & Dây sích"],
         },
         {
-          label: "Đồ chơi",value: "Đồ chơi",children: ["Bàn cào", "Nhồi bông", "Huấn luyện&Tương tác"]
+          label: "Đồ chơi",
+          value: "Đồ chơi",
+          children: ["Bàn cào", "Nhồi bông", "Huấn luyện&Tương tác"],
         },
         {
-          label: "Chăm sóc vệ sinh",value: "Chăm sóc vệ sinh",children: ["Răng&Miệng", "Tai&Mắt", "Sửa tắm", "Xịt khử mùi"]
-        }
-      ]
-    }
+          label: "Chăm sóc vệ sinh",
+          value: "Chăm sóc vệ sinh",
+          children: ["Răng&Miệng", "Tai&Mắt", "Sửa tắm", "Xịt khử mùi"],
+        },
+      ],
+    },
   ];
-  
 
   const columns = [
     { title: "Mã sản phẩm", dataIndex: "productCode", key: "productCode" },
@@ -195,23 +239,52 @@ const ProductList = () => {
       ),
     },
     { title: "Danh mục chính", dataIndex: "category", key: "category" },
-    { 
-      title: "Danh mục con", 
-      dataIndex: "childCategory", 
+    {
+      title: "Danh mục con",
+      dataIndex: "childCategory",
       key: "childCategory",
-      render: (childCategory) => childCategory 
+      render: (childCategory) => childCategory,
     },
     { title: "Số lượng tồn", dataIndex: "stock", key: "stock" },
-    { title: "Số lượng đã bán", dataIndex: "soldQuantity", key: "soldQuantity" },
-    { title: "Giá gốc", dataIndex: "originalPrice", key: "originalPrice", render: (price) => `${price.toLocaleString()} VND` },
-    { title: "Giảm giá (%)", dataIndex: "discount", key: "discount", render: (discount) => `${discount}%` },
-    { title: "Giá cập nhật", dataIndex: "updatedPrice", key: "updatedPrice", render: (price) => `${price.toLocaleString()} VND` },
+    {
+      title: "Số lượng đã bán",
+      dataIndex: "soldQuantity",
+      key: "soldQuantity",
+    },
+    {
+      title: "Giá gốc",
+      dataIndex: "originalPrice",
+      key: "originalPrice",
+      render: (price) => `${price.toLocaleString()} VND`,
+    },
+    {
+      title: "Giảm giá (%)",
+      dataIndex: "discount",
+      key: "discount",
+      render: (discount) => `${discount}%`,
+    },
+    {
+      title: "Giá cập nhật",
+      dataIndex: "updatedPrice",
+      key: "updatedPrice",
+      render: (price) => `${price.toLocaleString()} VND`,
+    },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
       render: (status) => (
-        <Tag color={status === "Tồn kho" ? "green" : status === "Cần nhập" ? "gold" : "red"}>{status}</Tag>
+        <Tag
+          color={
+            status === "Tồn kho"
+              ? "green"
+              : status === "Cần nhập"
+              ? "gold"
+              : "red"
+          }
+        >
+          {status}
+        </Tag>
       ),
     },
     {
@@ -219,11 +292,14 @@ const ProductList = () => {
       key: "favorite",
       render: (_, record) => (
         <span
-        onClick={(event) => {
-          event.stopPropagation(); // Dừng sự kiện click lan tới hàng
-          toggleFavorite(record.id);
-        }}
-          style={{ cursor: "pointer", color: record.isFavorite ? "red" : "gray" }}
+          onClick={(event) => {
+            event.stopPropagation(); // Dừng sự kiện click lan tới hàng
+            toggleFavorite(record.id);
+          }}
+          style={{
+            cursor: "pointer",
+            color: record.isFavorite ? "red" : "gray",
+          }}
         >
           {record.isFavorite ? <HeartFilled /> : <HeartOutlined />}
         </span>
@@ -242,7 +318,9 @@ const ProductList = () => {
   const toggleFavorite = (id) => {
     setProducts((prevProducts) =>
       prevProducts.map((product) =>
-        product.id === id ? { ...product, isFavorite: !product.isFavorite } : product
+        product.id === id
+          ? { ...product, isFavorite: !product.isFavorite }
+          : product
       )
     );
   };
@@ -250,13 +328,15 @@ const ProductList = () => {
   const rowSelection = {
     selectedRowKeys,
     onChange: (selectedRowKeys) => {
-      setSelectedRowKeys(selectedRowKeys); 
+      setSelectedRowKeys(selectedRowKeys);
     },
   };
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    const selectedCategoryObj = categories.find((cat) => cat.value === category);
+    const selectedCategoryObj = categories.find(
+      (cat) => cat.value === category
+    );
     if (selectedCategoryObj) {
       setProductDetails({
         ...productDetails,
@@ -279,7 +359,11 @@ const ProductList = () => {
               onChange={handleSearchChange}
               value={searchTerm}
             />
-            <Button type="primary" className="export-button" icon={<ExportOutlined />}>
+            <Button
+              type="primary"
+              className="export-button"
+              icon={<ExportOutlined />}
+            >
               Xuất file
             </Button>
             <Button
@@ -293,12 +377,14 @@ const ProductList = () => {
           </div>
         </header>
 
-          {/* Filters */}
-          <div className="filter-section">
+        {/* Filters */}
+        <div className="filter-section">
           <div className="filter-left">
             <Button
               onClick={() => handleStatusFilterChange("Tất cả trạng thái")}
-              className={`filter-btn ${filters === "Tất cả trạng thái" ? "active" : ""}`}
+              className={`filter-btn ${
+                filters === "Tất cả trạng thái" ? "active" : ""
+              }`}
             >
               Tất cả trạng thái
             </Button>
@@ -322,18 +408,17 @@ const ProductList = () => {
             </Button>
           </div>
 
-          
           <div className="filter-right">
-          <Select
-            placeholder="Chọn danh mục"
-            style={{ width: 150, marginRight: "10px" }}
-            onChange={handleCategoryChange}
-            allowClear
-            options={[
-              { value: "Chó", label: "Chó" },
-              { value: "Mèo", label: "Mèo" },
-            ]}
-          />
+            <Select
+              placeholder="Chọn danh mục"
+              style={{ width: 150, marginRight: "10px" }}
+              onChange={handleCategoryChange}
+              allowClear
+              options={[
+                { value: "Chó", label: "Chó" },
+                { value: "Mèo", label: "Mèo" },
+              ]}
+            />
             <Button
               type="primary"
               danger
@@ -345,7 +430,7 @@ const ProductList = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* Product Table */}
         <Table
           columns={columns}
@@ -357,14 +442,26 @@ const ProductList = () => {
           })}
         />
 
+        {/* Modal xác nhận xóa */}
+        <Modal
+          title="Xác nhận xóa"
+          visible={isModalVisibleDelete}
+          onOk={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+          okText="Xóa"
+          cancelText="Hủy"
+        >
+          <p>Bạn có chắc chắn muốn xóa những sản phẩm đã chọn?</p>
+        </Modal>
+
         <ProductModal
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        onSubmit={handleAddProduct}
-        categories={categories}
-        productDetails={productDetails}
-        setProductDetails={setProductDetails}
-      />
+          visible={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          onSubmit={handleAddProduct}
+          categories={categories}
+          productDetails={productDetails}
+          setProductDetails={setProductDetails}
+        />
       </div>
     </div>
   );
