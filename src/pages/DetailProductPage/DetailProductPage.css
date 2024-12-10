@@ -1,6 +1,5 @@
 .product-detail {
     margin-left: 270px;
-    max-width: 1200px;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -21,6 +20,13 @@
     border: 1px solid #eaeaea;
     border-radius: 8px;
     background-color: #fafafa;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
   }
   
   .section:last-child {
@@ -128,7 +134,7 @@
     justify-content: center; 
     height: 100%; 
     margin-left: -30px;
-    margin-bottom: -13px;
+    margin-bottom: -20px;
   }
   .save-button-container {
     display: flex;

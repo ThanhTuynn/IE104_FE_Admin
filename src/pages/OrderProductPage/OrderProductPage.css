@@ -12,6 +12,15 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px; 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px; 
+      width: 100%;
+      box-sizing: border-box; 
+    }
+
     .export-button {
         background-color:  #cdd1ff;
         color: #091057;
@@ -32,6 +41,18 @@
     gap: 16px; 
     align-items: center;
     margin-top: 20px;
+
+    .filter-left {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .filter-right {
+      display: flex;
+      align-items: center;
+      margin-right: 10px;
+    }
+
     .filter-toggle-button {
         background-color: #091057;
         border-color: #091057;

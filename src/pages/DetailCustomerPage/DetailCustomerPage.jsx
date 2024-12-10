@@ -95,6 +95,12 @@ const CustomerDetail = () => {
         <Topbar title="Thông tin chi tiết khách hàng" />
       </div>
 
+//       <div className="customer-detail">
+//         {/* Main Container */}
+//           {/* Left Section */}
+//           <div className="left-profile-section">
+//             <div className="avatar-placeholder">
+//               <img src={avatar} alt="avatar-customer" />
 
       {/* Main Container */}
       {/* Left Section */}\

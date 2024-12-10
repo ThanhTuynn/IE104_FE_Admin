@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./DetailOrderPage.css"; 
+import "./DetailOrderPage.css";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 
 const DetailOrderPage = () => {
@@ -11,11 +11,98 @@ const DetailOrderPage = () => {
     "Trả hàng/Hoàn tiền": { color: "gray", backgroundColor: "rgb(221, 213, 199)" },
   };
 
-  const [status, setStatus] = useState("Hoàn thành"); // Trạng thái mặc định
+  // Dữ liệu khởi tạo
+  const initData = {
+    orderId: "DA3172101",
+    purchaseDate: "19/11/2024",
+    status: "Hoàn thành",
+    customer: {
+      name: "Vân Mây",
+      email: "vanmay.nguyenngoc@gmail.com",
+      phone: "0987654321",
+      address: "Số 08, đường Hàn Thuyên, phường Linh Trung, TP. Thủ Đức, TP.HCM",
+      note: "Mong shop có thể chuẩn bị và vận chuyển hàng trước 21/11/2024 giúp mình nhé!",
+    },
+    employee: {
+      name: "Ngọc Thị A",
+      phone: "0323154625",
+      expectedDate: "19/11/2024",
+      referenceCode: "MHN01012345",
+      note: "Đơn hàng cần vận chuyển nhanh trước ngày 21/11/2024",
+    },
+    products: [
+      {
+        id: "IT00012",
+        name: "Sữa tắm SOS cực thơm và lành tính dành cho thú cưng nhà iu",
+        mainCategory: "Chăm sóc thú cưng",
+        subCategory: "Sữa tắm",
+        type: "Hương bưởi",
+        quantity: 100,
+        unitPrice: 600000,
+        voucherPercent: 10,
+        imageUrl: "https://sieupet.com/sites/default/files/pictures/images/sua-tam-SOS.jpg",
+      },
+      {
+        id: "IT00013",
+        name: "Thức ăn hạt cao cấp cho mèo",
+        mainCategory: "Thức ăn",
+        subCategory: "Hạt",
+        type: "Vị cá ngừ",
+        quantity: 50,
+        unitPrice: 300000,
+        voucherPercent: 5,
+        imageUrl: "https://th.bing.com/th/id/OIP.F_8k-Ec1I5YDIEdLs-NoTQHaHa?rs=1&pid=ImgDetMain",
+      },
+    ],
+    feedback:
+      "Sữa tắm SOS thực sự rất thơm, tắm xong mà thơm mấy ngày liền. Bé cún nhà mình có da nhạy cảm, trước đây hay bị ngứa sau khi tắm nhưng từ khi dùng SOS thì không còn bị nữa. Lông mượt mà, sạch sẽ, ôm lúc nào cũng thích!",
+    cost: 
+    {
+      shippingFee: 20000, // Phí vận chuyển
+      handlingFee: 15000,
+      orderDiscount: 50000, // Giảm giá cho đơn hàng
+    }
+  };
+
+  const [status, setStatus] = useState(initData.status); // Trạng thái mặc định
+  const [customerNote, setCustomerNote] = useState(initData.customer.note); // Ghi chú khách hàng
+  const [employeeNote, setEmployeeNote] = useState(initData.employee.note); // Ghi chú nhân viên
+  const [expectedDate, setExpectedDate] = useState(initData.employee.expectedDate); // Ngày nhận hàng dự kiến
 
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
   };
+
+  const handleCustomerNoteChange = (event) => {
+    setCustomerNote(event.target.value);
+  };
+
+  const handleEmployeeNoteChange = (event) => {
+    setEmployeeNote(event.target.value);
+  };
+
+  const handleExpectedDateChange = (event) => {
+    setExpectedDate(event.target.value);
+  };
+
+  const totalCost = initData.products.reduce((acc, product) => {
+    const productTotal = product.unitPrice * product.quantity;
+    const productVoucher = (productTotal * product.voucherPercent) / 100;
+
+    // Cộng dồn tổng tiền sản phẩm
+    acc.totalPrice += productTotal;
+    acc.totalVoucher += productVoucher;
+    acc.totalAmount += productTotal - productVoucher;
+
+    return acc;
+  }, {
+    totalPrice: 0,
+    totalVoucher: 0,
+    totalAmount: 0,
+  });
+
+  // Thêm chi phí vận chuyển và phí xử lý
+  const finalAmount = totalCost.totalAmount + initData.cost.shippingFee + initData.cost.handlingFee - initData.cost.orderDiscount;
 
   return (
     <div>
@@ -29,11 +116,11 @@ const DetailOrderPage = () => {
         <div className="order-header">
           <div>
             <span>Mã phiếu mua hàng: </span>
-            <strong>DA3172101</strong>
+            <strong>{initData.orderId}</strong>
           </div>
           <div>
             <span>Ngày mua hàng: </span>
-            <strong>19/11/2024</strong>
+            <strong>{initData.purchaseDate}</strong>
           </div>
           <div>
             <span>Trạng thái: </span>
@@ -42,15 +129,18 @@ const DetailOrderPage = () => {
               onChange={handleStatusChange}
               className="status-select"
               style={{
-                color: actionStyle[status].color,
-                backgroundColor: "white", 
+                color: actionStyle[status]?.color,
               }}
             >
-              <option value="Chờ xác nhận">Chờ xác nhận</option>
-              <option value="Đang vận chuyển">Đang vận chuyển</option>
-              <option value="Hoàn thành">Hoàn thành</option>
-              <option value="Đã hủy">Đã hủy</option>
-              <option value="Trả hàng/Hoàn tiền">Trả hàng/Hoàn tiền</option>
+              {Object.keys(actionStyle).map((key) => (
+                <option
+                  key={key}
+                  value={key}
+                  style={{ color: actionStyle[key]?.color }}
+                >
+                  {key}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -61,10 +151,16 @@ const DetailOrderPage = () => {
           <div className="customer-info-section">
             <h3>Thông tin khách hàng</h3>
             <div className="info-card">
-              <p><strong>Họ và tên:</strong> Vân Mây</p>
-              <p><strong>Email:</strong> vanmay.nguyenngoc@gmail.com</p>
-              <p><strong>Số điện thoại:</strong> 0987654321</p>
-              <p><strong>Địa chỉ:</strong> Số 08, đường Hàn Thuyên, phường Linh Trung, TP. Thủ Đức, TP.HCM</p>
+              <p><strong>Họ và tên:</strong> {initData.customer.name}</p>
+              <p><strong>Email:</strong> {initData.customer.email}</p>
+              <p><strong>Số điện thoại:</strong> {initData.customer.phone}</p>
+              <p><strong>Địa chỉ:</strong> {initData.customer.address}</p>
+              <textarea 
+                placeholder="Ghi chú khách hàng" 
+                value={customerNote}
+                onChange={handleCustomerNoteChange}
+                className="note-input">
+              </textarea>
             </div>
           </div>
 
@@ -72,10 +168,23 @@ const DetailOrderPage = () => {
           <div className="employee-info-section">
             <h3>Nhân viên xử lý</h3>
             <div className="info-card">
-              <p><strong>Họ và tên:</strong> Ngọc Thị A</p>
-              <p><strong>Ngày nhận hàng dự kiến:</strong> 19/11/2024</p>
-              <p><strong>Mã tham chiếu:</strong> MHN01012345</p>
-              <textarea placeholder="Ghi chú" className="note-input"></textarea>
+              <p><strong>Họ và tên:</strong> {initData.employee.name}</p>
+              <p><strong>Số điện thoại:</strong> {initData.employee.phone}</p>
+              <p><strong>Ngày nhận hàng dự kiến:</strong>
+                <input
+                  type="date"
+                  value={expectedDate}
+                  onChange={handleExpectedDateChange}
+                  className="date-input"
+                />
+              </p>
+              <p><strong>Mã tham chiếu:</strong> {initData.employee.referenceCode}</p>
+              <textarea 
+                placeholder="Ghi chú nhân viên xử lý" 
+                value={employeeNote}
+                onChange={handleEmployeeNoteChange}
+                className="note-input">
+              </textarea>
             </div>
           </div>
         </div>
@@ -88,86 +197,85 @@ const DetailOrderPage = () => {
               <tr>
                 <th>Mã sản phẩm</th>
                 <th>Tên sản phẩm</th>
-                <th>Loại sản phẩm</th>
+                <th>Danh mục chính</th>
+                <th>Danh mục con</th>
+                <th>Biến thể</th>
                 <th>Số lượng đặt</th>
                 <th>Đơn giá (VNĐ)</th>
                 <th>Thành tiền (VNĐ)</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>IT00012</td>
-                <td>
-                  <div className="product-info">
-                    <img
-                      src="https://sieupet.com/sites/default/files/pictures/images/sua-tam-SOS.jpg" 
-                      alt="Dây chuyền bạc nữ kim cương"
-                      className="product-image"
-                    />
-                    <span>Sữa tắm SOS cực thơm và lành tính dành cho thú cưng nhà iu</span>
-                  </div>
-                </td>
-                <td>Hương bưởi</td>
-                <td>100</td>
-                <td>600,000 VNĐ</td>
-                <td>6,000,000 VNĐ</td>
-              </tr>
+              {initData.products.map((product) => (
+                <tr key={product.id}>
+                  <td>{product.id}</td>
+                  <td>
+                    <div className="product-info">
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="product-image"
+                      />
+                      <span>{product.name}</span>
+                    </div>
+                  </td>
+                  <td>{product.mainCategory}</td>
+                  <td>{product.subCategory}</td>
+                  <td>{product.type}</td>
+                  <td>{product.quantity}</td>
+                  <td>{product.unitPrice.toLocaleString()} VNĐ</td>
+                  <td>{(product.quantity * product.unitPrice).toLocaleString()} VNĐ</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
         {/* Chi phí mua hàng */}
-        <div className="cost-info-section">
-        <h3>Chi phí mua hàng</h3>
         <div className="info-card">
-            <div className="cost-item">
-            <p className="cost-label">Tổng số lượng đặt:</p>
-            <p className="cost-value">100</p>
-            </div>
-            <div className="cost-item">
+          <div className="cost-item">
             <p className="cost-label">Tổng tiền hàng:</p>
-            <p className="cost-value">6,000,000 VNĐ</p>
-            </div>
-            <div className="cost-item">
-            <p className="cost-label">Chiết khấu:</p>
-            <p className="cost-value">0 VNĐ</p>
-            </div>
-            <div className="cost-item">
-            <p className="cost-label">Chi phí khác:</p>
-            <p className="cost-value">1,000,000 VNĐ</p>
-            </div>
-            <div className="cost-item">
+            <p className="cost-value">{totalCost.totalPrice.toLocaleString()} VNĐ</p>
+          </div>
+          <div className="cost-item">
+            <p className="cost-label">Tổng voucher giảm giá:</p>
+            <p className="cost-value">-{totalCost.totalVoucher.toLocaleString()} VNĐ</p>
+          </div>
+          <div className="cost-item">
             <p className="cost-label">Phí vận chuyển:</p>
-            <p className="cost-value">50,000 VNĐ</p>
-            </div>
-            <div className="cost-item">
-            <p className="cost-label">Voucher của cửa hàng:</p>
-            <p className="cost-value">-250,000 VNĐ</p>
-            </div>
-            <div className="cost-item total">
-            <p className="cost-label">Tổng tiền mua hàng:</p>
-            <p className="cost-value total-amount">7,250,000 VNĐ</p>
-            </div>
-        </div>
+            <p className="cost-value">{initData.cost.shippingFee.toLocaleString()} VNĐ</p>
+          </div>
+          <div className="cost-item">
+            <p className="cost-label">Phí xử lý:</p>
+            <p className="cost-value">{initData.cost.handlingFee.toLocaleString()} VNĐ</p>
+          </div>
+          <div className="cost-item">
+            <p className="cost-label">Giảm giá cho đơn hàng:</p>
+            <p className="cost-value">-{initData.cost.orderDiscount.toLocaleString()} VNĐ</p>
+          </div>
+          <div className="total-cost">
+            <p className="cost-label">Tổng chi phí cuối cùng:</p>
+            <p className="cost-value">{finalAmount.toLocaleString()} VNĐ</p>
+          </div>
         </div>
 
-        <div className="feedback-section-container">
-        <h3>Đánh giá sản phẩm</h3>
-        <div className="info-card">
-          <p>
-            <strong>
-              "Sữa tắm SOS thực sự rất thơm, tắm xong mà thơm mấy ngày liền. Bé cún nhà mình có da nhạy cảm, trước đây hay bị ngứa sau khi tắm nhưng từ khi dùng SOS thì không còn bị nữa. Lông mượt mà, sạch sẽ, ôm lúc nào cũng thích!"
-            </strong>
-          </p>
-          <textarea placeholder="Phản hồi..." className="note-input"></textarea>
-        </div>
-      </div>
+        {/* Phản hồi */}
+        {status === "Hoàn thành" && (
+          <div className="feedback-section-container">
+            <h3>Đánh giá sản phẩm</h3>
+            <div className="info-card">
+              <p><strong>"{initData.feedback}"</strong></p>
+              <textarea placeholder="Phản hồi..." className="note-input"></textarea>
+            </div>
+          </div>
+        )}
 
         {/* Buttons */}
         <div className="form-footer">
           <button className="return-button">Thoát</button>
           <button className="save-button">Lưu</button>
         </div>
+        
       </div>
     </div>
   );
