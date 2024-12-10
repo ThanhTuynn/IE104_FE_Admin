@@ -98,7 +98,7 @@ const CustomerDetail = () => {
       <div className="customer-detail">
         {/* Main Container */}
           {/* Left Section */}
-          <div className="left-section">
+          <div className="left-profile-section">
             <div className="avatar-placeholder">
               <img src={avatar} alt="avatar-customer" />
             </div>

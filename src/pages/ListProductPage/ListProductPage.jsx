@@ -1,55 +1,61 @@
 import React, { useState, useMemo } from "react";
-import { Input, Button, Table, Tag, DatePicker, Modal, Form, Select, InputNumber, Upload } from "antd";
-import { ExportOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { Input, Button, Table, Tag, Select } from "antd";
+import { ExportOutlined, DeleteOutlined, PlusOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import "./ListProductPage.css";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
+import ProductModal from "./AddProductModal.jsx"; 
 
 // Sample product data initialization
 const initData = () => [
   {
     id: 1,
     productCode: "PRO0076",
-    name: "Nhẫn Kim cương Vàng",
+    name: "Dầu gội trị viêm da cho thú cưng",
     image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
-    category: "Nhẫn",
+    category: "Mèo",
+    subCategory: "Chăm sóc vệ sinh", // Danh mục phụ
+    childCategory: "Sữa tắm",
     stock: 120,
     soldQuantity: 30,
     originalPrice: 15000000,
     discount: 20, // Giảm giá 20%
     updatedPrice: 12000000,
     status: "Tồn kho",
-    date: "29 Dec 2022",
+    isFavorite: false,
   },
   {
     id: 2,
     productCode: "PRO0079",
-    name: "Nhẫn Kim cương Vàng",
+    name: "Hạt Mềm Cho Chó Trưởng Thành Zenith Adult",
     image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
-    category: "Nhẫn",
+    category: "Chó",
+    subCategory: "Thức ăn",
+    childCategory: "Hạt",
     stock: 43,
     soldQuantity: 20,
     originalPrice: 15000000,
     discount: 10, // Giảm giá 10%
     updatedPrice: 13500000,
-    status: "Nhập",
-    date: "12 Dec 2022",
+    status: "Cần nhập",
+    isFavorite: false,
   },
   {
     id: 3,
     productCode: "PRO0076",
-    name: "Nhẫn Kim cương Vàng",
+    name: "Hạt Mềm Cho Chó Trưởng Thành Zenith Adult",
     image: "https://iupets.vn/wp-content/uploads/2020/03/sua-tam-sos-cho-meo-cho.jpg",
-    category: "Nhẫn",
+    category: "Chó",
+    subCategory: "Thức ăn",
+    childCategory: "Hạt",
     stock: 111,
     soldQuantity: 50,
     originalPrice: 15000000,
     discount: 15, // Giảm giá 15%
     updatedPrice: 12750000,
     status: "Hết hàng",
-    date: "21 Oct 2022",
+    isFavorite: false,
   },
-  // Additional product data
 ];
 
 const ProductList = () => {
@@ -57,14 +63,22 @@ const ProductList = () => {
   const [products, setProducts] = useState(initData());
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [filters, setFilters] = useState("Tất cả trạng thái");
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDate, setSelectedDate] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [form] = Form.useForm();
-  const [image, setImage] = useState(null); // State for product image
+  // const [form] = Form.useForm();
+  const [image, setImage] = useState(null);
+  const [productDetails, setProductDetails] = useState({
+    attributes: [],
+    subCategory: []
+  });
 
+  // const [isFormValid, setIsFormValid] = useState(false);
+  
+  // Lọc theo trạng thái
   const handleStatusFilterChange = (status) => setFilters(status);
 
+  // Xóa sản phẩm theo lựa chọn
   const handleDeleteSelected = () => {
     const remainingProducts = products.filter(
       (product) => !selectedRowKeys.includes(product.id)
@@ -73,31 +87,36 @@ const ProductList = () => {
     setSelectedRowKeys([]);
     alert("Đã xóa sản phẩm đã chọn.");
   };
-
+  
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
-
-  const handleDateChange = (date, dateString) => setSelectedDate(dateString);
 
   const filteredProducts = useMemo(() => {
     let filtered = products;
+   
+    // Lọc theo trạng thái
     if (filters !== "Tất cả trạng thái") {
       filtered = filtered.filter((product) => product.status === filters);
     }
+
+    // Lọc theo danh mục
+    if (selectedCategory) {
+      filtered = filtered.filter((product) => product.category === selectedCategory);
+    }
+
+    // Lọc theo tìm kiếm
     if (searchTerm) {
       filtered = filtered.filter((product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    if (selectedDate) {
-      filtered = filtered.filter((product) => product.date === selectedDate);
-    }
+
     return filtered;
-  }, [products, filters, searchTerm, selectedDate]);
+    }, [products, filters,  selectedCategory, searchTerm ]);
 
   const handleAddProduct = (values) => {
-    const { name, category, stock, soldQuantity, originalPrice, discount, status, date } = values;
+    const { name, category, stock, soldQuantity, originalPrice, discount, status } = values;
     const newProduct = {
-      id: products.length + 1, // Generate new ID for product
+      id: products.length + 1, // Tạo new ID mới cho sản phẩm
       productCode: `PRO00${products.length + 1}`,
       name,
       category,
@@ -107,13 +126,56 @@ const ProductList = () => {
       discount,
       updatedPrice: originalPrice - (originalPrice * discount) / 100,
       status,
-      date,
-      image: image || "https://example.com/default-product-image.jpg", // Default image URL (could be modified by user)
+      image: image || "https://example.com/default-product-image.jpg",
+      subCategory: productDetails.subCategory, 
+      childCategory: productDetails.childCategory,
+      attributes: productDetails.attributes 
     };
     setProducts([...products, newProduct]);
     alert("Đã thêm sản phẩm mới.");
     setIsModalVisible(false);
+    setProductDetails({ attributes: [] }); // Reset attributes after adding product
   };
+
+  const categories = [
+    {
+      label: "Chó",
+      value: "Chó",
+      subCategories: [
+        {
+          label: "Thức ăn",value: "Thức ăn",children: ["Hạt",  "Ướt",  "Hữu cơ", "Sữa"]
+        },
+        {
+          label: "Trang phục",value: "Trang phục",children: [ "Áo quần",  "Mũ nón", "Vòng cổ & Dây sích"]
+        },
+        {
+          label: "Đồ chơi",value: "Đồ chơi",children: ["Xương gặm", "Nhồi bông", "Huấn luyện&Tương tác"]
+        },
+        {
+          label: "Chăm sóc vệ sinh",value: "Chăm sóc vệ sinh",children: ["Răng&Miệng", "Tai&Mắt", "Sửa tắm", "Xịt khử mùi"]
+        }
+      ]
+    },
+    {
+      label: "Mèo",
+      value: "Mèo",
+      subCategories: [
+        {
+          label: "Thức ăn", value: "Thức ăn",children: ["Hạt", "Ướt", "Hữu cơ", "Sữa"]
+        },
+        {
+          label: "Trang phục",value: "Trang phục",children: ["Áo quần", "Mũ nón", "Vòng cổ & Dây sích"]
+        },
+        {
+          label: "Đồ chơi",value: "Đồ chơi",children: ["Bàn cào", "Nhồi bông", "Huấn luyện&Tương tác"]
+        },
+        {
+          label: "Chăm sóc vệ sinh",value: "Chăm sóc vệ sinh",children: ["Răng&Miệng", "Tai&Mắt", "Sửa tắm", "Xịt khử mùi"]
+        }
+      ]
+    }
+  ];
+  
 
   const columns = [
     { title: "Mã sản phẩm", dataIndex: "productCode", key: "productCode" },
@@ -132,7 +194,13 @@ const ProductList = () => {
         </div>
       ),
     },
-    { title: "Danh mục", dataIndex: "category", key: "category" },
+    { title: "Danh mục chính", dataIndex: "category", key: "category" },
+    { 
+      title: "Danh mục con", 
+      dataIndex: "childCategory", 
+      key: "childCategory",
+      render: (childCategory) => childCategory 
+    },
     { title: "Số lượng tồn", dataIndex: "stock", key: "stock" },
     { title: "Số lượng đã bán", dataIndex: "soldQuantity", key: "soldQuantity" },
     { title: "Giá gốc", dataIndex: "originalPrice", key: "originalPrice", render: (price) => `${price.toLocaleString()} VND` },
@@ -143,10 +211,24 @@ const ProductList = () => {
       dataIndex: "status",
       key: "status",
       render: (status) => (
-        <Tag color={status === "Tồn kho" ? "green" : status === "Nhập" ? "gold" : "red"}>{status}</Tag>
+        <Tag color={status === "Tồn kho" ? "green" : status === "Cần nhập" ? "gold" : "red"}>{status}</Tag>
       ),
     },
-    { title: "Ngày đăng", dataIndex: "date", key: "date" },
+    {
+      title: "Yêu thích",
+      key: "favorite",
+      render: (_, record) => (
+        <span
+        onClick={(event) => {
+          event.stopPropagation(); // Dừng sự kiện click lan tới hàng
+          toggleFavorite(record.id);
+        }}
+          style={{ cursor: "pointer", color: record.isFavorite ? "red" : "gray" }}
+        >
+          {record.isFavorite ? <HeartFilled /> : <HeartOutlined />}
+        </span>
+      ),
+    },
   ];
 
   const handleRowClick = (record) => {
@@ -157,6 +239,14 @@ const ProductList = () => {
     setIsModalVisible(true);
   };
 
+  const toggleFavorite = (id) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === id ? { ...product, isFavorite: !product.isFavorite } : product
+      )
+    );
+  };
+
   const rowSelection = {
     selectedRowKeys,
     onChange: (selectedRowKeys) => {
@@ -164,9 +254,15 @@ const ProductList = () => {
     },
   };
 
-  const handleImageChange = (file) => {
-    setImage(file?.url || file?.preview); // Set image from uploaded file or preview
-    return false; // Prevent automatic upload
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    const selectedCategoryObj = categories.find((cat) => cat.value === category);
+    if (selectedCategoryObj) {
+      setProductDetails({
+        ...productDetails,
+        subCategory: selectedCategoryObj.subCategories,
+      });
+    }
   };
 
   return (
@@ -180,7 +276,6 @@ const ProductList = () => {
           <div className="header-actions">
             <Input.Search
               placeholder="Tìm kiếm sản phẩm..."
-              style={{ width: 790 }}
               onChange={handleSearchChange}
               value={searchTerm}
             />
@@ -198,8 +293,8 @@ const ProductList = () => {
           </div>
         </header>
 
-        {/* Filters */}
-        <div className="filter-section">
+          {/* Filters */}
+          <div className="filter-section">
           <div className="filter-left">
             <Button
               onClick={() => handleStatusFilterChange("Tất cả trạng thái")}
@@ -214,10 +309,10 @@ const ProductList = () => {
               Tồn kho
             </Button>
             <Button
-              onClick={() => handleStatusFilterChange("Nhập")}
-              className={`filter-btn ${filters === "Nhập" ? "active" : ""}`}
+              onClick={() => handleStatusFilterChange("Cần nhập")}
+              className={`filter-btn ${filters === "Cần nhập" ? "active" : ""}`}
             >
-              Nhập
+              Cần nhập
             </Button>
             <Button
               onClick={() => handleStatusFilterChange("Hết hàng")}
@@ -229,13 +324,19 @@ const ProductList = () => {
 
           
           <div className="filter-right">
-            <DatePicker
-              placeholder="Chọn ngày"
-              style={{ width: 120, marginRight: "10px" }}
-              onChange={handleDateChange}
-            />
+          <Select
+            placeholder="Chọn danh mục"
+            style={{ width: 150, marginRight: "10px" }}
+            onChange={handleCategoryChange}
+            allowClear
+            options={[
+              { value: "Chó", label: "Chó" },
+              { value: "Mèo", label: "Mèo" },
+            ]}
+          />
             <Button
-              type="danger"
+              type="primary"
+              danger
               icon={<DeleteOutlined />}
               onClick={handleDeleteSelected}
               disabled={selectedRowKeys.length === 0}
@@ -244,77 +345,26 @@ const ProductList = () => {
             </Button>
           </div>
         </div>
-
+        
         {/* Product Table */}
         <Table
-          rowSelection={rowSelection}
           columns={columns}
           dataSource={filteredProducts}
+          rowSelection={rowSelection}
           rowKey="id"
-          pagination={{ pageSize: 5 }}
-          style={{ marginTop: 20 }}
           onRow={(record) => ({
             onClick: () => handleRowClick(record),
           })}
         />
 
-        {/* Modal to add a new product */}
-        <Modal
-          title="Thêm sản phẩm mới"
-          visible={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          footer={null}
-          centered
-        >
-          <Form form={form} onFinish={handleAddProduct} layout="vertical">
-            <Form.Item name="name" label="Tên sản phẩm" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="category" label="Danh mục" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="stock" label="Số lượng tồn" rules={[{ required: true }]}>
-              <InputNumber min={1} />
-            </Form.Item>
-            <Form.Item name="soldQuantity" label="Số lượng đã bán" rules={[{ required: true }]}>
-              <InputNumber min={0} />
-            </Form.Item>
-            <Form.Item name="originalPrice" label="Giá gốc" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="discount" label="Giảm giá (%)" rules={[{ required: true }]}>
-              <InputNumber min={0} max={100} />
-            </Form.Item>
-            <Form.Item name="status" label="Trạng thái" rules={[{ required: true }]}>
-              <Select>
-                <Select.Option value="Tồn kho">Tồn kho</Select.Option>
-                <Select.Option value="Nhập">Nhập</Select.Option>
-                <Select.Option value="Hết hàng">Hết hàng</Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name="date" label="Ngày đăng" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Hình ảnh sản phẩm">
-              <Upload
-                showUploadList={false}
-                beforeUpload={handleImageChange}
-              >
-                <Button>Chọn hình ảnh</Button>
-              </Upload>
-            </Form.Item>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                block
-                style={{ display: "flex", justifyContent: "center", backgroundColor:'#091057' }}
-              >
-                Thêm nhân viên
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+        <ProductModal
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        onSubmit={handleAddProduct}
+        categories={categories}
+        productDetails={productDetails}
+        setProductDetails={setProductDetails}
+      />
       </div>
     </div>
   );

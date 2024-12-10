@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { Table, Button, Input, DatePicker} from "antd";
-import { ExportOutlined, MenuOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Button, Input, DatePicker } from "antd";
+import { ExportOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Topbar from '../../components/TopbarComponent/TopbarComponent';
 import './OrderProductPage.css';
@@ -9,7 +9,10 @@ import './OrderProductPage.css';
 const initData = () => [
   {
     id: "1",
-    products: "Nhẫn Kim Cương Vàng, Lắc Tay Mạ Bạc, Vòng Tay Kim Cương",
+    products: {
+      name: "Dầu gội trị viêm da cho thú cưng",
+      otherProducts: ["Dầu dưỡng trị viêm da cho thú cưng", "Dầu gội trị viêm nấm cho thú cưng"],
+    },
     date: "29 Dec 2022",
     customer: "John Bushmill",
     total: "13,000,000",
@@ -18,7 +21,10 @@ const initData = () => [
   },
   {
     id: "2",
-    products: "Vòng Tay Kim Cương",
+    products: {
+      name: "Vòng Tay Kim Cương",
+      otherProducts: ["Dầu dưỡng trị viêm da cho thú cưng", "Dầu gội trị viêm nấm cho thú cưng"],
+    },
     date: "24 Dec 2022",
     customer: "Linda Blair",
     total: "10,000,000",
@@ -27,7 +33,10 @@ const initData = () => [
   },
   {
     id: "3",
-    products: "Lắc Tay Bạc",
+    products: {
+      name: "Lắc Tay Bạc",
+      otherProducts: [],
+    },
     date: "12 Dec 2022",
     customer: "M Karim",
     total: "5,000,000",
@@ -36,7 +45,10 @@ const initData = () => [
   },
   {
     id: "4",
-    products: "Lắc Tay Bạc",
+    products: {
+      name: "Lắc Tay Bạc",
+      otherProducts: [],
+    },
     date: "12 Dec 2022",
     customer: "M Karim",
     total: "5,000,000",
@@ -45,7 +57,10 @@ const initData = () => [
   },
   {
     id: "5",
-    products: "Lắc Tay Bạc",
+    products: {
+      name: "Lắc Tay Bạc",
+      otherProducts: [],
+    },
     date: "12 Dec 2022",
     customer: "M Karim",
     total: "5,000,000",
@@ -68,7 +83,7 @@ const OrderProduct = () => {
 
   const filteredData = useMemo(() => {
     return data.filter((item) => {
-      const matchesSearchQuery = item.products.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearchQuery = item.products.name.toLowerCase().includes(searchQuery.toLowerCase());
       return (
         (filters.orderType === 'Tất cả đơn hàng' || item.action === filters.orderType) &&
         (filters.dateString ? item.date.includes(filters.dateString) : true) &&
@@ -76,7 +91,6 @@ const OrderProduct = () => {
       );
     });
   }, [data, filters, searchQuery]);
-
 
   const handleDeleteSelected = () => {
     const remainingOrders = data.filter(
@@ -92,7 +106,7 @@ const OrderProduct = () => {
   };
 
   const rowSelection = {
-    selectedOrders, 
+    selectedOrders,
     onChange: setSelectedOrders,
   };
 
@@ -106,6 +120,21 @@ const OrderProduct = () => {
       title: "Sản phẩm",
       dataIndex: "products",
       key: "products",
+      render: (products) => {
+        const { name, otherProducts } = products;  // Lấy tên sản phẩm và các sản phẩm khác
+        const remainingCount = otherProducts.length; // Số sản phẩm còn lại
+
+        return (
+          <div>
+              <span>{name}</span>
+              {remainingCount > 0 && (
+                <span style={{ color: "#888", marginLeft: 8 }}>
+                  +{remainingCount} sản phẩm khác
+                </span>
+              )}
+          </div>
+        );
+      },
     },
     {
       title: "Ngày",
@@ -175,12 +204,12 @@ const OrderProduct = () => {
       <div style={{ marginLeft: '270px' }}>
         <Topbar title="Quản lý đơn hàng" />
       </div>
+
       <div className="order-table-container">
         <header className="order-header">
           <div className="header-actions">
             <Input.Search
               placeholder="Tìm kiếm đơn hàng..."
-              style={{ width: 830 }}
               onSearch={(value) => setSearchQuery(value)}
               onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery}
@@ -198,48 +227,47 @@ const OrderProduct = () => {
             </Button>
           </div>
         </header>
+
         <div className="filter-section">
-          <Button onClick={() => handleOrderTypeChange('Tất cả đơn hàng')} className={`filter-btn ${filters.orderType === 'Tất cả đơn hàng' ? 'active' : ''}`}>
-            Tất cả đơn hàng
-          </Button>
-          <Button onClick={() => handleOrderTypeChange('Chờ xác nhận')} className={`filter-btn ${filters.orderType === 'Chờ xác nhận' ? 'active' : ''}`}>
-            Chờ xác nhận
-          </Button>
-          <Button onClick={() => handleOrderTypeChange('Đang vận chuyển')} className={`filter-btn ${filters.orderType === 'Đang vận chuyển' ? 'active' : ''}`}>
-            Đang vận chuyển
-          </Button>
-          <Button onClick={() => handleOrderTypeChange('Hoàn thành')} className={`filter-btn ${filters.orderType === 'Hoàn thành' ? 'active' : ''}`}>
-            Hoàn thành
-          </Button>
-          <Button onClick={() => handleOrderTypeChange('Đã hủy')} className={`filter-btn ${filters.orderType === 'Đã hủy' ? 'active' : ''}`}>
-            Đã hủy
-          </Button>
-          <Button onClick={() => handleOrderTypeChange('Trả hàng/Hoàn tiền')} className={`filter-btn ${filters.orderType === 'Trả hàng/Hoàn tiền' ? 'active' : ''}`}>
-            Trả hàng/Hoàn tiền
-          </Button>
-          <div>
+          <div className="filter-left">
+            <Button onClick={() => handleOrderTypeChange('Tất cả đơn hàng')} className={`filter-btn ${filters.orderType === 'Tất cả đơn hàng' ? 'active' : ''}`}>
+              Tất cả đơn hàng
+            </Button>
+            <Button onClick={() => handleOrderTypeChange('Chờ xác nhận')} className={`filter-btn ${filters.orderType === 'Chờ xác nhận' ? 'active' : ''}`}>
+              Chờ xác nhận
+            </Button>
+            <Button onClick={() => handleOrderTypeChange('Đang vận chuyển')} className={`filter-btn ${filters.orderType === 'Đang vận chuyển' ? 'active' : ''}`}>
+              Đang vận chuyển
+            </Button>
+            <Button onClick={() => handleOrderTypeChange('Hoàn thành')} className={`filter-btn ${filters.orderType === 'Hoàn thành' ? 'active' : ''}`}>
+              Hoàn thành
+            </Button>
+            <Button onClick={() => handleOrderTypeChange('Đã hủy')} className={`filter-btn ${filters.orderType === 'Đã hủy' ? 'active' : ''}`}>
+              Đã hủy
+            </Button>
+            <Button onClick={() => handleOrderTypeChange('Trả hàng/Hoàn tiền')} className={`filter-btn ${filters.orderType === 'Trả hàng/Hoàn tiền' ? 'active' : ''}`}>
+              Trả hàng/Hoàn tiền
+            </Button>
+          </div>
+
+          <div className="filter-right">
             <DatePicker
               placeholder="Chọn ngày"
-              style={{ width: 120, marginLeft: '20px', marginRight: '10px' }}
               onChange={handleDateChange}
+              format="DD/MM/YYYY"
+              value={filters.date}
             />
-            <Button
-              type="primary"
-              icon={<MenuOutlined />}
-              className="filter-toggle-button"
-            >
-            </Button>
           </div>
         </div>
         <Table
-          rowSelection={rowSelection}
           columns={columns}
           dataSource={filteredData}
-          pagination={{ pageSize: 10 }}
           rowKey="id"
+          rowSelection={rowSelection}
           onRow={(record) => ({
             onClick: () => handleRowClick(record),
           })}
+          pagination={{ pageSize: 5 }}
         />
       </div>
     </div>
