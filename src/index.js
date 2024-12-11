@@ -40,7 +40,7 @@ const queryClient = new QueryClient()
 root.render(
   <React.StrictMode>
   <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
+    <Provider store={store} persistor={persistor}>
       <App />
     </Provider>
     <ReactQueryDevtools initialIsOpen={false} />

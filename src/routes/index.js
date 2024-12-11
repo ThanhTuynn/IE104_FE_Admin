@@ -12,6 +12,7 @@ import Dashboard from '../pages/DashboardPage/Dashboard'
 import Storeinfo from '../pages/StoreinfoPage/Storeinfo'
 import AdminInfo from '../pages/AdminInfoPage/AdminInfoPage'
 import EmployeeInfo from '../pages/EmployeeInfoPage/EmployeeInfoPage'
+import LogoutPage from '../pages/LogoutPage/LogoutPage'
 
 // const routes = [
 //     {
@@ -163,6 +164,12 @@ const routes = [
   {
     path: "employee-info",
     page: EmployeeInfo,
+    isShowHeader: true,
+    isProtected: true, // Chỉ truy cập nếu đã đăng nhập
+  },
+  {
+    path: "logout",
+    page: LogoutPage,
     isShowHeader: true,
     isProtected: true, // Chỉ truy cập nếu đã đăng nhập
   },
