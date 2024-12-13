@@ -91,13 +91,13 @@ const SidebarComponent = () => {
         </ul>
         <ul className="nav-list secondary-nav">
           <li>
-            <a href="#" className="nav-link">
+            <Link to="/admin-info" className="nav-link">
               <UserOutlined />
               <span>Cá nhân</span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="nav-link">
+            <a href="/logout" className="nav-link">
               <LogoutOutlined style={{ color: "red" }} />
               <span style={{ color: "red" }}>Đăng xuất</span>
             </a>

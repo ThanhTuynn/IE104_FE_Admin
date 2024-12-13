@@ -3,7 +3,7 @@ import { Button, Form, Input } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./SignInPage.css";
 import { useDispatch, useSelector } from "react-redux";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import { getDetailAdmin, loginUser } from "../../services/admin.service";
 import PopupComponent from "../../components/PopupComponent/PopupComponent";
@@ -18,11 +18,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const admin = useSelector((state) => state.admin);
 
   const mutation = useMutationHooks((data) =>
     loginUser(data.username, data.password)
   );
   const { data, isSuccess, isError, error } = mutation;
+  // Theo dõi thay đổi Redux Store
+  useEffect(() => {
+    console.log("Redux Store updated:", admin);
+  }, [admin]);
 
   // Handle login success and token storage
   useEffect(() => {
@@ -37,14 +42,22 @@ const Login = () => {
         });
 
         // Decode token to get user ID
-        const decoded = jwtDecode(data.ACCESS_TOKEN);
-        if (decoded?.id) {
-          await handleGetDetailsAdmin(decoded.id);
+
+        // Lấy thông tin người dùng
+        if (data?.ACCESS_TOKEN) {
+          const decoded = jwtDecode(data.ACCESS_TOKEN);
+          if (decoded?.id) {
+            handleGetDetailsAdmin(decoded.id);
+          } else {
+            console.error("Decoded token does not have an id.");
+          }
+        } else {
+          console.error("ACCESS_TOKEN is missing in the response data.");
         }
 
         // Navigate after updating state
-        if (location.state?.from) {
-          navigate(location.state.from);
+        if (location?.state) {
+          navigate(location.state);
         } else {
           navigate("/");
         }
@@ -59,11 +72,14 @@ const Login = () => {
     const accessToken = localStorage.getItem("accessToken");
     try {
       const response = await getDetailAdmin(id, accessToken);
+      console.log("Fetched user details:", response.data);
+
+      const refreshToken = Cookies.get("refreshToken");
       dispatch(
         updateAdmin({
           ...response?.data,
-          accessToken,
-          refreshToken: Cookies.get("refreshToken"),
+          accessToken: accessToken,
+          refreshToken: refreshToken,
         })
       );
     } catch (err) {
@@ -104,7 +120,9 @@ const Login = () => {
         >
           <Form.Item
             label="Tên đăng nhập"
-            rules={[{ required: true, message: "Vui lòng nhập tên đăng nhập!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+            ]}
           >
             <Input
               placeholder="Nhập tên đăng nhập"

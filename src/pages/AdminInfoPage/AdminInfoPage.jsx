@@ -62,12 +62,6 @@ const AdminInfo = () => {
 
   return (
     <div>
-      {/* Thanh tiêu đề */}
-      <div style={{ display: "flex" }}>
-        <Sidebar />
-        <div style={{ width: "100%" }}></div>{" "}
-      </div>
-
       <div style={{ marginLeft: "270px" }}>
         <Topbar title="Thông tin cá nhân" />
       </div>
