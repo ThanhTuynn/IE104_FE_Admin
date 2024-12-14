@@ -229,7 +229,7 @@ const OrderProduct = () => {
 
   return (
     <div>
-      <div style={{ marginLeft: "270px" }}>
+      <div>
         <Topbar title="Quản lý đơn hàng" />
       </div>
 

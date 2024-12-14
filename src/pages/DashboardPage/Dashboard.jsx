@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import "./Dashboard.css";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
-import { Input, Button } from "antd";
-import { ExportOutlined } from "@ant-design/icons";
+import styles from './Dashboard.module.scss'
 
 import {
   BsFillArchiveFill,
@@ -25,6 +23,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import clsx from "clsx";
 
 const data1 = [
   {
@@ -218,54 +217,57 @@ const Dashboard = () => {
   };
 
   return (
-    <section id="content">
-      <div style={{ marginLeft: "270px" }}>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Dashboard" />
       </div>
+
       {/* MAIN*/}
-      <main className="main-container">
-        <div className="main-title">
-          <h3>DASHBOARD</h3>
+      <div className={styles.wrapMain}>
+        <div className={clsx('row', styles.wrapCard)}>
+          <div className={clsx('col l-3 m-6 c-6')}>
+            <div className={styles.card} style={{ background: "#2962ff" }}>
+              <div className={styles.cardDetails}>
+                <h3>SẢN PHẨM</h3>
+                <BsFillArchiveFill className={styles.icon} />
+              </div>
+              <h1>300</h1>
+            </div>
+          </div>
+          <div className={clsx('col l-3 m-6 c-6')}>
+            <div className={styles.card} style={{ background: "#ff6d00" }}>
+              <div className={styles.cardDetails}>
+                <h3>DANH MỤC</h3>
+                <BsFillGrid3X3GapFill className={styles.icon} />
+              </div>
+              <h1>12</h1>
+            </div>
+          </div>
+          <div className={clsx('col l-3 m-6 c-6')}>
+            <div className={styles.card} style={{ background: "#2e7d32" }}>
+              <div className={styles.cardDetails}>
+                <h3>KHÁCH HÀNG</h3>
+                <BsPeopleFill className={styles.icon} />
+              </div>
+              <h1>33</h1>
+            </div>
+          </div>
+          <div className={clsx('col l-3 m-6 c-6')}>
+            <div className={styles.card} style={{ background: "#d50000" }}>
+              <div className={styles.cardDetails}>
+                <h3>THÔNG BÁO</h3>
+                <BsFillBellFill className={styles.icon} />
+              </div>
+              <h1>42</h1>
+            </div>
+          </div>
         </div>
 
-        <div className="main-cards">
-          <div className="card">
-            <div className="card-inner">
-              <h3>SẢN PHẨM</h3>
-              <BsFillArchiveFill className="card_icon" />
-            </div>
-            <h1>300</h1>
-          </div>
-          <div className="card">
-            <div className="card-inner">
-              <h3>DANH MỤC</h3>
-              <BsFillGrid3X3GapFill className="card_icon" />
-            </div>
-            <h1>12</h1>
-          </div>
-          <div className="card">
-            <div className="card-inner">
-              <h3>KHÁCH HÀNG</h3>
-              <BsPeopleFill className="card_icon" />
-            </div>
-            <h1>33</h1>
-          </div>
-          <div className="card">
-            <div className="card-inner">
-              <h3>THÔNG BÁO</h3>
-              <BsFillBellFill className="card_icon" />
-            </div>
-            <h1>42</h1>
-          </div>
-        </div>
-
-        <div className="charts-container">
+        <div className={styles.charts}>
           {/* Container cho Line Chart */}
-          <div className="chart-line">
+          <div className={styles.chartLine}>
+            <h3>Doanh thu năm</h3>
             <ResponsiveContainer width="100%" height={400}>
-              <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-                Doanh thu năm
-              </h3>
               <LineChart
                 data={data1}
                 margin={{
@@ -286,102 +288,87 @@ const Dashboard = () => {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="pv"
-                  stroke="#8884d8"
-                  activeDot={{ r: 8 }}
-                />
+                <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
                 <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
-          <div className="chart-below">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "20px",
-              }}
-            >
-              {/* Bar Chart - Bên trái */}
-              <div
-                className="chart-bar"
-                style={{ width: "48%", height: "300px" }}
-              >
-                <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-                  Đơn hàng mới
-                </h3>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={data2}
-                    margin={{
-                      top: 5,
-                      right: 30,
-                      left: 20,
-                      bottom: 5,
+          <div className={styles.otherCharts}>
+            {/* Bar Chart - Bên trái */}
+            <div className={styles.charBar}>
+              <h3>Đơn hàng mới</h3>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={data2}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <Legend
+                    formatter={(value) => {
+                      if (value === "pv") return "Hoàn thành";
+                      if (value === "uv") return "Đã hủy";
+                      return value;
                     }}
+                  />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="pv" fill="#8884d8" />
+                  <Bar dataKey="uv" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Pie Chart - Bên phải */}
+            <div className={styles.charPie}>
+              <h3>Doanh thu trên danh mục sản phẩm</h3>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={[
+                      { name: "Danh mục A", pv: 400 },
+                      { name: "Danh mục B", pv: 300 },
+                      { name: "Danh mục C", pv: 300 },
+                      { name: "Danh mục D", pv: 200 },
+                    ]}
+                    dataKey="pv"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#8884d8"
+                    label
                   >
-                    <Legend
-                      formatter={(value) => {
-                        if (value === "pv") return "Hoàn thành";
-                        if (value === "uv") return "Đã hủy";
-                        return value;
-                      }}
-                    />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="pv" fill="#8884d8" />
-                    <Bar dataKey="uv" fill="#82ca9d" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-
-              {/* Pie Chart - Bên phải */}
-              <div
-                className="chart-pie"
-                style={{ width: "48%", height: "300px" }}
-              >
-                <h3 style={{ textAlign: "center", marginBottom: "10px" }}>
-                  Doanh thu trên danh mục sản phẩm
-                </h3>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={data3}
-                      dataKey="pv"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      fill="#8884d8"
-                      label
-                    />
-                    {/* Sử dụng Cell để chỉ định màu sắc cho từng phần */}
-                    {data3.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={
-                          index % 4 === 0 ? "#BFECFF" : "#CDC1FF"
-                        } /* Tùy chỉnh màu sắc */
-                      />
+                    {[
+                      "#8884d8", // Màu cho danh mục A
+                      "#82ca9d", // Màu cho danh mục B
+                      "#ffc658", // Màu cho danh mục C
+                      "#ff8042", // Màu cho danh mục D
+                    ].map((color, index) => (
+                      <Cell key={`cell-${index}`} fill={color} />
                     ))}
-
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+                  </Pie>
+                  <Tooltip />
+                  <Legend
+                    layout="vertical"
+                    verticalAlign="middle"
+                    align="right"
+                    formatter={(value, entry) => `${value} (${entry.payload.pv})`}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>
-      </main>
-      )
-    </section>
+      </div>
+    </div>
   );
 };
 

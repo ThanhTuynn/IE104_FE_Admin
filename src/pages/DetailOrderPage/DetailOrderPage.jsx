@@ -145,7 +145,7 @@ const DetailOrderPage = () => {
   return (
     <div>
       {/* Thanh tiêu đề */}
-      <div style={{ marginLeft: "270px" }}>
+      <div>
         <Topbar title="Thông tin chi tiết đơn hàng" />
       </div>
 

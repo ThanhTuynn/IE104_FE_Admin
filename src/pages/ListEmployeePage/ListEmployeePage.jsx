@@ -144,7 +144,7 @@ const EmployeeList = () => {
 
   return (
     <div>
-      <div style={{ marginLeft: "270px" }}>
+      <div>
         <Topbar title="Danh sách nhân viên" />
       </div>
       <div className="employee-page">

@@ -37,7 +37,7 @@ const Storeinfo = () => {
   return (
     <div>
       {/* Thanh tiêu đề */}
-      <div style={{ marginLeft: "270px" }}>
+      <div>
         <Topbar title="Quản lý cửa hàng" />
       </div>
 

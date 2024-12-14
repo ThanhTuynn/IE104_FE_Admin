@@ -938,7 +938,7 @@ const ProductList = () => {
 
   return (
     <div>
-      <div style={{ marginLeft: "270px" }}>
+      <div>
         <Topbar title="Danh sách sản phẩm" admin_name={admin_name} />
       </div>
       <div className="product-page">

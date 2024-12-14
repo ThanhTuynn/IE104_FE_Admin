@@ -68,7 +68,7 @@ const EmployeeInfo = () => {
         <div style={{ width: "100%" }}></div>{" "}
       </div>
 
-      <div style={{ marginLeft: "270px" }}>
+      <div >
         <Topbar title="Thông tin cá nhân" />
       </div>
 

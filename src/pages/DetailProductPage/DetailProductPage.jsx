@@ -610,7 +610,7 @@ const ProductDetailForm = () => {
 
   return (
     <div>
-      <div style={{ marginLeft: "270px" }}>
+      <div>
         <Topbar title="Chi tiết sản phẩm" />
       </div>
 

@@ -112,7 +112,7 @@ const CustomerList = () => {
 
   return (
     <div>
-      <div style={{ marginLeft: "270px" }}>
+      <div>
         <Topbar title="Danh sách khách hàng" />
       </div>
       <div className="customer-page">

@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/whiteLogo.svg";
-import "./SidebarComponent.css";
+import styles from './SidebarComponent.module.scss';
 
 const SidebarComponent = () => {
   const location = useLocation();
@@ -18,18 +18,18 @@ const SidebarComponent = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <aside className="sidebar">
-      <header className="sidebar-header">
-        <Link to="/" className="header-logo">
-          <img src={logo} alt="BUTTH Luxury Jewelry" />
+    <div className={styles.sidebar}>
+      <div className={styles.img}>
+        <Link to="/">
+          <img src={logo} alt="PAWFECT LOGO" />
         </Link>
-      </header>
-      <nav className="sidebar-nav">
-        <ul className="nav-list primary-nav">
+      </div>
+      <div className={styles.wrapInfo}>
+        <ul className={styles.mainBar}>
           <li>
             <Link
               to="/"
-              className={`nav-link ${isActive("/") ? "active" : ""}`}
+              className={`${isActive("/") ? styles.active : ""}`}
             >
               <DashboardOutlined />
               <span>Dashboard</span>
@@ -38,9 +38,8 @@ const SidebarComponent = () => {
           <li>
             <Link
               to="/list-product"
-              className={`nav-link ${
-                isActive("/list-product") ? "active" : ""
-              }`}
+              className={`${isActive("/list-product") ? styles.active : ""
+                }`}
             >
               <AppstoreOutlined />
               <span>Quản lý sản phẩm</span>
@@ -49,9 +48,8 @@ const SidebarComponent = () => {
           <li>
             <Link
               to="/list-order-product"
-              className={`nav-link ${
-                isActive("/list-order-product") ? "active" : ""
-              }`}
+              className={`${isActive("/list-order-product") ? styles.active : ""
+                }`}
             >
               <FileAddOutlined />
               <span>Quản lý đơn hàng</span>
@@ -60,9 +58,8 @@ const SidebarComponent = () => {
           <li>
             <Link
               to="/list-customer"
-              className={`nav-link ${
-                isActive("/list-customer") ? "active" : ""
-              }`}
+              className={`${isActive("/list-customer") ? styles.active : ""
+                }`}
             >
               <TeamOutlined />
               <span>Quản lý khách hàng</span>
@@ -71,9 +68,8 @@ const SidebarComponent = () => {
           <li>
             <Link
               to="/list-employee"
-              className={`nav-link ${
-                isActive("/list-employee") ? "active" : ""
-              }`}
+              className={`${isActive("/list-employee") ? styles.active : ""
+                }`}
             >
               <TeamOutlined />
               <span>Quản lý nhân viên</span>
@@ -82,29 +78,35 @@ const SidebarComponent = () => {
           <li>
             <Link
               to="/store-info"
-              className={`nav-link ${isActive("/store-info") ? "active" : ""}`}
+              className={`${isActive("/store-info") ? styles.active : ""}`}
             >
               <ShoppingCartOutlined />
               <span>Quản lý cửa hàng</span>
             </Link>
           </li>
         </ul>
-        <ul className="nav-list secondary-nav">
+        <ul className={styles.subBar}>
           <li>
-            <Link to="/admin-info" className="nav-link">
+            <Link
+              to="/admin-info"
+              className={`${isActive("/admin-info") ? styles.active : ""}`}
+            >
               <UserOutlined />
               <span>Cá nhân</span>
             </Link>
           </li>
           <li>
-            <a href="/logout" className="nav-link">
+            <Link
+              to="/logout"
+              className={`${isActive("/logout") ? styles.active : ""}`}
+            >
               <LogoutOutlined style={{ color: "red" }} />
               <span style={{ color: "red" }}>Đăng xuất</span>
-            </a>
+            </Link>
           </li>
         </ul>
-      </nav>
-    </aside>
+      </div>
+    </div>
   );
 };
 
