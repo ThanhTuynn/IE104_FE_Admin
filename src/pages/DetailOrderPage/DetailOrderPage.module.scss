@@ -267,6 +267,7 @@
   justify-content: space-between;
   background-color: #e9eff5;
   padding: 20px 10px;
+  margin-bottom: 10px;
 
   .select {
     padding: 5px;
@@ -281,6 +282,7 @@
 .userInfo {
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
 
   .userAndStaff {
     background-color: #fff;
@@ -324,6 +326,7 @@
   padding: 20px;
   border: 1px solid #ddd;
   overflow-x: auto;
+  margin-bottom: 10px;
 
   h3 {
     font-size: 1.7rem;
@@ -394,6 +397,7 @@
   border-radius: 10px;
   padding: 20px;
   border: 1px solid #ddd;
+  margin-bottom: 10px;
 
   .totalText {
     display: flex;

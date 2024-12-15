@@ -155,7 +155,7 @@
 //               onChange={(checked) => setIsGlobalActive(checked)}
 //             />
 //           </div>
-//           <div className="label-box-group">
+//           <div className={styles.name}>
 //             <label>Tên sản phẩm:</label>
 //             <Input
 //               name="name"
@@ -165,7 +165,7 @@
 //               style={{ width: "100%" }}
 //             />
 //           </div>
-//           <div className="label-box-group">
+//           <div className={styles.name}>
 //             <label>Mô tả:</label>
 //             <Input.TextArea
 //               name="description"
@@ -179,7 +179,7 @@
 //           {/* Minh họa */}
 //           <div className="section">
 //             <h3>Minh họa</h3>
-//             <div className="label-box-group">
+//             <div className={styles.name}>
 //               <label>Hình ảnh sản phẩm:</label>
 //               <Upload
 //                 action="/upload"
@@ -200,7 +200,7 @@
 //             {productDetails.attributes.map((attr, index) => (
 //               <Row gutter={16} key={index} align="middle">
 //                 <Col span={10}>
-//                   <div className="label-box-group">
+//                   <div className={styles.name}>
 //                     <label>Loại biến thể:</label>
 //                     <Input
 //                       name="type"
@@ -211,7 +211,7 @@
 //                   </div>
 //                 </Col>
 //                 <Col span={10}>
-//                   <div className="label-box-group">
+//                   <div className={styles.name}>
 //                     <label>Tên biến thể:</label>
 //                     <Input
 //                       name="value"
@@ -222,7 +222,7 @@
 //                   </div>
 //                 </Col>
 //                 <Col span={1}>
-//                   <div className="label-box-group">
+//                   <div className={styles.name}>
 //                     <label>Bật/Tắt:</label>
 //                     <Switch
 //                       checked={attr.isActive}
@@ -233,7 +233,7 @@
 //                   </div>
 //                 </Col>
 //                 <Col span={24}>
-//                   <div className="label-box-group">
+//                   <div className={styles.name}>
 //                     <Form.Item name="status">
 //                       <label>Trạng thái:</label>
 //                       <Select
@@ -253,7 +253,7 @@
 //                 </Col>
 
 //                 <Col span={12}>
-//                   <div className="label-box-group">
+//                   <div className={styles.name}>
 //                     <label>Giá:</label>
 //                     <InputNumber
 //                       name="price"
@@ -302,7 +302,7 @@
 //                 </Col>
 
 //                 <Col span={8}>
-//                   <div className="label-box-group">
+//                   <div className={styles.name}>
 //                     <label>Hình ảnh:</label>
 //                     <Upload
 //                       listType="picture-card"
@@ -543,10 +543,10 @@ const ProductDetailForm = () => {
 
   const handleAttributeImageChange = (index, files) => {
     if (!files || files.length === 0) return;
-  
+
     // Chuyển đổi FileList thành mảng
     const newFiles = Array.from(files);
-  
+
     // Cập nhật trạng thái một cách rõ ràng
     const updatedDetails = {
       ...productDetails,
@@ -559,17 +559,17 @@ const ProductDetailForm = () => {
           : attr
       ),
     };
-  
+
     // Cập nhật trạng thái và kiểm tra
     setProductDetails((prevDetails) => {
       checkIfModified(updatedDetails);
       return updatedDetails;
     });
-  
+
     // Log sau khi cập nhật
     console.log("Updated details prepared for update:", updatedDetails);
   };
-  
+
 
 
 
@@ -590,7 +590,7 @@ const ProductDetailForm = () => {
   // Ảnh minh họa
   const [image, setImage] = useState(productDetails.image || "");  // Lưu trữ ảnh trong state
   console.log('productDetails.image', productDetails.image);
-  
+
   // Hàm để thêm hoặc sửa ảnh
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -609,103 +609,96 @@ const ProductDetailForm = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Chi tiết sản phẩm" />
       </div>
 
-      <div className="product-detail">
+      <div className={styles.wrapInfo}>
         {/* Thông tin chung */}
-        <div className="section">
-          <div className="section-header">
-            <h3>Thông tin chung</h3>
+        <div className={styles.header}>
+          <h3>Thông tin chung</h3>
+          <div className={styles.onOff}>
             <Switch
               checked={isGlobalActive}
               onChange={(checked) => setIsGlobalActive(checked)}
             />
-            <div onClick={handleToggleFavorite} style={{ fontSize: "24px", cursor: "pointer" }}>
-              {isFavorited ? <HeartFilled style={{ color: "red" }} /> : <HeartOutlined />}
+            {isFavorited
+              ?
+              <HeartFilled className={styles.icon} onClick={handleToggleFavorite} />
+              :
+              <HeartOutlined className={styles.icon} onClick={handleToggleFavorite} />}
+          </div>
+        </div>
+        <div className={styles.name}>
+          <label>Tên sản phẩm:</label>
+          <Input
+            name="name"
+            placeholder="Tên sản phẩm"
+            value={productDetails.name}
+            onChange={handleChange}
+          />
+        </div>
+        <div className={styles.name}>
+          <label>Mô tả:</label>
+          <Input.TextArea
+            name="description"
+            placeholder="Mô tả"
+            value={productDetails.description}
+            onChange={handleChange}
+            rows={4}
+          />
+        </div>
+
+        {/* Minh họa */}
+        <div className={styles.examImg}>
+          <p>Minh họa:</p>
+          <div className={styles.img}>
+            {/* Hiển thị ảnh sản phẩm */}
+            {image ? (
+              <img
+                src={image}
+                alt={productDetails.name}
+              />
+            ) : (
+              <span className={styles.noImg}>No image available</span>
+            )}
+            <div className={styles.addImg}>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+              <Button
+                type="danger"
+                onClick={handleRemoveImage}
+              >
+                Xóa
+              </Button>
             </div>
           </div>
-          <div className="label-box-group">
-            <label>Tên sản phẩm:</label>
-            <Input
-              name="name"
-              placeholder="Tên sản phẩm"
-              value={productDetails.name}
-              onChange={handleChange}
-              style={{ width: "100%" }}
-            />
-          </div>
-          <div className="label-box-group">
-            <label>Mô tả:</label>
-            <Input.TextArea
-              name="description"
-              placeholder="Mô tả"
-              value={productDetails.description}
-              onChange={handleChange}
-              rows={4}
-            />
-          </div>
+        </div>
 
-          {/* Minh họa */}
-          <div className="section">
-            <h3>Minh họa</h3>
-            <div className="label-box-group">
-              <div className="product-images">
-                {/* Hiển thị ảnh sản phẩm */}
-                {image ? (
-                  <div>
-                    <img
-                      src={image}
-                      alt={productDetails.name}
-                      style={{
-                        width: '150px',
-                        height: '150px',
-                        objectFit: 'cover',
-                        borderRadius: '8px',
-                      }}
-                    />
-                    <div style={{ marginTop: '10px' }}>
-                      <button
-                        onClick={handleRemoveImage}
-                        style={{
-                          padding: '5px 10px',
-                          backgroundColor: 'red',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '5px',
-                          cursor: 'pointer',
-                          marginTop: '10px',
-                        }}
-                      >
-                        Xóa ảnh
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div>No image available</div>
-                )}
-              </div>
-
-              {/* Thêm ảnh mới */}
-              <div style={{ marginTop: '20px' }}>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Biến thể */}
-          <div className="section">
-            <h3>Biến thể</h3>
-            {productDetails.attributes.map((attr, index) => (
+        {/* Biến thể */}
+        <div className={styles.variant}>
+          <p>Biến thể:</p>
+          <Button
+            type="dashed"
+            icon={<PlusOutlined />}
+            onClick={handleAddAttribute}
+            style={{
+              backgroundColor: "#cdd1ff",
+              color: "#091057",
+              border: "none",
+            }}
+          >
+            Thêm biến thể
+          </Button>
+          {productDetails.attributes.map((attr, index) => (
+            <div className={styles.wrapVariant}>
               <Row gutter={16} key={index} align="middle">
-                <Col span={10}>
-                  <div className="label-box-group">
+                <Col span={8}>
+                  <div className={styles.name}>
                     <label>Loại biến thể:</label>
                     <Input
                       name="type"
@@ -716,8 +709,8 @@ const ProductDetailForm = () => {
                   </div>
                 </Col>
 
-                <Col span={12}>
-                  <div className="label-box-group">
+                <Col span={8}>
+                  <div className={styles.name}>
                     <label>Giá:</label>
                     <InputNumber
                       name="price"
@@ -727,27 +720,29 @@ const ProductDetailForm = () => {
                       }
                       placeholder="Giá thuộc tính"
                       style={{ width: "100%" }}
+                      min={0}
                     />
                   </div>
                 </Col>
 
-                <Col span={12}>
-                  <div className="label-box-group">
+                <Col span={8}>
+                  <div className={styles.name}>
                     <label>Số lượng:</label>
                     <InputNumber
                       name="quantity"
-                      value={attr.quantity || 0}
+                      value={attr.quantity || 1}
                       onChange={(value) =>
                         handleAttributeChange(index, { target: { name: "quantity", value } })
                       }
                       placeholder="Số lượng"
                       style={{ width: "100%" }}
+                      min={1}
                     />
                   </div>
                 </Col>
 
                 <Col span={24}>
-                  <div className="label-box-group">
+                  <div className={styles.name}>
                     <label>Hình ảnh:</label>
                     <Input
                       type="file"
@@ -755,7 +750,7 @@ const ProductDetailForm = () => {
                       multiple
                       onChange={(e) => handleAttributeImageChange(index, e.target.files)}
                     />
-                    <div style={{ marginTop: "10px" }}>
+                    <div className={styles.variantImg}>
                       {attr.attributeImage && attr.attributeImage.length > 0 && (
                         <div>
                           {attr.attributeImage.map((img, idx) => (
@@ -763,13 +758,6 @@ const ProductDetailForm = () => {
                               key={idx}
                               src={URL.createObjectURL(img)}
                               alt={`image-${idx}`}
-                              style={{
-                                width: "100px",
-                                height: "100px",
-                                objectFit: "cover",
-                                marginRight: "10px",
-                                marginBottom: "10px",
-                              }}
                             />
                           ))}
                         </div>
@@ -783,40 +771,28 @@ const ProductDetailForm = () => {
                     type="danger"
                     onClick={() => handleRemoveAttribute(index)}
                   >
-                    Xóa
+                    Xóa biến thể
                   </Button>
                 </Col>
               </Row>
-            ))}
-            <Button
-              type="dashed"
-              icon={<PlusOutlined />}
-              onClick={handleAddAttribute}
-              style={{
-                backgroundColor: "#cdd1ff",
-                color: "#091057",
-                border: "none",
-              }}
-            >
-              Thêm biến thể
-            </Button>
-          </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Nút lưu */}
-          <div className="form-footer">
-            <Button onClick={handleExit} className="return-button">
-              Thoát
-            </Button>
+        {/* Nút lưu */}
+        <div className={styles.allBtn}>
+          <Button onClick={handleExit} className={styles.returnBtn}>
+            Thoát
+          </Button>
 
-            <Button
-              type="primary"
-              onClick={handleSaveProduct}
-              className="save-button"
-            //disabled={!isModified} // Nút chỉ bật khi có thay đổi
-            >
-              Lưu sản phẩm
-            </Button>
-          </div>
+          <Button
+            type="primary"
+            onClick={handleSaveProduct}
+            className={styles.saveBtn}
+          //disabled={!isModified} // Nút chỉ bật khi có thay đổi
+          >
+            Lưu sản phẩm
+          </Button>
         </div>
       </div>
     </div>
