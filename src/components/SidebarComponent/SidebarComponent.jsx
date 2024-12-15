@@ -12,7 +12,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/whiteLogo.svg";
 import styles from './SidebarComponent.module.scss';
 
-const SidebarComponent = () => {
+const SidebarComponent = ({onClick}) => {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -20,12 +20,12 @@ const SidebarComponent = () => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.img}>
-        <Link to="/">
           <img src={logo} alt="PAWFECT LOGO" />
-        </Link>
+        {/* <Link to="/">
+        </Link> */}
       </div>
       <div className={styles.wrapInfo}>
-        <ul className={styles.mainBar}>
+        <ul onClick={onClick} className={styles.mainBar}>
           <li>
             <Link
               to="/"

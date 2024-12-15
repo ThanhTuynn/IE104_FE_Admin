@@ -34,7 +34,7 @@ const DefaultComponent = ({ children }) => {
         </button>
       )}
       <div className={`${styles.sidebar} ${isSidebarVisible ? styles.visible : ""}`}>
-        <SidebarComponent />
+        <SidebarComponent onClick={toggleSidebar}/>
       </div>
       <div className={styles.children}>
         {children}

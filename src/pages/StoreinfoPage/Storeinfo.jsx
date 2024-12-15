@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Input, message } from "antd";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
-import "./Storeinfo.css";
+import styles from './Storeinfo.module.scss'
 
 const Storeinfo = () => {
   const [form] = Form.useForm();
@@ -34,122 +34,125 @@ const Storeinfo = () => {
     message.success("Cập nhật thông tin thành công!");
   };
 
+
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result); // Lưu trữ URL của hình ảnh vào state
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
-    <div>
-      {/* Thanh tiêu đề */}
-      <div>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Quản lý cửa hàng" />
       </div>
 
-      <div className="store-info">
-        <section id="content">
-          <main style={{ marginLeft: "10px", padding: "5px" }}>
-            <div className="account-info">
-              <h2>Thông tin cửa hàng</h2>
-              <Form
-                form={form}
-                layout="vertical"
-                onFinish={handleUpdate}
-                style={{ width: "100%" }}
-              >
-                <Form.Item
-                  name="storeName"
-                  label="Tên cửa hàng"
-                  rules={[
-                    { required: true, message: "Vui lòng nhập tên cửa hàng!" },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
+      <div className={styles.wrapInfo}>
+        <div className={styles.storeInfo}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleUpdate}
+            style={{ width: "100%" }}
+          >
+            <Form.Item
+              name="storeName"
+              label="Tên cửa hàng"
+              rules={[
+                { required: true, message: "Vui lòng nhập tên cửa hàng!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-                <Form.Item
-                  name="storeEmail"
-                  label="Email cửa hàng"
-                  rules={[
-                    {
-                      type: "email",
-                      message: "Vui lòng nhập đúng định dạng email!",
-                    },
-                    { required: true, message: "Vui lòng nhập email!" },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
+            <Form.Item
+              name="storeEmail"
+              label="Email cửa hàng"
+              rules={[
+                {
+                  type: "email",
+                  message: "Vui lòng nhập đúng định dạng email!",
+                },
+                { required: true, message: "Vui lòng nhập email!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-                <Form.Item
-                  name="storePhone"
-                  label="Số điện thoại cửa hàng"
-                  rules={[
-                    { required: true, message: "Vui lòng nhập số điện thoại!" },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
+            <Form.Item
+              name="storePhone"
+              label="Số điện thoại cửa hàng"
+              rules={[
+                { required: true, message: "Vui lòng nhập số điện thoại!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-                <Form.Item
-                  name="storeAddress"
-                  label="Địa chỉ cửa hàng"
-                  rules={[
-                    { required: true, message: "Vui lòng nhập địa chỉ!" },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
+            <Form.Item
+              name="storeAddress"
+              label="Địa chỉ cửa hàng"
+              rules={[
+                { required: true, message: "Vui lòng nhập địa chỉ!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-                <Form.Item name="generalPolicy" label="Điều khoản chung">
-                  <Input.TextArea rows={4} />
-                </Form.Item>
+            <Form.Item name="generalPolicy" label="Điều khoản chung">
+              <Input.TextArea rows={4} />
+            </Form.Item>
 
-                <Form.Item name="guaranteePolicy" label="Chính sách bảo hành">
-                  <Input.TextArea rows={4} />
-                </Form.Item>
+            <Form.Item name="guaranteePolicy" label="Chính sách bảo hành">
+              <Input.TextArea rows={4} />
+            </Form.Item>
 
-                <Form.Item
-                  name="refundPolicy"
-                  label="Chính sách đổi trả hàng - hoàn tiền"
-                >
-                  <Input.TextArea rows={4} />
-                </Form.Item>
+            <Form.Item
+              name="refundPolicy"
+              label="Chính sách đổi trả hàng - hoàn tiền"
+            >
+              <Input.TextArea rows={4} />
+            </Form.Item>
 
-                <Form.Item
-                  name="aboutUs"
-                  label="Thông tin giới thiệu - Về chúng tôi"
-                >
-                  <Input.TextArea rows={6} />
-                </Form.Item>
+            <Form.Item
+              name="aboutUs"
+              label="Thông tin giới thiệu - Về chúng tôi"
+            >
+              <Input.TextArea rows={6} />
+            </Form.Item>
 
-                {/* Hình ảnh - Giữ nguyên nếu đã có */}
-                <div className="store-image">
-                  <h3>Hình ảnh cửa hàng</h3>
-                  <div
-                    style={{
-                      textAlign: "center",
-                      marginTop: "10px",
-                    }}
-                  >
-                    <img
-                      src="URL_OR_PATH_TO_IMAGE" // Thay bằng logic hiện tại nếu cần
-                      alt="Store"
-                      style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                        border: "1px solid #ddd",
-                        padding: "5px",
-                        borderRadius: "5px",
-                      }}
-                    />
+            <div className={styles.wrapImg}>
+              <h3>Hình ảnh cửa hàng</h3>
+              <div className={styles.infoImg}>
+                {image ? (
+                  <div className={styles.img}>
+                    <img src={image} alt="Store" />
                   </div>
-                </div>
-
-                <Form.Item>
-                  <Button type="primary" htmlType="submit" block>
-                    Cập nhật thông tin
-                  </Button>
-                </Form.Item>
-              </Form>
+                ) : (
+                  <p>Chưa có hình ảnh cửa hàng</p>
+                )}
+              </div>
+              <input
+                type="file"
+                onChange={handleImageChange}
+                className={styles.fileInput}
+              />
             </div>
-          </main>
-        </section>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit" block>
+                Cập nhật thông tin
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
     </div>
   );

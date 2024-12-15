@@ -23,17 +23,17 @@
 }
 
 .charts {
-  width: 100%;         
-  max-width: 1200px;  
-  margin: 0 auto;     
-  padding: 20px 0;  
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
 
   .chartLine {
     width: 100%;
-    height: 100%;       
-    display: flex;   
-    flex-direction: column;  
-    justify-content: center; 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
 
     h3 {
@@ -44,17 +44,18 @@
 }
 
 .otherCharts {
-  width: 100%;         
-  max-width: 1200px;  
-  margin: 0 auto;     
-  padding: 20px 0;  
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
 
-  .charBar, .charPie {
-    width: 100%;        
-    height: 300px;    
-    display: flex;   
-    flex-direction: column;  
-    justify-content: center; 
+  .charBar,
+  .charPie {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     margin-bottom: 50px;
 
@@ -68,8 +69,13 @@
 @media (max-width: 739px) {
   .main {
     padding: 10px 4px;
+
     .title {
       margin-left: 45px;
+
+      h2 {
+        font-size: 2.5rem;
+      }
     }
   }
 }

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 import Sidebar from "../../components/SidebarComponent/SidebarComponent";
-import "./AdminInfoPage.css";
+import styles from './AdminInfoPage.module.scss'
+import clsx from "clsx";
 
 const AdminInfo = () => {
   // State để kiểm soát các trường nhập liệu
@@ -61,16 +62,14 @@ const AdminInfo = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Thông tin cá nhân" />
       </div>
 
-      <div className="store-info">
-        {/* CONTENT */}
-        <section id="content">
-          {/* NAVBAR */}
-          {/* <nav>
+      <div className={styles.wrapInfo}>
+        {/* NAVBAR */}
+        {/* <nav>
           <div className="form-input">
             <input type="search" placeholder="Tìm kiếm..." />
             <button type="submit">
@@ -86,165 +85,151 @@ const AdminInfo = () => {
           </a>
         </nav> */}
 
-          {/* Thêm nút Đổi mật khẩu */}
-          {/* Thêm nút Đổi mật khẩu */}
-          <div
-            className="ant-row"
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: "10px",
-            }}
+        {/* Thêm nút Đổi mật khẩu */}
+        {/* Thêm nút Đổi mật khẩu */}
+        <div className={styles.forgot}>
+          <button
+            className={clsx("ant-btn ant-btn-secondary", styles.forgotBtn)}
+            onClick={showModal}
+            type="button"
           >
-            <button
-              className="ant-btn ant-btn-secondary"
-              onClick={showModal}
-              type="button"
-            >
-              Đổi mật khẩu
-            </button>
-          </div>
+            Đổi mật khẩu
+          </button>
+        </div>
 
-          {/* Account Info Section */}
-          <main style={{ marginLeft: "10px", padding: "5px" }}>
-            <div className="account-info">
-              <h2>Thông tin cá nhân Quản trị viên</h2>
-              <form
-                className="ant-form ant-form-horizontal"
-                onSubmit={handleUpdate}
-              >
-                <div className="ant-row">
-                  <div className="ant-col ant-col-24 ant-col-md-12">
-                    <label className="ant-form-item-label">Tên đăng nhập</label>
-                    <input
-                      className="ant-input"
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)} // Cập nhật giá trị khi nhập
-                    />
-                  </div>
+        {/* Account Info Section */}
+        <div className={styles.wrapForm}>
+          <form
+            className="ant-form ant-form-horizontal"
+            onSubmit={handleUpdate}
+          >
+            <div className="ant-row">
+              <div className="ant-col ant-col-24">
+                <label className="ant-form-item-label">Tên đăng nhập</label>
+                <input
+                  className="ant-input"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="ant-row">
+              <div className="ant-col ant-col-24">
+                <label className="ant-form-item-label">Email</label>
+                <input
+                  className="ant-input"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="ant-row">
+              <div className="ant-col ant-col-24">
+                <label className="ant-form-item-label">Mật khẩu</label>
+                <div className="ant-input-password">
+                  <input
+                    className={clsx("ant-input", styles.inputDisabled)}
+                    type="password"
+                    value="********"
+                    disabled
+                  />
                 </div>
-                <div className="ant-row">
-                  <div className="ant-col ant-col-24 ant-col-md-12">
-                    <label className="ant-form-item-label">Email</label>
-                    <input
-                      className="ant-input"
-                      type="text"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)} // Cập nhật giá trị khi nhập
-                    />
-                  </div>
+              </div>
+            </div>
+            <div className="ant-row">
+              <button className={clsx("ant-btn ant-btn-primary", styles.updateBtn)} type="submit">
+                Cập nhật
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {isModalVisible && (
+        <div onClick={hideModal} className={styles.modalOverlay}>
+          <div className={styles.modalWrap} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modal}>
+              <div className={styles.modalContent}>
+                <div className={styles.modalHeader}>
+                  <div className={styles.modalTitle}>Đổi mật khẩu</div>
                 </div>
-
-                {isModalVisible && (
-                  <div id="changePasswordModal" style={{ display: "block" }}>
-                    <div className="ant-modal-wrap">
-                      <div className="ant-modal">
-                        <div className="ant-modal-content">
-                          <div className="ant-modal-header">
-                            <div className="ant-modal-title">Đổi mật khẩu</div>
-                          </div>
-                          <div className="ant-modal-body">
-                            <form
-                              id="changePasswordForm"
-                              className="ant-form ant-form-horizontal"
-                              onSubmit={handleChangePassword}
-                            >
-                              <div className="ant-form-item">
-                                <label className="ant-form-item-label">
-                                  Mật khẩu hiện tại
-                                </label>
-                                <input
-                                  type="password"
-                                  className="ant-input"
-                                  value={currentPassword}
-                                  onChange={(e) =>
-                                    setCurrentPassword(e.target.value)
-                                  } // Cập nhật giá trị khi nhập
-                                  placeholder="Nhập mật khẩu hiện tại"
-                                />
-                              </div>
-                              <div className="ant-form-item">
-                                <label className="ant-form-item-label">
-                                  Mật khẩu mới
-                                </label>
-                                <input
-                                  type="password"
-                                  className="ant-input"
-                                  value={newPassword}
-                                  onChange={(e) =>
-                                    setNewPassword(e.target.value)
-                                  } // Cập nhật giá trị khi nhập
-                                  placeholder="Nhập mật khẩu mới"
-                                />
-                              </div>
-                              <div className="ant-form-item">
-                                <label className="ant-form-item-label">
-                                  Xác nhận mật khẩu mới
-                                </label>
-                                <input
-                                  type="password"
-                                  className="ant-input"
-                                  value={confirmNewPassword}
-                                  onChange={(e) =>
-                                    setConfirmNewPassword(e.target.value)
-                                  } // Cập nhật giá trị khi nhập
-                                  placeholder="Xác nhận mật khẩu mới"
-                                />
-                              </div>
-                              {/* Hiển thị thông báo lỗi nếu có */}
-                              {passwordError && (
-                                <div className="ant-alert ant-alert-error">
-                                  {passwordError}
-                                </div>
-                              )}
-                              <div className="ant-modal-footer">
-                                <button
-                                  type="button"
-                                  className="ant-btn ant-btn-secondary"
-                                  onClick={hideModal}
-                                >
-                                  Đóng
-                                </button>
-                                <button
-                                  type="submit"
-                                  className="ant-btn ant-btn-primary"
-                                >
-                                  Đổi mật khẩu
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="ant-row">
-                  <div className="ant-col ant-col-24">
-                    <label className="ant-form-item-label">Mật khẩu</label>
-                    <div className="ant-input-password">
+                <div className={styles.modalBody}>
+                  <form
+                    className={styles.form}
+                    onSubmit={handleChangePassword}
+                  >
+                    <div className={styles.formItem}>
+                      <label className={styles.formItemLabel}>
+                        Mật khẩu hiện tại
+                      </label>
                       <input
-                        className="ant-input"
                         type="password"
-                        value="********"
-                        disabled
+                        className={styles.input}
+                        value={currentPassword}
+                        onChange={(e) =>
+                          setCurrentPassword(e.target.value)
+                        }
+                        placeholder="Nhập mật khẩu hiện tại"
                       />
                     </div>
-                  </div>
+                    <div className={styles.formItem}>
+                      <label className={styles.formItemLabel}>
+                        Mật khẩu mới
+                      </label>
+                      <input
+                        type="password"
+                        className={styles.input}
+                        value={newPassword}
+                        onChange={(e) =>
+                          setNewPassword(e.target.value)
+                        }
+                        placeholder="Nhập mật khẩu mới"
+                      />
+                    </div>
+                    <div className={styles.formItem}>
+                      <label className={styles.formItemLabel}>
+                        Xác nhận mật khẩu mới
+                      </label>
+                      <input
+                        type="password"
+                        className={styles.input}
+                        value={confirmNewPassword}
+                        onChange={(e) =>
+                          setConfirmNewPassword(e.target.value)
+                        }
+                        placeholder="Xác nhận mật khẩu mới"
+                      />
+                    </div>
+                    {passwordError && (
+                      <div className={styles.alertError}>
+                        {passwordError}
+                      </div>
+                    )}
+                    <div className={styles.modalFooter}>
+                      <button
+                        type="button"
+                        className={styles.closeBtn}
+                        onClick={hideModal}
+                      >
+                        Đóng
+                      </button>
+                      <button
+                        type="submit"
+                        className={styles.submitBtn}
+                      >
+                        Đổi mật khẩu
+                      </button>
+                    </div>
+                  </form>
                 </div>
-                <div className="ant-row" style={{ marginTop: "20px" }}>
-                  <button className="ant-btn ant-btn-primary" type="submit">
-                    Cập nhật
-                  </button>
-                </div>
-              </form>
+              </div>
             </div>
-          </main>
-        </section>
-      </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
