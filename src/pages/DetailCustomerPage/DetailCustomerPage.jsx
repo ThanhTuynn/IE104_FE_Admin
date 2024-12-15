@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./DetailCustomerPage.css";
+import React, { useEffect, useState } from "react";
+import styles from './DetailCustomerPage.module.scss'
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 import avatar from "../../assets/avatar_customer/customer1.jpg";
 import {
@@ -13,6 +13,7 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Form, Input, Button, DatePicker } from "antd";
+import { FaUser } from "react-icons/fa";
 
 const CustomerDetail = () => {
   const [form] = Form.useForm();
@@ -108,186 +109,197 @@ const CustomerDetail = () => {
     }
   };
 
-  return (
-    <div>
-      <div style={{ marginLeft: "270px" }}>
-        <Topbar title="Thông tin chi tiết khách hàng" />
-      </div>
+  const [isMobile, setIsMobile] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
-      <div className="customer-detail">
+  const toggleSider = () => setCollapsed(!collapsed);
+
+  // Lắng nghe kích thước màn hình
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 1023);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <div className={styles.main}>
+      <div className={styles.title}>
+        <Topbar title="Chi tiết khách hàng" />
+      </div>
+      {isMobile && (
+        <div className={styles.user}>
+          <FaUser className={styles.userIcon} onClick={toggleSider} />
+          <span onClick={toggleSider}>Xem chi tiết</span>
+        </div>
+      )}
+
+      <div className={styles.wrapInfo}>
         {/* Main Container */}
         {/* Left Section */}
-        <div className="customer-info">
-          <div className="left-section">
-            <div className="avatar-placeholder">
-              <img src={avatar} alt="avatar-customer" />
+        {isMobile && !collapsed && (
+          <div className={styles.overlay} onClick={toggleSider}></div>
+        )}
+        <div className={
+          `${styles.leftNav} 
+          ${isMobile && !collapsed ? styles.open : ""}`
+        }
+        >
+          <div className={styles.wrapImg}>
+            <div className={styles.img}>
+              <img src={avatar} alt="Avatar Customer" />
             </div>
-            <h2 className="customer-name">{initData.name}</h2>
-            <span className="status active">{initData.status}</span>
-
-            <Form
-              form={form}
-              layout="vertical"
-              onFinish={handleSubmit}
-              initialValues={initData}
-            >
-              <Form.Item name="id" label="Mã khách hàng">
-                <Input prefix={<CopyOutlined />} disabled />
-              </Form.Item>
-
-              <Form.Item name="email" label="E-mail">
-                <Input prefix={<MailOutlined />} />
-              </Form.Item>
-
-              <Form.Item name="address" label="Địa chỉ">
-                <Input prefix={<EnvironmentOutlined />} />
-              </Form.Item>
-
-              <Form.Item name="phone" label="Số điện thoại">
-                <Input prefix={<PhoneOutlined />} />
-              </Form.Item>
-
-              <Form.Item name="lastActive" label="Hoạt động gần nhất">
-                <Input prefix={<ClockCircleOutlined />} disabled />
-              </Form.Item>
-            </Form>
+            <h2>{initData.name}</h2>
+            <span className={styles.role}>{initData.status}</span>
           </div>
+
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSubmit}
+            initialValues={initData}
+          >
+            <Form.Item name="id" label="Mã khách hàng">
+              <Input prefix={<CopyOutlined />} disabled />
+            </Form.Item>
+
+            <Form.Item name="email" label="E-mail">
+              <Input prefix={<MailOutlined />} />
+            </Form.Item>
+
+            <Form.Item name="address" label="Địa chỉ">
+              <Input prefix={<EnvironmentOutlined />} />
+            </Form.Item>
+
+            <Form.Item name="phone" label="Số điện thoại">
+              <Input prefix={<PhoneOutlined />} />
+            </Form.Item>
+
+            <Form.Item name="lastActive" label="Hoạt động gần nhất">
+              <Input prefix={<ClockCircleOutlined />} disabled />
+            </Form.Item>
+          </Form>
         </div>
 
-        <div className="customer-container">
+        <div className={styles.rightNav}>
           {/* Right Section */}
-          <div className="customer-stats">
+          <div className='row'>
             {/* Card 1: Chi tiêu */}
-            <div className="stat-card">
-              <div className="header">
-                <div className="icon-wrapper">
-                  <ClockCircleOutlined className="icon" />
+            <div className='col l-6 m-6 c-12'>
+              <div className={styles.info} style={{ background: "#b7e0ff" }}>
+                <div className={styles.wrapIcon}>
+                  <ClockCircleOutlined className={styles.icon} />
                 </div>
-              </div>
-              <div>
-                <div className="stat-title">Chi tiêu</div>
-                <div className="stat-value">120.000.000 đồng</div>
+                <div>
+                  <span>Chi tiêu</span>
+                  <h3>120.000.000 đồng</h3>
+                </div>
               </div>
             </div>
 
             {/* Card 2: Điểm */}
-            <div className="stat-card">
-              <div className="header">
-                <div className="icon-wrapper">
-                  <ShoppingCartOutlined className="icon" />
+            <div className='col l-6 m-6 c-12'>
+              <div className={styles.info} style={{ background: "#ffcfb3" }}>
+                <div className={styles.wrapIcon}>
+                  <ShoppingCartOutlined className={styles.icon} />
                 </div>
-              </div>
-              <div>
-                <div className="stat-title">Điểm thưởng</div>
-                <div className="stat-value">12.000</div>
+                <div>
+                  <span>Điểm thưởng</span>
+                  <h3>12.000</h3>
+                </div>
               </div>
             </div>
 
             {/* Card 3: Tổng đơn hàng */}
-            <div className="stat-card">
-              <div className="header">
-                <div className="icon-wrapper">
-                  <ShoppingOutlined className="icon" />
+            <div className='col l-6 m-6 c-12'>
+              <div className={styles.info} style={{ background: "#fff5cd" }}>
+                <div className={styles.wrapIcon}>
+                  <ShoppingOutlined className={styles.icon} />
                 </div>
-              </div>
-              <div className="stat-summary">
-                <div className="summary-item">
-                  <strong>10</strong>
-                  <span>Tổng đơn hàng</span>
-                </div>
-                <div className="summary-item">
-                  <strong>2</strong>
-                  <span>Đang xử lý</span>
-                </div>
-                <div className="summary-item">
-                  <strong>8</strong>
-                  <span>Hoàn thành</span>
-                </div>
-                <div className="summary-item">
-                  <strong>0</strong>
-                  <span>Đơn hủy</span>
+                <div className={styles.totalOrder}>
+                  <div className={styles.detail}>
+                    <span>Tổng đơn hàng:</span>
+                    <h3>10</h3>
+                  </div>
+                  <div className={styles.detail}>
+                    <span>Đang xử lý:</span>
+                    <h3>2</h3>
+                  </div>
+                  <div className={styles.detail}>
+                    <span>Hoàn thành:</span>
+                    <h3>8</h3>
+                  </div>
+                  <div className={styles.detail}>
+                    <span>Đơn hủy:</span>
+                    <h3>0</h3>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Card 4: Đơn hủy và lỗi */}
-            <div className="stat-card">
-              <div className="header">
-                <div className="icon-wrapper">
-                  <ShoppingOutlined className="icon" />
+            <div className='col l-6 m-6 c-12'>
+              <div className={styles.info} style={{ background: "#f8aea2" }}>
+                <div className={styles.wrapIcon}>
+                  <ShoppingOutlined className={styles.icon} />
                 </div>
-              </div>
-              <div className="stat-summary">
-                <div className="summary-item">
-                  <strong>0</strong>
-                  <span>Số đơn hủy</span>
-                </div>
-                <div className="summary-item">
-                  <strong>0</strong>
-                  <span>Hoàn hàng</span>
-                </div>
-                <div className="summary-item">
-                  <strong>0</strong>
-                  <span>Hư hại</span>
-                </div>
-                <div className="summary-item">
-                  <strong>0</strong>
-                  <span>Báo cáo</span>
+                <div className={styles.totalOrder}>
+                  <div className={styles.detail}>
+                    <span>Số đơn hủy:</span>
+                    <h3>0</h3>
+                  </div>
+                  <div className={styles.detail}>
+                    <span>Hoàn hàng:</span>
+                    <h3>0</h3>
+                  </div>
+                  <div className={styles.detail}>
+                    <span>Hư hại:</span>
+                    <h3>0</h3>
+                  </div>
+                  <div className={styles.detail}>
+                    <span>Báo cáo:</span>
+                    <h3>0</h3>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Purchase History */}
-          <div className="purchase-history">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+          <div className={styles.history}>
+            <div className={styles.text}>
               <h3>Lịch sử mua hàng</h3>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "10px",
-                }}
-              >
-                <DatePicker
-                  placeholder="Chọn ngày"
-                  style={{ width: 150, marginRight: "10px" }}
-                  onChange={handleDateChange}
-                />
-                <Button
+              <DatePicker
+                placeholder="Chọn ngày"
+                style={{ width: 150, marginRight: "10px" }}
+                onChange={handleDateChange}
+              />
+              {/* <Button
                   type="primary"
                   icon={<MenuOutlined />}
                   style={{ backgroundColor: "#091057" }}
-                ></Button>
-              </div>
+                ></Button> */}
             </div>
-            <table className="history-table">
+            <table className={styles.historyTable}>
               <thead>
                 <tr>
-                  <th>Mã đơn hàng</th>
-                  <th>Sản phẩm</th>
-                  <th>Tổng tiền</th>
-                  <th>Tình trạng</th>
-                  <th>Ngày đặt hàng</th>
+                  <th>{/* Mã đơn hàng */} Mã đơn hàng</th>
+                  <th>{/* Sản phẩm */} Sản phẩm</th>
+                  <th>{/* Tổng tiền */} Tổng tiền</th>
+                  <th>{/* Tình trạng */} Tình trạng</th>
+                  <th>{/* Ngày đặt hàng */} Ngày đặt hàng</th>
                 </tr>
-                <div></div>
               </thead>
               <tbody>
                 {orders.map((order, index) => (
                   <tr key={index}>
-                    <td className="order-id">{order.id}</td>
+                    <td className={styles.orderId}>{order.id}</td>
                     <td>
                       {order.product}{" "}
-                      <span className="extra">{order.extra}</span>
+                      <span className={styles.extra}>{order.extra}</span>
                     </td>
                     <td>{order.total}</td>
-                    <td className={`status ${order.statusClass}`}>
+                    <td className={`${styles.status} ${styles[order.statusClass]}`}>
                       {order.status}
                     </td>
                     <td>{order.date}</td>

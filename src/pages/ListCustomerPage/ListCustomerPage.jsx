@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Input, Button, Tag, Table, Modal } from "antd";
 import { ExportOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import "./ListCustomerPage.css";
+import styles from './ListCustomerPage.module.scss'
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 
 // Hàm khởi tạo dữ liệu mẫu
@@ -111,28 +111,26 @@ const CustomerList = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Danh sách khách hàng" />
       </div>
-      <div className="customer-page">
+      <div className={styles.wrapInfo}>
         {/* Header */}
-        <header className="customer-header">
-          <div className="header-actions">
-            <Input.Search placeholder="Tìm kiếm khách hàng..." />
-            <Button
-              type="primary"
-              icon={<ExportOutlined />}
-              className="export-button"
-            >
-              Xuất file
-            </Button>
-          </div>
-        </header>
+        <div className={styles.header}>
+          <Input.Search placeholder="Tìm kiếm khách hàng..." />
+          <Button
+            type="primary"
+            icon={<ExportOutlined />}
+            className={styles.exportBtn}
+          >
+            Xuất file
+          </Button>
+        </div>
 
         {/* Filters */}
-        <div className="filter-section">
-          <div className="filter-buttons">
+        <div className={styles.wrapBtn}>
+          <div className={styles.positionBtn}>
             {["Tất cả trạng thái", "Hoạt động", "Mới", "Đã khóa"].map(
               (status) => (
                 <Button
@@ -147,45 +145,44 @@ const CustomerList = () => {
               )
             )}
           </div>
-          <div className="filter-buttons">
-            <Button
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              disabled={selectedRowKeys.length === 0}
-              onClick={handleDeleteSelected}
-              className="delete-all-button"
-            >
-              Xóa đã chọn
-            </Button>
-          </div>
+          <Button
+            type="primary"
+            danger
+            icon={<DeleteOutlined />}
+            disabled={selectedRowKeys.length === 0}
+            onClick={handleDeleteSelected}
+          >
+            Xóa đã chọn
+          </Button>
         </div>
 
         {/* Table */}
-        <Table
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={filteredCustomers}
-          rowKey="id"
-          pagination={{ pageSize: 5 }}
-          style={{ marginTop: 20 }}
-          onRow={(record) => ({
-            onClick: () => handleRowClick(record),
-          })}
-        />
-
-        {/* Delete Confirmation Modal */}
-        <Modal
-          title="Xác nhận xóa"
-          visible={isDeleteModalVisible}
-          onOk={handleConfirmDelete}
-          onCancel={handleCancelDelete}
-          okText="Xóa"
-          cancelText="Hủy"
-        >
-          <p>Bạn có chắc chắn muốn xóa khách hàng đã chọn?</p>
-        </Modal>
+        <div className={styles.wrapTable}>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={filteredCustomers}
+            rowKey="id"
+            pagination={{ pageSize: 5 }}
+            onRow={(record) => ({
+              onClick: () => handleRowClick(record),
+            })}
+            scroll={{ x: 1000 }}
+          />
+        </div>
       </div>
+      {/* Delete Confirmation Modal */}
+      <Modal
+        title="Xác nhận xóa"
+        visible={isDeleteModalVisible}
+        onOk={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        okText="Xóa"
+        cancelText="Hủy"
+        okButtonProps={{ className: styles.deleteBtn }}
+      >
+        <p>Bạn có chắc chắn muốn xóa khách hàng đã chọn?</p>
+      </Modal>
     </div>
   );
 };
