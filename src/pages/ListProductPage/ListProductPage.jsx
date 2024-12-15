@@ -485,12 +485,12 @@ import {
   HeartFilled,
 } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./ListProductPage.css";
+import styles from './ListProductPage.module.scss'
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 import ProductModal from "./AddProductModal.jsx";
 import { useSelector } from "react-redux";
 import { getAllProduct } from "../../services/product.service.js";
-import { useQuery } from "@tanstack/react-query"; 
+import { useQuery } from "@tanstack/react-query";
 
 // Sample product data initialization
 const initData = () => [
@@ -653,13 +653,13 @@ const ProductList = () => {
         originalPrice: product?.product_price || 0,
         discount: product?.product_percent_discount,
         stock: product?.product_countInStock || 1,
-        status : product?.product_countInStock === 0 ? "Hết hàng" : (product?.product_countInStock < 10 ? "Cần nhập" : "Tồn kho"),
+        status: product?.product_countInStock === 0 ? "Hết hàng" : (product?.product_countInStock < 10 ? "Cần nhập" : "Tồn kho"),
         updatedPrice:
           product?.product_price *
-            (
-              1 -
-              product?.product_percent_discount / 100
-            ).toLocaleString() || 0,
+          (
+            1 -
+            product?.product_percent_discount / 100
+          ).toLocaleString() || 0,
         image: `data:image/jpeg;base64,${product?.product_images[0]}`,
         isFavorite: product?.product_famous,
         soldQuantity: product?.product_selled
@@ -869,8 +869,8 @@ const ProductList = () => {
             status === "Tồn kho"
               ? "green"
               : status === "Cần nhập"
-              ? "gold"
-              : "red"
+                ? "gold"
+                : "red"
           }
         >
           {status}
@@ -937,22 +937,21 @@ const ProductList = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Danh sách sản phẩm" admin_name={admin_name} />
       </div>
-      <div className="product-page">
+      <div className={styles.wrapInfo}>
         {/* Header */}
-        <header className="product-header">
-          <div className="header-actions">
-            <Input.Search
-              placeholder="Tìm kiếm sản phẩm..."
-              onChange={handleSearchChange}
-              value={searchTerm}
-            />
+        <div className={styles.header}>
+          <Input.Search
+            placeholder="Tìm kiếm sản phẩm..."
+            onChange={handleSearchChange}
+            value={searchTerm}
+          />
+          <div className={styles.allBtn}>
             <Button
               type="primary"
-              className="export-button"
               icon={<ExportOutlined />}
             >
               Xuất file
@@ -960,86 +959,77 @@ const ProductList = () => {
             <Button
               type="primary"
               icon={<PlusOutlined />}
-              className="add-product-button"
               onClick={showModal}
             >
               Thêm sản phẩm
             </Button>
           </div>
-        </header>
+        </div>
 
         {/* Filters */}
-        <div className="filter-section">
-          <div className="filter-left">
-            <Button
-              onClick={() => handleStatusFilterChange("Tất cả trạng thái")}
-              className={`filter-btn ${
-                filters === "Tất cả trạng thái" ? "active" : ""
-              }`}
-            >
-              Tất cả trạng thái
-            </Button>
-            <Button
-              onClick={() => handleStatusFilterChange("Tồn kho")}
-              className={`filter-btn ${filters === "Tồn kho" ? "active" : ""}`}
-            >
-              Tồn kho
-            </Button>
-            <Button
-              onClick={() => handleStatusFilterChange("Cần nhập")}
-              className={`filter-btn ${filters === "Cần nhập" ? "active" : ""}`}
-            >
-              Cần nhập
-            </Button>
-            <Button
-              onClick={() => handleStatusFilterChange("Hết hàng")}
-              className={`filter-btn ${filters === "Hết hàng" ? "active" : ""}`}
-            >
-              Hết hàng
-            </Button>
-          </div>
-
-          <div className="filter-right">
-            <Select
-              placeholder="Chọn danh mục"
-              style={{ width: 150, marginRight: "10px" }}
-              onChange={handleCategoryChange}
-              allowClear
-              options={[
-                { value: "Chó", label: "Chó" },
-                { value: "Mèo", label: "Mèo" },
-              ]}
-            />
-            <Button
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={handleDeleteSelected}
-              disabled={selectedRowKeys.length === 0}
-            >
-              Xóa đã chọn
-            </Button>
+        <div className={styles.wrapBtn}>
+          <div className={styles.positionBtn}>
+            {[
+              "Tất cả trạng thái",
+              "Tồn kho",
+              "Cần nhập",
+              "Hết hàng",
+            ].map((status) => (
+              <Button
+                key={status}
+                onClick={() => handleStatusFilterChange(status)}
+                type={filters === status ? "primary" : "default"}
+                className={`${filters === status ? "active" : ""}`}
+              >
+                {status}
+              </Button>
+            ))}
           </div>
         </div>
 
+        <div className={styles.other}>
+          <Select
+            placeholder="Chọn danh mục"
+            style={{ width: 150, marginRight: "10px" }}
+            onChange={handleCategoryChange}
+            allowClear
+            options={[
+              { value: "Chó", label: "Chó" },
+              { value: "Mèo", label: "Mèo" },
+            ]}
+          />
+          <Button
+            type="primary"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={handleDeleteSelected}
+            disabled={selectedRowKeys.length === 0}
+          >
+            Xóa đã chọn
+          </Button>
+        </div>
+
         {/* Bảng dữ liệu hiển thị */}
-        <Table
-          columns={columns}
-          dataSource={filteredProducts}
-          rowSelection={rowSelection}
-          rowKey="id"
-          onRow={(record) => ({
-            onClick: () => handleRowClick(record),
-          })}
-          pagination={{
-            // current: pagination.current||1,
-            // pageSize: pagination.pageSize||10,
-            pageSize: 10,
-            showSizeChanger: true, 
-            pageSizeOptions: ["5", "10", "20", "50"],
-          }}
-          onChange={handleFilterChange}
-        />
+        <div className={styles.wrapTable}>
+          <Table
+            columns={columns}
+            dataSource={filteredProducts}
+            rowSelection={rowSelection}
+            rowKey="id"
+            onRow={(record) => ({
+              onClick: () => handleRowClick(record),
+            })}
+            pagination={{
+              // current: pagination.current||1,
+              // pageSize: pagination.pageSize||10,
+              pageSize: 10,
+              showSizeChanger: true,
+              pageSizeOptions: ["5", "10", "20", "50"],
+            }}
+            onChange={handleFilterChange}
+            scroll={{ x: 400 }}
+          />
+        </div>
 
         {/* Modal xác nhận xóa */}
         <Modal
@@ -1049,18 +1039,21 @@ const ProductList = () => {
           onCancel={handleCancelDelete}
           okText="Xóa"
           cancelText="Hủy"
+          okButtonProps={{ className: styles.deleteBtn }}
         >
           <p>Bạn có chắc chắn muốn xóa những sản phẩm đã chọn?</p>
         </Modal>
 
-        <ProductModal
-          visible={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          onSubmit={handleAddProduct}
-          categories={categories}
-          productDetails={productDetails}
-          setProductDetails={setProductDetails}
-        />
+        <div className={styles.addProduct}>
+          <ProductModal
+            visible={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            onSubmit={handleAddProduct}
+            categories={categories}
+            productDetails={productDetails}
+            setProductDetails={setProductDetails}
+          />
+        </div>
       </div>
     </div>
   );

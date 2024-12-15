@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Form,
@@ -11,7 +11,7 @@ import {
   InputNumber,
 } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import "./ListProductPage.css";
+import styles from './ListProductPage.module.scss'
 
 const ProductModal = ({
   visible,
@@ -106,6 +106,13 @@ const ProductModal = ({
     setProductDetails({ attributes: [], subCategory: [] }); // Reset product details
   };
 
+  // Reset form khi `visible` thay đổi
+  useEffect(() => {
+    if (visible) {
+      form.resetFields();
+    }
+  }, [visible, form]);
+
   return (
     <Modal
       title="Thêm sản phẩm mới"
@@ -113,7 +120,6 @@ const ProductModal = ({
       onCancel={onCancel}
       footer={null}
       centered
-      className="form-order-content"
     >
       <Form
         form={form}
@@ -126,14 +132,19 @@ const ProductModal = ({
             .catch(() => setIsFormValid(false));
         }}
       >
-        <Form.Item label="Tên sản phẩm" name="name" required>
+        <Form.Item
+          label="Tên sản phẩm"
+          name="name"
+          required
+          rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm" }]}
+        >
           <Input placeholder="Tên sản phẩm" />
         </Form.Item>
 
         <Form.Item
           label="Danh mục chính"
           name="category"
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "Vui lòng chọn danh mục chính" }]}
         >
           <Select
             placeholder="Chọn danh mục chính"
@@ -151,7 +162,7 @@ const ProductModal = ({
         <Form.Item
           label="Danh mục phụ"
           name="subCategory"
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "Vui lòng chọn danh mục phụ" }]}
         >
           <Select
             placeholder="Chọn danh mục phụ"
@@ -170,7 +181,7 @@ const ProductModal = ({
         <Form.Item
           label="Danh mục con"
           name="childCategory"
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "Vui lòng chọn danh mục con" }]}
         >
           <Select
             placeholder="Chọn danh mục con"
@@ -210,8 +221,11 @@ const ProductModal = ({
           {productDetails.attributes.map((attr, index) => (
             <div key={index} style={{ marginBottom: "15px" }}>
               <Row gutter={16}>
-                <Col span={20}>
-                  <Form.Item label="Loại biến thể" required>
+                <Col span={24}>
+                  <Form.Item
+                    label="Loại biến thể"
+                    required
+                  >
                     <Input
                       name="type"
                       value={attr.type}
@@ -219,7 +233,10 @@ const ProductModal = ({
                       placeholder="Loại biến thể"
                     />
                   </Form.Item>
-                  <Form.Item label="Tên biến thể" required>
+                  <Form.Item
+                    label="Tên biến thể"
+                    required
+                  >
                     <Input
                       name="value"
                       value={attr.value}
@@ -227,7 +244,10 @@ const ProductModal = ({
                       placeholder="Tên biến thể"
                     />
                   </Form.Item>
-                  <Form.Item label="Trạng thái" name="status" required>
+                  <Form.Item
+                    label="Trạng thái" name="status"
+                    required
+                  >
                     <Select>
                       <Select.Option value="Tồn kho">Tồn kho</Select.Option>
                       <Select.Option value="Cần nhập">Cần nhập</Select.Option>
@@ -246,10 +266,11 @@ const ProductModal = ({
                             })
                           }
                           placeholder="Giá thuộc tính"
+                          min={0}
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={12}>
                       <Form.Item label="Số lượng" required>
                         <InputNumber
                           name="quantity"
@@ -260,11 +281,11 @@ const ProductModal = ({
                             })
                           }
                           placeholder="Số lượng thuộc tính"
+                          min={1}
                         />
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Form.Item label="Hình ảnh" required>
                     <Upload
                       listType="picture-card"
@@ -283,25 +304,24 @@ const ProductModal = ({
                     </Upload>
                   </Form.Item>
                 </Col>
-                <Col span={4}>
+                <div className={styles.wrapdeleteBtn}>
                   <Button
                     type="danger"
                     icon={<DeleteOutlined />}
                     onClick={() => handleDeleteAttribute(index)}
-                    style={{ marginTop: "30px" }}
                   >
-                    Xóa
+                    Xóa biến thể
                   </Button>
-                </Col>
+                </div>
               </Row>
             </div>
           ))}
         </div>
 
-        <Form.Item style={{ textAlign: "center", marginTop: "30px" }}>
+        <Form.Item style={{ margin: "0", textAlign: "center", width: "100%" }}>
           <Button
             type="primary"
-            className="create-button"
+            className={styles.addBtn}
             disabled={!isFormValid}
           >
             Thêm sản phẩm

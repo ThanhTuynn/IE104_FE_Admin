@@ -3,7 +3,7 @@ import { Table, Button, Input, DatePicker, Modal } from "antd";
 import { ExportOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
-import "./OrderProductPage.css";
+import styles from './OrderProductPage.module.scss'
 
 // Initialize data outside useState
 const initData = () => [
@@ -217,6 +217,7 @@ const OrderProduct = () => {
       ...prev,
       orderType: type,
     }));
+    // setFilters(type)
   };
 
   const handleDateChange = (date, dateString) => {
@@ -228,100 +229,66 @@ const OrderProduct = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Quản lý đơn hàng" />
       </div>
 
-      <div className="order-table-container">
-        <header className="order-header">
-          <div className="header-actions">
-            <Input.Search
-              placeholder="Tìm kiếm đơn hàng..."
-              onSearch={(value) => setSearchQuery(value)}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              value={searchQuery}
-            />
-            <Button
-              type="primary"
-              className="export-button"
-              icon={<ExportOutlined />}
-            >
-              Xuất file
-            </Button>
-            <Button
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              disabled={selectedOrders.length === 0}
-              onClick={handleDeleteSelected}
-              className="delete-all-button"
-            >
-              Xóa đã chọn
-            </Button>
-          </div>
-        </header>
+      <div className={styles.wrapInfo}>
+        <div className={styles.header}>
+          <Input.Search
+            placeholder="Tìm kiếm đơn hàng..."
+            onSearch={(value) => setSearchQuery(value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery}
+          />
+          <Button
+            type="primary"
+            className={styles.exportBtn}
+            icon={<ExportOutlined />}
+          >
+            Xuất file
+          </Button>
+        </div>
 
-        <div className="filter-section">
-          <div className="filter-left">
-            <Button
-              onClick={() => handleOrderTypeChange("Tất cả đơn hàng")}
-              className={`filter-btn ${
-                filters.orderType === "Tất cả đơn hàng" ? "active" : ""
-              }`}
-            >
-              Tất cả đơn hàng
-            </Button>
-            <Button
-              onClick={() => handleOrderTypeChange("Chờ xác nhận")}
-              className={`filter-btn ${
-                filters.orderType === "Chờ xác nhận" ? "active" : ""
-              }`}
-            >
-              Chờ xác nhận
-            </Button>
-            <Button
-              onClick={() => handleOrderTypeChange("Đang vận chuyển")}
-              className={`filter-btn ${
-                filters.orderType === "Đang vận chuyển" ? "active" : ""
-              }`}
-            >
-              Đang vận chuyển
-            </Button>
-            <Button
-              onClick={() => handleOrderTypeChange("Hoàn thành")}
-              className={`filter-btn ${
-                filters.orderType === "Hoàn thành" ? "active" : ""
-              }`}
-            >
-              Hoàn thành
-            </Button>
-            <Button
-              onClick={() => handleOrderTypeChange("Đã hủy")}
-              className={`filter-btn ${
-                filters.orderType === "Đã hủy" ? "active" : ""
-              }`}
-            >
-              Đã hủy
-            </Button>
-            <Button
-              onClick={() => handleOrderTypeChange("Trả hàng/Hoàn tiền")}
-              className={`filter-btn ${
-                filters.orderType === "Trả hàng/Hoàn tiền" ? "active" : ""
-              }`}
-            >
-              Trả hàng/Hoàn tiền
-            </Button>
+        <div className={styles.wrapBtn}>
+          <div className={styles.positionBtn}>
+            {[
+              "Tất cả đơn hàng",
+              "Chờ xác nhận",
+              "Đang vận chuyển",
+              "Hoàn thành",
+              "Đã hủy",
+              "Trả hàng/Hoàn tiền"
+            ].map((status) => (
+              <Button
+                key={status}
+                type={filters.orderType === status ? "primary" : "default"}
+                onClick={() => handleOrderTypeChange(status)}
+                className={filters.orderType === status ? "active" : ""}
+                style={{ margin: 5 }}
+              >
+                {status}
+              </Button>
+            ))}
           </div>
-
-          <div className="filter-right">
-            <DatePicker
-              placeholder="Chọn ngày"
-              onChange={handleDateChange}
-              format="DD/MM/YYYY"
-              value={filters.date}
-            />
-          </div>
+        </div>
+        <div className={styles.other}>
+          <DatePicker
+            placeholder="Chọn ngày"
+            onChange={handleDateChange}
+            format="DD/MM/YYYY"
+            value={filters.date}
+          />
+          <Button
+            type="primary"
+            danger
+            icon={<DeleteOutlined />}
+            disabled={selectedOrders.length === 0}
+            onClick={handleDeleteSelected}
+          >
+            Xóa đã chọn
+          </Button>
         </div>
         <Table
           columns={columns}
@@ -332,6 +299,7 @@ const OrderProduct = () => {
             onClick: () => handleRowClick(record),
           })}
           pagination={{ pageSize: 5 }}
+          scroll={{ x: 400 }}
         />
 
         {/* Modal xác nhận xóa */}
@@ -342,6 +310,7 @@ const OrderProduct = () => {
           onCancel={handleCancelDelete}
           okText="Xóa"
           cancelText="Hủy"
+          okButtonProps={{ className: styles.deleteBtn }}
         >
           <p>Bạn có chắc chắn muốn xóa những đơn hàng đã chọn?</p>
         </Modal>

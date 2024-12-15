@@ -329,6 +329,7 @@ const EmployeeList = () => {
         okText="Xóa"
         cancelText="Hủy"
         okButtonProps={{ className: styles.deleteBtn }}
+        style={{margin: "0"}}
       >
         <p>Bạn có chắc chắn muốn xóa nhân viên đã chọn?</p>
       </Modal>

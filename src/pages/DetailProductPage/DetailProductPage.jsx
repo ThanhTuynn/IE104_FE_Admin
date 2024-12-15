@@ -379,7 +379,7 @@ import {
 } from "@ant-design/icons";
 import { PlusOutlined } from "@ant-design/icons";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
-import "./DetailProductPage.css";
+import styles from './DetailProductPage.module.scss'
 import { useNavigate, useParams } from "react-router-dom";
 import { getDetailsProduct } from "../../services/product.service";
 import { useQuery } from "@tanstack/react-query";

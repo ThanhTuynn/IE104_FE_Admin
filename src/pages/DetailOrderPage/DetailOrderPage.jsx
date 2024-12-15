@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, DatePicker } from "antd";
-import "./DetailOrderPage.css";
+import styles from './DetailOrderPage.module.scss'
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
@@ -143,15 +143,15 @@ const DetailOrderPage = () => {
     initData.cost.orderDiscount;
 
   return (
-    <div>
+    <div className={styles.main}>
       {/* Thanh tiêu đề */}
-      <div>
-        <Topbar title="Thông tin chi tiết đơn hàng" />
+      <div className={styles.title}>
+        <Topbar title="Chi tiết đơn hàng" />
       </div>
 
-      <div className="order-detail">
+      <div className={styles.wrapInfo}>
         {/* Mã đơn hàng và trạng thái */}
-        <div className="order-header">
+        <div className={styles.orderInfo}>
           <div>
             <span>Mã phiếu mua hàng: </span>
             <strong>{initData.orderId}</strong>
@@ -165,7 +165,7 @@ const DetailOrderPage = () => {
             <select
               value={status}
               onChange={handleStatusChange}
-              className="status-select"
+              className={styles.select}
               style={{
                 color: actionStyle[status]?.color,
               }}
@@ -184,11 +184,11 @@ const DetailOrderPage = () => {
         </div>
 
         {/* Thông tin khách hàng và nhân viên xử lý */}
-        <div className="info-container">
+        <div className={styles.userInfo}>
           {/* Thông tin khách hàng */}
-          <div className="customer-info-section">
+          <div className={styles.userAndStaff}>
             <h3>Thông tin khách hàng</h3>
-            <div className="info-card">
+            <div className={styles.infoCard}>
               <p>
                 <strong>Họ và tên:</strong> {initData.customer.name}
               </p>
@@ -210,9 +210,9 @@ const DetailOrderPage = () => {
           </div>
 
           {/* Thông tin nhân viên xử lý */}
-          <div className="employee-info-section">
+          <div className={styles.userAndStaff}>
             <h3>Nhân viên xử lý</h3>
-            <div className="info-card">
+            <div className={styles.infoCard}>
               <p>
                 <strong>Họ và tên:</strong> {initData.employee.name}
               </p>
@@ -246,9 +246,9 @@ const DetailOrderPage = () => {
         </div>
 
         {/* Sản phẩm */}
-        <div className="product-section">
+        <div className={styles.products}>
           <h3>Sản phẩm</h3>
-          <table className="product-table">
+          <table className={styles.productsTable}>
             <thead>
               <tr>
                 <th>Mã sản phẩm</th>
@@ -266,11 +266,10 @@ const DetailOrderPage = () => {
                 <tr key={product.id}>
                   <td>{product.id}</td>
                   <td>
-                    <div className="product-info">
+                    <div className={styles.img}>
                       <img
                         src={product.imageUrl}
                         alt={product.name}
-                        className="product-image"
                       />
                       <span>{product.name}</span>
                     </div>
@@ -279,11 +278,9 @@ const DetailOrderPage = () => {
                   <td>{product.subCategory}</td>
                   <td>{product.type}</td>
                   <td>{product.quantity}</td>
-                  <td>{product.unitPrice.toLocaleString()} VNĐ</td>
+                  <td>{product.unitPrice.toLocaleString()}</td>
                   <td>
-                    {(product.quantity * product.unitPrice).toLocaleString()}{" "}
-                    VNĐ
-                  </td>
+                    {(product.quantity * product.unitPrice).toLocaleString()}{" "}</td>
                 </tr>
               ))}
             </tbody>
@@ -291,48 +288,48 @@ const DetailOrderPage = () => {
         </div>
 
         {/* Chi phí mua hàng */}
-        <div className="info-card">
-          <div className="cost-item">
-            <p className="cost-label">Tổng tiền hàng:</p>
-            <p className="cost-value">
-              {totalCost.totalPrice.toLocaleString()} VNĐ
+        <div className={styles.totalPrice}>
+          <div className={styles.totalText}>
+            <p>Tổng tiền hàng:</p>
+            <p>
+              đ{totalCost.totalPrice.toLocaleString()}
             </p>
           </div>
-          <div className="cost-item">
-            <p className="cost-label">Tổng voucher giảm giá:</p>
-            <p className="cost-value">
-              -{totalCost.totalVoucher.toLocaleString()} VNĐ
+          <div className={styles.totalText}>
+            <p>Tổng voucher giảm giá:</p>
+            <p>
+              -đ{totalCost.totalVoucher.toLocaleString()}
             </p>
           </div>
-          <div className="cost-item">
-            <p className="cost-label">Phí vận chuyển:</p>
-            <p className="cost-value">
-              {initData.cost.shippingFee.toLocaleString()} VNĐ
+          <div className={styles.totalText}>
+            <p>Phí vận chuyển:</p>
+            <p>
+              đ{initData.cost.shippingFee.toLocaleString()}
             </p>
           </div>
-          <div className="cost-item">
-            <p className="cost-label">Phí xử lý:</p>
-            <p className="cost-value">
-              {initData.cost.handlingFee.toLocaleString()} VNĐ
+          <div className={styles.totalText}>
+            <p>Phí xử lý:</p>
+            <p>
+              đ{initData.cost.handlingFee.toLocaleString()}
             </p>
           </div>
-          <div className="cost-item">
-            <p className="cost-label">Giảm giá cho đơn hàng:</p>
-            <p className="cost-value">
-              -{initData.cost.orderDiscount.toLocaleString()} VNĐ
+          <div className={styles.totalText}>
+            <p>Giảm giá cho đơn hàng:</p>
+            <p>
+              -đ{initData.cost.orderDiscount.toLocaleString()}
             </p>
           </div>
-          <div className="total-cost">
-            <p className="cost-label">Tổng chi phí cuối cùng:</p>
-            <p className="cost-value">{finalAmount.toLocaleString()} VNĐ</p>
+          <div className={styles.totalText}>
+            <p>Tổng chi phí cuối cùng:</p>
+            <p>đ{finalAmount.toLocaleString()}</p>
           </div>
         </div>
 
         {/* Phản hồi */}
         {status === "Hoàn thành" && (
-          <div className="feedback-section-container">
+          <div className={styles.feedback}>
             <h3>Đánh giá sản phẩm</h3>
-            <div className="info-card">
+            <div className={styles.infoFeedback}>
               <p>
                 <strong>"{initData.feedback}"</strong>
               </p>
@@ -345,12 +342,12 @@ const DetailOrderPage = () => {
         )}
 
         {/* Buttons */}
-        <div className="form-footer">
-          <Button className="return-button" onClick={handleExit}>
+        <div className={styles.btn}>
+          <Button className={styles.exitBtn} onClick={handleExit}>
             Thoát
           </Button>
           <Button
-            className="save-button"
+            className={styles.saveBtn}
             onClick={handleSaveOrder}
             disabled={!isChanged}
           >
