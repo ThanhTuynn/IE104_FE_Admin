@@ -6,7 +6,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import "./ListEmployeePage.css";
+import styles from './ListEmployeePage.module.scss'
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
 
 // Hàm khởi tạo dữ liệu mẫu cho nhân viên
@@ -132,10 +132,12 @@ const EmployeeList = () => {
 
   const showModal = () => {
     setIsModalVisible(true);
+    form.resetFields();
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    form.resetFields();
   };
 
   const handleCancelDelete = () => {
@@ -143,64 +145,74 @@ const EmployeeList = () => {
   };
 
   return (
-    <div>
-      <div>
+    <div className={styles.main}>
+      <div className={styles.title}>
         <Topbar title="Danh sách nhân viên" />
       </div>
-      <div className="employee-page">
+      <div className={styles.wrapInfo}>
         {/* Header */}
-        <header className="employee-header">
-          <div className="header-actions">
-            <Input.Search placeholder="Tìm kiếm nhân viên..." />
+        <div className={styles.header}>
+          <Input.Search placeholder="Tìm kiếm nhân viên..." />
+          <div className={styles.allBtn}>
             <Button
               type="primary"
               icon={<ExportOutlined />}
-              className="export-button"
+              className={styles.exportBtn}
             >
               Xuất file
             </Button>
-            {/* Thêm nhân viên button next to Export file */}
             <Button
               type="primary"
               icon={<PlusOutlined />}
               onClick={showModal}
-              className="add-employee-button"
+              className={styles.addBtn}
             >
               Thêm nhân viên
             </Button>
           </div>
-        </header>
+        </div>
 
         {/* Filters */}
-        <div className="filter-section">
-          <div className="filter-buttons">
+        <div className={styles.wrapBtn}>
+          <div className={styles.positionBtn}>
             {["Tất cả chức vụ", "Quản lý", "Nhân viên"].map((role) => (
               <Button
                 key={role}
                 type={filters === role ? "primary" : "default"}
                 onClick={() => handleRoleFilterChange(role)}
                 className={filters === role ? "active" : ""}
-                style={{ margin: 5 }}
               >
                 {role}
               </Button>
             ))}
           </div>
-          <div className="filter-buttons">
-            <Button
-              type="primary"
-              danger
-              icon={<DeleteOutlined />}
-              disabled={selectedRowKeys.length === 0}
-              onClick={handleDeleteSelected}
-              className="delete-all-button"
-            >
-              Xóa đã chọn
-            </Button>
-          </div>
+          <Button
+            type="primary"
+            danger
+            icon={<DeleteOutlined />}
+            disabled={selectedRowKeys.length === 0}
+            onClick={handleDeleteSelected}
+          >
+            Xóa đã chọn
+          </Button>
         </div>
 
-        {/* Modal */}
+        {/* Table */}
+        <div className={styles.wrapTable}>
+          <Table
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={filteredEmployees}
+            rowKey="id"
+            pagination={{ pageSize: 5 }}
+            onRow={(record) => ({
+              onClick: () => handleRowClick(record),
+            })}
+            scroll={{ x: 1000 }}
+          />
+        </div>
+      </div>
+      <div className={styles.addEmployee}>
         <Modal
           title="Thêm nhân viên mới"
           visible={isModalVisible}
@@ -208,8 +220,9 @@ const EmployeeList = () => {
           footer={null}
           centered
         >
-          <Form form={form} layout="vertical" onFinish={handleAddEmployee}>
+          <Form form={form} layout="vertical" onFinish={handleAddEmployee} >
             <Form.Item
+              style={{ marginBottom: "12px" }}
               label="Họ tên"
               name="name"
               rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
@@ -217,6 +230,7 @@ const EmployeeList = () => {
               <Input placeholder="Nhập họ tên..." />
             </Form.Item>
             <Form.Item
+              style={{ marginBottom: "12px" }}
               label="Username"
               name="username"
               rules={[{ required: true, message: "Vui lòng nhập username" }]}
@@ -224,6 +238,7 @@ const EmployeeList = () => {
               <Input placeholder="Nhập username..." />
             </Form.Item>
             <Form.Item
+              style={{ marginBottom: "12px" }}
               label="Email"
               name="email"
               rules={[{ required: true, message: "Vui lòng nhập email" }]}
@@ -231,6 +246,7 @@ const EmployeeList = () => {
               <Input placeholder="Nhập email..." />
             </Form.Item>
             <Form.Item
+              style={{ marginBottom: "12px" }}
               label="Số điện thoại"
               name="phone"
               rules={[
@@ -240,6 +256,7 @@ const EmployeeList = () => {
               <Input placeholder="Nhập số điện thoại..." />
             </Form.Item>
             <Form.Item
+              style={{ marginBottom: "12px" }}
               label="Chức vụ"
               name="role"
               rules={[{ required: true, message: "Vui lòng chọn chức vụ" }]}
@@ -289,48 +306,32 @@ const EmployeeList = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item style={{ margin: "0" }}>
               <Button
                 type="primary"
                 htmlType="submit"
                 block
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  backgroundColor: "#091057",
-                }}
+                className={styles.employeeBtn}
               >
                 Thêm nhân viên
               </Button>
             </Form.Item>
           </Form>
         </Modal>
-
-        {/* Delete Confirmation Modal */}
-        <Modal
-          title="Xác nhận xóa"
-          visible={isDeleteModalVisible}
-          onOk={handleConfirmDelete}
-          onCancel={handleCancelDelete}
-          okText="Xóa"
-          cancelText="Hủy"
-        >
-          <p>Bạn có chắc chắn muốn xóa nhân viên đã chọn?</p>
-        </Modal>
-
-        {/* Table */}
-        <Table
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={filteredEmployees}
-          rowKey="id"
-          pagination={{ pageSize: 5 }}
-          style={{ marginTop: 20 }}
-          onRow={(record) => ({
-            onClick: () => handleRowClick(record),
-          })}
-        />
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        title="Xác nhận xóa"
+        visible={isDeleteModalVisible}
+        onOk={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        okText="Xóa"
+        cancelText="Hủy"
+        okButtonProps={{ className: styles.deleteBtn }}
+      >
+        <p>Bạn có chắc chắn muốn xóa nhân viên đã chọn?</p>
+      </Modal>
     </div>
   );
 };

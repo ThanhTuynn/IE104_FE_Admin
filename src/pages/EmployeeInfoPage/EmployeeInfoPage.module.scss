@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Forum&family=Nunito:wght@200..1000&family=Poppins:wght@400;500;600;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Forum&family=Nunito:wght@200..1000&family=Poppins:wght@400;500;600;700&display=swap");
 
 .store-info {
   * {
@@ -22,7 +22,7 @@
     margin: auto;
   }
 
-  /* CONTENT */
+
   #content {
     position: relative;
     width: calc(100% - 280px);
@@ -30,7 +30,7 @@
     transition: 0.3s ease;
   }
 
-  /* NAVBAR */
+
   #content nav {
     height: 64px;
     background: #ffffff;
@@ -132,13 +132,13 @@
   .ant-btn {
     margin-right: 8px;
     border-radius: 4px;
-    background-color: #e6f7ff; /* Màu nền xanh nhạt */
-    border: 1px solid #1890ff; /* Viền màu xanh */
-    color: #1890ff; /* Màu chữ */
-    padding: 6px 20px; /* Khoảng cách bên trong */
-    font-weight: bold; /* Chữ in đậm */
-    border-radius: 10px; /* Bo góc nút */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng hover */
+    background-color: #e6f7ff; 
+    border: 1px solid #1890ff; 
+    color: #1890ff; 
+    padding: 6px 20px; 
+    font-weight: bold; 
+    border-radius: 10px; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
   }
 
   .ant-btn-primary {
@@ -152,20 +152,20 @@
     border-color: #40a9ff;
   }
 
-  /*Định dạng nút đổi mật khẩu*/
+
   .ant-btn-secondary {
-    background-color: #e6f7ff; /* Màu nền xanh nhạt */
-    border: 1px solid #1890ff; /* Viền màu xanh */
-    color: #1890ff; /* Màu chữ */
-    padding: 6px 20px; /* Khoảng cách bên trong */
-    font-weight: bold; /* Chữ in đậm */
-    border-radius: 10px; /* Bo góc nút */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng hover */
+    background-color: #e6f7ff;
+    border: 1px solid #1890ff; 
+    color: #1890ff; 
+    padding: 6px 20px;
+    font-weight: bold; 
+    border-radius: 10px; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
   }
 
   .ant-btn-secondary:hover {
-    background-color: #bae7ff; /* Màu nền đậm hơn khi hover */
-    color: #096dd9; /* Màu chữ đậm hơn khi hover */
+    background-color: #bae7ff; 
+    color: #096dd9; 
   }
 
   #changePasswordModal {
@@ -221,4 +221,6 @@
     gap: 10px;
     border-top: 1px solid #f0f0f0;
   }
-}
+} */
+
+

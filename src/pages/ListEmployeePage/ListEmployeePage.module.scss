@@ -1,0 +1,169 @@
+// .employee-page {
+//   padding: 20px;
+//   background-color: #f9f9f9;
+//   min-height: 100vh;
+
+//   .header-actions {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     gap: 15px;
+//     width: 100%;
+//     box-sizing: border-box;
+//   }
+
+//   .employee-header {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     margin-bottom: 20px;
+//   }
+
+//   .export-button {
+//     background-color: #cdd1ff;
+//     color: #091057;
+//     border: none;
+//     margin-left: 10px;
+//   }
+
+//   .export-button:hover {
+//     border-color: white;
+//     background-color: #091057;
+//     color: white;
+//   }
+
+//   .add-employee-button {
+//     border-color: white;
+//     background-color: #091057;
+//     color: white;
+//     margin-left: 12px;
+//   }
+//   .add-employee-button:hover {
+//     background-color: #cdd1ff;
+//     color: #091057;
+//   }
+
+//   .filter-section {
+//     display: flex;
+//     justify-content: space-between;
+//     margin-bottom: 20px;
+//   }
+
+//   .filter-buttons button {
+//     margin-right: 0px;
+//   }
+
+//   .filter-buttons button:hover {
+//     border-color: #091057;
+//     color: #091057;
+//   }
+//   .filter-buttons button.active {
+//     background-color: #cdd1ff;
+//     border-color: #cdd1ff;
+//     color: #091057;
+//     font-weight: bold;
+//   }
+
+//   .delete-all-button {
+//     background-color: rgb(173, 4, 4);
+//     color: white;
+//     border: none;
+//   }
+
+//   .delete-all-button:hover {
+//     background-color: rgb(200, 50, 50);
+//     color: white;
+//   }
+// }
+
+
+.main {
+  background-color: #f5f5f5;
+  padding: 10px 20px;
+  height: 100vh;
+}
+
+.wrapInfo {
+  .header {
+    display: flex;
+    gap: 10px;
+    
+    .allBtn {
+      display: flex;
+      gap: 10px;
+    }
+  }
+}
+
+.wrapBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  gap: 10px;
+
+  .positionBtn {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+.wrapTable {
+  width: 100%;
+  overflow: hidden;
+}
+
+.deleteBtn {
+  background-color: red;
+  border: none;
+
+  &:hover, &:active, &:focus {
+    background-color: red;
+    opacity: 0.7;
+  }
+}
+
+
+@media (max-width: 739px) {
+  .main {
+    padding: 10px 4px;
+
+    .title {
+      margin-left: 45px;
+
+      h2 {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  .wrapInfo {
+    .header {
+      flex-direction: column;
+
+      .allBtn {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .wrapBtn {
+    flex-wrap: wrap;
+  }  
+}
+
+// style={{
+//   display: "flex",
+//   justifyContent: "center",
+//   backgroundColor: "#091057",
+// }}
+
+@media (min-width: 740px) and (max-width: 1023px) {
+  .main {
+    .title {
+      margin-left: 50px;
+    }
+  }
+}
