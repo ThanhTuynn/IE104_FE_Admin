@@ -94,7 +94,7 @@ const routes = [
     path: "/",
     page: Dashboard,
     isShowHeader: true,
-    isProtected: true, // Chỉ truy cập nếu đã đăng nhập
+    isProtected: false, // Chỉ truy cập nếu đã đăng nhập
   },
   {
     path: "list-order-product",
