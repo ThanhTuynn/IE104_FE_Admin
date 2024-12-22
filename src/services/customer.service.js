@@ -1,6 +1,6 @@
 const API_URL = "http://localhost:3001/api";
 
-export const getDetailsOrder = async (id) => {
+export const getCustomerDetails = async (id) => {
   try {
     const response = await fetch(`${API_URL}/order/details/${id}`, {
       method: "GET",

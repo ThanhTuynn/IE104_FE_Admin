@@ -133,7 +133,7 @@ const routes = [
     isProtected: true, // Chỉ truy cập nếu đã đăng nhập
   },
   {
-    path: "customer-detail/1",
+    path: "customer-detail/:id",
     page: DetailCustomerPage,
     isShowHeader: true,
     isProtected: true, // Chỉ truy cập nếu đã đăng nhập
