@@ -109,7 +109,7 @@ const routes = [
     isProtected: true, // Chỉ truy cập nếu đã đăng nhập
   },
   {
-    path: "order-detail/1",
+    path: "order-detail/:id",
     page: DetailOrderPage,
     isShowHeader: true,
     isProtected: true, // Chỉ truy cập nếu đã đăng nhập

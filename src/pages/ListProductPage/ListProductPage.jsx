@@ -621,7 +621,7 @@ const ProductList = () => {
   // Hàm fetch dữ liệu từ API
   const fetchAllProduct = async () => {
     try {
-      const allProducts = await getAllProduct();
+      const allProducts = await getAllProduct(filterParams);
       if (!allProducts || !allProducts.data) {
         throw new Error("No product data returned from API");
       }
@@ -634,9 +634,9 @@ const ProductList = () => {
 
   // Sử dụng useQuery để gọi API
   const { data, isLoading, error } = useQuery({
-    queryKey: ["product-data", filters],
+    queryKey: ["product-data", filterParams],
     queryFn: fetchAllProduct,
-    enabled: !!filters, // Chỉ fetch khi filters hợp lệ
+    enabled: !!filterParams, // Chỉ fetch khi filters hợp lệ
     refetchOnWindowFocus: false, // Không fetch lại khi đổi tab
     keepPreviousData: true, // Giữ dữ liệu cũ trong lúc fetch mới
   });
@@ -991,12 +991,12 @@ const ProductList = () => {
           <Select
             placeholder="Chọn danh mục"
             style={{ width: 150, marginRight: "10px" }}
-            onChange={handleCategoryChange}
             allowClear
             options={[
               { value: "Chó", label: "Chó" },
               { value: "Mèo", label: "Mèo" },
             ]}
+            onChange={(value) => handleFilterChange({ category_level_1: value })}
           />
           <Button
             type="primary"
@@ -1009,6 +1009,31 @@ const ProductList = () => {
           </Button>
         </div>
 
+        <div className={styles.other}>
+          <Select
+            placeholder="Chọn danh mục"
+            style={{ width: 150, marginRight: "10px" }}
+            allowClear
+            options={[
+              { value: "Thức ăn", label: "Thức ăn" },
+              { value: "Trang phục", label: "Trang phục" },
+              { value: "Đồ chơi", label: "Đồ chơi" },
+              { value: "Chăm sóc vệ sinh", label: "Chăm sóc vệ sinh" },
+            ]}
+            onChange={(value) => handleFilterChange({ category_level_2: value })}
+          />
+          <Button
+            type="primary"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={handleDeleteSelected}
+            disabled={selectedRowKeys.length === 0}
+          >
+            Xóa đã chọn
+          </Button>
+        </div>
+
+
         {/* Bảng dữ liệu hiển thị */}
         <div className={styles.wrapTable}>
           <Table
@@ -1020,13 +1045,14 @@ const ProductList = () => {
               onClick: () => handleRowClick(record),
             })}
             pagination={{
-              // current: pagination.current||1,
-              // pageSize: pagination.pageSize||10,
-              pageSize: 10,
+              current: filterParams.page,
+              pageSize: filterParams.limit,
               showSizeChanger: true,
               pageSizeOptions: ["5", "10", "20", "50"],
+              total: data?.total || 0, // Tổng số bản ghi từ API
+              onChange: (page, pageSize) => handleFilterChange({ page, limit: pageSize }),
             }}
-            onChange={handleFilterChange}
+            
             scroll={{ x: 400 }}
           />
         </div>

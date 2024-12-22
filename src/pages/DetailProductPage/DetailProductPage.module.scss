@@ -291,6 +291,13 @@
   flex-wrap: wrap;
 }
 
+img {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+
 @media (max-width: 739px) {
   .main {
     padding: 10px 4px;
