@@ -586,16 +586,16 @@ const OrderProduct = () => {
       render: (action) => {
         const actionStyle = {
           "Chờ xác nhận": { color: "#E8A300", backgroundColor: "#feedc7" },
-          "Đang vận chuyển": {
+          "Đang chuẩn bị hàng": {
             color: "blue",
             backgroundColor: "rgb(215, 215, 255)",
           },
-          "Hoàn thành": {
+          "Giao hàng thành công": {
             color: "green",
             backgroundColor: "rgb(224, 251, 224)",
           },
-          "Đã hủy": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
-          "Trả hàng/Hoàn tiền": {
+          "Hủy hàng": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
+          "Hoàn hàng": {
             color: "gray",
             backgroundColor: "rgb(221, 213, 199)",
           },
