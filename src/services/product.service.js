@@ -90,7 +90,7 @@ export const getDetailsProduct = async (id) => {
 export const getAllProduct = async (params = {}) => {
   try {
     const {
-      limit= 20,
+      limit,
       page,
       sort,
       search,

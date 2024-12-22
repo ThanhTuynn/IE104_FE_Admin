@@ -373,13 +373,10 @@ import {
   Form,
   Switch,
 } from "antd";
-import {
-  HeartOutlined,
-  HeartFilled,
-} from "@ant-design/icons";
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import { PlusOutlined } from "@ant-design/icons";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
-import styles from './DetailProductPage.module.scss'
+import styles from "./DetailProductPage.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDetailsProduct } from "../../services/product.service";
 import { useQuery } from "@tanstack/react-query";
@@ -389,12 +386,8 @@ const ProductDetailForm = () => {
   const initData = {
     name: "Dầu gội chăm sóc lông và làm mịn da cho thú cưng",
     description: "Đây là mô tả sản phẩm mẫu..........",
-    attributes: [
-      { type: "Màu sắc", value: "Đen", isActive: true },
-      { type: "Kích thước", value: "Lớn", isActive: true },
-    ],
+    attributes: [],
   };
-
 
   const navigate = useNavigate();
 
@@ -436,8 +429,8 @@ const ProductDetailForm = () => {
         )
           ? "Mèo"
           : String(data?.product_category?.category_level).startsWith("11")
-            ? "Chó"
-            : null,
+          ? "Chó"
+          : null,
         subCategory: "Chăm sóc vệ sinh", // Danh mục phụ
         childCategory: data?.product_category?.category_title,
         description: data?.product_description,
@@ -448,15 +441,14 @@ const ProductDetailForm = () => {
           data?.product_countInStock === 0
             ? "Hết hàng"
             : data?.product_countInStock < 10
-              ? "Cần nhập"
-              : "Tồn kho",
+            ? "Cần nhập"
+            : "Tồn kho",
         updatedPrice:
           data?.product_price *
-          (1 - data?.product_percent_discount / 100).toLocaleString() || 0,
-        image:
-          data?.product_images
-            ? `data:image/jpeg;base64,${data?.product_images}`
-            : product4,
+            (1 - data?.product_percent_discount / 100).toLocaleString() || 0,
+        image: data?.product_images[0]
+          ? `data:image/jpeg;base64,${data?.product_images[0]}`
+          : product4,
         isFavorite: data?.product_famous,
         soldQuantity: data?.product_selled,
         attributes:
@@ -467,7 +459,7 @@ const ProductDetailForm = () => {
             isActive: data?.product_display,
             value: variant?.product_price || 0,
             quantity: variant?.product_countInStock || 0,
-            image: `data:image/jpeg;base64,${variant?.variant_img}`
+            image: `data:image/jpeg;base64,${variant?.variant_img}`,
           })) || [], // Nếu không có variants thì để mảng rỗng
       };
       setProductDetails(products);
@@ -528,11 +520,13 @@ const ProductDetailForm = () => {
     const updatedDetails = { ...productDetails, attributes: newAttributes };
     setProductDetails(updatedDetails);
     checkIfModified(updatedDetails);
-    console.log('Updated productDetails:', updatedDetails);
+    console.log("Updated productDetails:", updatedDetails);
   };
 
   const handleRemoveAttribute = (index) => {
-    const updatedAttributes = productDetails.attributes.filter((_, i) => i !== index);
+    const updatedAttributes = productDetails.attributes.filter(
+      (_, i) => i !== index
+    );
     const updatedDetails = {
       ...productDetails,
       attributes: updatedAttributes,
@@ -553,9 +547,9 @@ const ProductDetailForm = () => {
       attributes: productDetails.attributes.map((attr, i) =>
         i === index
           ? {
-            ...attr,
-            attributeImage: newFiles, // Gán mảng file mới
-          }
+              ...attr,
+              attributeImage: newFiles, // Gán mảng file mới
+            }
           : attr
       ),
     };
@@ -570,10 +564,6 @@ const ProductDetailForm = () => {
     console.log("Updated details prepared for update:", updatedDetails);
   };
 
-
-
-
-
   // Lưu sản phẩm
   const handleSaveProduct = () => {
     console.log("Save Product", productDetails, imageList);
@@ -586,10 +576,9 @@ const ProductDetailForm = () => {
     navigate(-1);
   };
 
-
   // Ảnh minh họa
-  const [image, setImage] = useState(productDetails.image || "");  // Lưu trữ ảnh trong state
-  console.log('productDetails.image', productDetails.image);
+  const [image, setImage] = useState(productDetails.image || ""); // Lưu trữ ảnh trong state
+  console.log("productDetails.image", productDetails.image);
 
   // Hàm để thêm hoặc sửa ảnh
   const handleImageChange = (e) => {
@@ -607,7 +596,7 @@ const ProductDetailForm = () => {
   const handleRemoveImage = () => {
     setImage(""); // Xóa ảnh
   };
-
+  console.log(productDetails.attributes);
   return (
     <div className={styles.main}>
       <div className={styles.title}>
@@ -623,11 +612,17 @@ const ProductDetailForm = () => {
               checked={isGlobalActive}
               onChange={(checked) => setIsGlobalActive(checked)}
             />
-            {isFavorited
-              ?
-              <HeartFilled className={styles.icon} onClick={handleToggleFavorite} />
-              :
-              <HeartOutlined className={styles.icon} onClick={handleToggleFavorite} />}
+            {isFavorited ? (
+              <HeartFilled
+                className={styles.icon}
+                onClick={handleToggleFavorite}
+              />
+            ) : (
+              <HeartOutlined
+                className={styles.icon}
+                onClick={handleToggleFavorite}
+              />
+            )}
           </div>
         </div>
         <div className={styles.name}>
@@ -655,11 +650,8 @@ const ProductDetailForm = () => {
           <p>Minh họa:</p>
           <div className={styles.img}>
             {/* Hiển thị ảnh sản phẩm */}
-            {image ? (
-              <img
-                src={image}
-                alt={productDetails.name}
-              />
+            {productDetails.image ? (
+              <img src={productDetails.image} alt={productDetails.name} />
             ) : (
               <span className={styles.noImg}>No image available</span>
             )}
@@ -669,10 +661,7 @@ const ProductDetailForm = () => {
                 accept="image/*"
                 onChange={handleImageChange}
               />
-              <Button
-                type="danger"
-                onClick={handleRemoveImage}
-              >
+              <Button type="danger" onClick={handleRemoveImage}>
                 Xóa
               </Button>
             </div>
@@ -716,7 +705,9 @@ const ProductDetailForm = () => {
                       name="price"
                       value={attr.price || 0}
                       onChange={(value) =>
-                        handleAttributeChange(index, { target: { name: "price", value } })
+                        handleAttributeChange(index, {
+                          target: { name: "price", value },
+                        })
                       }
                       placeholder="Giá thuộc tính"
                       style={{ width: "100%" }}
@@ -732,7 +723,9 @@ const ProductDetailForm = () => {
                       name="quantity"
                       value={attr.quantity || 1}
                       onChange={(value) =>
-                        handleAttributeChange(index, { target: { name: "quantity", value } })
+                        handleAttributeChange(index, {
+                          target: { name: "quantity", value },
+                        })
                       }
                       placeholder="Số lượng"
                       style={{ width: "100%" }}
@@ -744,24 +737,35 @@ const ProductDetailForm = () => {
                 <Col span={24}>
                   <div className={styles.name}>
                     <label>Hình ảnh:</label>
+                    {attr.image ? (
+                      <img
+                        src={attr.image}
+                        alt={attr.name}
+                      />
+                    ) : (
+                      <span className={styles.noImg}>No image available</span>
+                    )}
                     <Input
                       type="file"
                       accept="image/*"
                       multiple
-                      onChange={(e) => handleAttributeImageChange(index, e.target.files)}
+                      onChange={(e) =>
+                        handleAttributeImageChange(index, e.target.files)
+                      }
                     />
                     <div className={styles.variantImg}>
-                      {attr.attributeImage && attr.attributeImage.length > 0 && (
-                        <div>
-                          {attr.attributeImage.map((img, idx) => (
-                            <img
-                              key={idx}
-                              src={URL.createObjectURL(img)}
-                              alt={`image-${idx}`}
-                            />
-                          ))}
-                        </div>
-                      )}
+                      {attr.attributeImage &&
+                        attr.attributeImage.length > 0 && (
+                          <div>
+                            {attr.attributeImage.map((img, idx) => (
+                              <img
+                                key={idx}
+                                src={URL.createObjectURL(img)}
+                                alt={`image-${idx}`}
+                              />
+                            ))}
+                          </div>
+                        )}
                     </div>
                   </div>
                 </Col>
@@ -789,7 +793,7 @@ const ProductDetailForm = () => {
             type="primary"
             onClick={handleSaveProduct}
             className={styles.saveBtn}
-          //disabled={!isModified} // Nút chỉ bật khi có thay đổi
+            //disabled={!isModified} // Nút chỉ bật khi có thay đổi
           >
             Lưu sản phẩm
           </Button>
