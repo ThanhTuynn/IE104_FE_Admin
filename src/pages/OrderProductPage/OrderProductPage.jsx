@@ -586,15 +586,15 @@ const OrderProduct = () => {
       render: (action) => {
         const actionStyle = {
           "Chờ xác nhận": { color: "#E8A300", backgroundColor: "#feedc7" },
-          "Đang chuẩn bị hàng": {
+          "Đang giao": {
             color: "blue",
             backgroundColor: "rgb(215, 215, 255)",
           },
-          "Giao hàng thành công": {
+          "Hoàn thành": {
             color: "green",
             backgroundColor: "rgb(224, 251, 224)",
           },
-          "Hủy hàng": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
+          "Đã hủy": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
           "Hoàn hàng": {
             color: "gray",
             backgroundColor: "rgb(221, 213, 199)",
@@ -660,10 +660,10 @@ const OrderProduct = () => {
             {[
               "Tất cả đơn hàng",
               "Chờ xác nhận",
-              "Đang vận chuyển",
+              "Đang giao",
               "Hoàn thành",
               "Đã hủy",
-              "Trả hàng/Hoàn tiền",
+              "Hoàn hàng",
             ].map((status) => (
               <Button
                 key={status}
