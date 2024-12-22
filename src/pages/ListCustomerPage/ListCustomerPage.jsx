@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Input, Button, Tag, Table, Modal } from "antd";
 import { ExportOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import styles from './ListCustomerPage.module.scss'
+import styles from "./ListCustomerPage.module.scss";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
+import { useQuery } from "@tanstack/react-query";
+import { getAllUser } from "../../services/customer.service";
 
 // Hàm khởi tạo dữ liệu mẫu
 const initData = () => [
@@ -47,6 +49,44 @@ const CustomerList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [filters, setFilters] = useState("Tất cả trạng thái");
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+  // Hàm fetch dữ liệu từ API
+  const fetchAllCustomer = async () => {
+    try {
+      const allUser = await getAllUser();
+      if (!allUser || !allUser.data) {
+        throw new Error("No product data returned from API");
+      }
+      return allUser; // React Query tự động xử lý Promise này
+    } catch (error) {
+      console.error("Error fetching allUser data:", error.message);
+      throw new Error("Failed to fetch allUser data");
+    }
+  };
+
+  // Sử dụng useQuery để gọi API
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["customer-data"],
+    queryFn: fetchAllCustomer,
+    refetchOnWindowFocus: false, // Không fetch lại khi đổi tab
+    keepPreviousData: true, // Giữ dữ liệu cũ trong lúc fetch mới
+  });
+
+  useEffect(() => {
+    if (data?.data) {
+      const customers = data.data.map((customer) => ({
+        id: customer._id,
+        name: customer.user_name,
+        email: customer.user_email,
+        phone: customer.user_phone,
+        status: !customer.is_delete? "Hoạt động": "Đã khóa",
+        customerCode: customer._id,
+      }));
+      setCustomers(customers);
+
+      console.log("data nè:", customers);
+    }
+  }, [data]);
 
   const handleStatusFilterChange = (status) => setFilters(status);
 

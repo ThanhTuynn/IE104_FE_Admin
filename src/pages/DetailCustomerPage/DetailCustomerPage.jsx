@@ -82,6 +82,69 @@ const CustomerDetail = () => {
   });
   const [setFilteredOrders] = useState(orders);
 
+  // const { id } = useParams();
+
+  // const fetchCustomerDetails = async ({ queryKey }) => {
+  //   const id = queryKey[1]; // Lấy id từ queryKey
+  //   const data = await Promise.all([getDetailsOrder(id)]);
+
+  //   return data[0].data;
+  // };
+
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["order-data", id], // queryKey chứa id
+  //   queryFn: fetchCustomerDetails, // Cấu trúc queryFn mới
+  //   enabled: !!id, // Chỉ fetch khi id tồn tại
+  //   refetchOnWindowFocus: false, // Không fetch lại khi chuyển tab
+  //   keepPreviousData: true, // Giữ dữ liệu cũ khi id thay đổi
+  // });
+
+  // useEffect(() => {
+  //   if (data) {
+  //     const products = {
+  //       orderId: data?._id,
+  //       purchaseDate: data?.updatedAt,
+  //       status: data?.order_status,
+  //       customer: {
+  //         name: data?.shipping_address?.full_name,
+  //         phone: data?.shipping_address?.phone,
+  //         address:
+  //           `${data?.shipping_address?.address?.home_address}, ${data?.shipping_address?.address?.commune}, ${data?.shipping_address?.address?.district}, ${data?.shipping_address?.address?.province}`, 
+  //         note: data?.order_note,
+  //       },
+  //       employee: {
+  //         name: "Ngọc Thị A",
+  //         phone: "0323154625",
+  //         referenceCode: "MHN01012345",
+  //         note: "Đơn hàng cần vận chuyển nhanh trước ngày 21/11/2024",
+  //       },
+  //       products:
+  //         data?.products?.map((product) => ({
+  //           id: product?.product_id._id,
+  //           name: product?.product_id.product_title,
+  //           type: product?.product_order_type,
+  //           quantity: product?.quantity,
+  //           unitPrice: product?.product_price,
+  //           voucherPercent: product?.product_id.product_percent_discount,
+  //           imageUrl:
+  //             `data:image/jpeg;base64,${product?.product_id.product_images[0]}`
+  //         })) || [], // Nếu không có variants thì để mảng rỗng
+  //       feedback:
+  //         "Sữa tắm SOS thực sự rất thơm, tắm xong mà thơm mấy ngày liền. Bé cún nhà mình có da nhạy cảm, trước đây hay bị ngứa sau khi tắm nhưng từ khi dùng SOS thì không còn bị nữa. Lông mượt mà, sạch sẽ, ôm lúc nào cũng thích!",
+  //       cost: {
+  //         shippingFee: data?.shipping_fee,
+  //         handlingFee: 15000,
+  //         orderDiscount: data?.order_total_before +  data?.shipping_fee - data?.order_total_after,
+  //       },
+  //       final_cost: data?.order_total_after
+  //     };
+  //     setOrderDetails(products);
+  //     setCustomerNote(products.customer.note)
+  //     setStatus(products.status)
+  //     console.log("data nè:", products);
+  //   }
+  // }, [data]);
+
   // Hàm xử lý gửi thông tin
   const handleSubmit = (values) => {
     console.log("Updated Values:", values);
