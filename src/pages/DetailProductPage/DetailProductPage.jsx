@@ -447,7 +447,7 @@ const ProductDetailForm = () => {
           data?.product_price *
             (1 - data?.product_percent_discount / 100).toLocaleString() || 0,
         image: data?.product_images[0]
-          ? `data:image/jpeg;base64,${data?.product_images[0]}`
+          ? `${data?.product_images[0]}`
           : product4,
         isFavorite: data?.product_famous,
         soldQuantity: data?.product_selled,
@@ -459,7 +459,7 @@ const ProductDetailForm = () => {
             isActive: data?.product_display,
             value: variant?.product_price || 0,
             quantity: variant?.product_countInStock || 0,
-            image: `data:image/jpeg;base64,${variant?.variant_img}`,
+            image: `${variant?.variant_img}`,
           })) || [], // Nếu không có variants thì để mảng rỗng
       };
       setProductDetails(products);

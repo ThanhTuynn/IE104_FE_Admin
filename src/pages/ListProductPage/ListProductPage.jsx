@@ -660,7 +660,7 @@ const ProductList = () => {
             1 -
             product?.product_percent_discount / 100
           ).toLocaleString() || 0,
-        image: `data:image/jpeg;base64,${product?.product_images[0]}`,
+        image: `${product?.product_images[0]}`,
         isFavorite: product?.product_famous,
         soldQuantity: product?.product_selled
       }));
