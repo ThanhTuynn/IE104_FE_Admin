@@ -11,7 +11,7 @@ import {
   InputNumber,
 } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
-import styles from './ListProductPage.module.scss'
+import { createProduct } from "../../services/product.service";
 
 const ProductModal = ({
   visible,
@@ -22,91 +22,162 @@ const ProductModal = ({
   setProductDetails,
 }) => {
   const [form] = Form.useForm();
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [subCategories, setSubCategories] = useState([]);
-  const [childCategories, setChildCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]); // Danh mục phụ
+  const [childCategories, setChildCategories] = useState([]); // Danh mục con
 
-  // Khi chọn danh mục chính
-  const handleCategoryChange = (categoryValue) => {
-    const selectedCategory = categories.find(
-      (cat) => cat.value === categoryValue
-    );
+  // Đảm bảo `productDetails` có dữ liệu mặc định
+  useEffect(() => {
+    if (!productDetails.variants) {
+      setProductDetails((prev) => ({ ...prev, variants: [] }));
+    }
+  }, [productDetails, setProductDetails]);
+
+  // Xử lý chọn danh mục chính
+  const handleCategoryChange = (value) => {
+    const selectedCategory = categories.find((cat) => cat.value === value);
     setSubCategories(selectedCategory?.subCategories || []);
     setChildCategories([]);
     setProductDetails({
       ...productDetails,
-      category: categoryValue,
-      subCategory: null,
-      childCategory: null,
+      category: value, // Lưu ID của danh mục chính
     });
   };
 
-  // Khi chọn danh mục phụ
-  const handleSubCategoryChange = (subCategoryValue) => {
+  // Xử lý chọn danh mục phụ
+  const handleSubCategoryChange = (value) => {
     const selectedSubCategory = subCategories.find(
-      (sub) => sub.value === subCategoryValue
+      (sub) => sub.value === value
     );
-    setChildCategories(selectedSubCategory?.children || []); // Đảm bảo giá trị mặc định là mảng rỗng
+    setChildCategories(selectedSubCategory?.children || []);
     setProductDetails({
       ...productDetails,
-      subCategory: subCategoryValue,
-      childCategory: null,
+      subCategory: value, // Lưu ID của danh mục phụ
     });
   };
 
-  // Khi chọn danh mục con
-  const handleChildCategoryChange = (childCategoryValue) => {
+  // Xử lý chọn danh mục con
+  const handleChildCategoryChange = (value) => {
     setProductDetails({
       ...productDetails,
-      childCategory: childCategoryValue,
+      childCategory: value, // Lưu ID của danh mục con
     });
   };
 
-  const handleAddAttribute = () => {
+  // Xử lý ảnh sản phẩm chính
+  const handleMainImageChange = (info) => {
+    const file = info.file.originFileObj || info.file; // Đảm bảo lấy file gốc
+    setProductDetails({ ...productDetails, product_images: file }); // Lưu file để gửi lên BE
+  };
+
+  // Thêm biến thể mới
+  const handleAddVariant = () => {
     setProductDetails({
       ...productDetails,
-      attributes: [
-        ...productDetails.attributes,
-        { type: "", value: "", price: "", quantity: "", attributeImage: null },
+      variants: [
+        ...(productDetails.variants || []),
+        {
+          product_order_type: "",
+          product_price: 0,
+          product_countInStock: 0,
+          variant_img: null,
+        },
       ],
     });
   };
 
-  const handleAttributeChange = (index, event) => {
-    const newAttributes = [...productDetails.attributes];
-    newAttributes[index][event.target.name] = event.target.value;
-    setProductDetails({ ...productDetails, attributes: newAttributes });
+  // Xóa biến thể
+  const handleDeleteVariant = (index) => {
+    const updatedVariants = [...productDetails.variants];
+    updatedVariants.splice(index, 1);
+    setProductDetails({ ...productDetails, variants: updatedVariants });
   };
 
-  const handleDeleteAttribute = (index) => {
-    const newAttributes = [...productDetails.attributes];
-    newAttributes.splice(index, 1);
-    setProductDetails({ ...productDetails, attributes: newAttributes });
+  // Cập nhật giá trị biến thể
+  const handleVariantChange = (index, key, value) => {
+    const updatedVariants = [...productDetails.variants];
+    updatedVariants[index][key] = value;
+    setProductDetails({ ...productDetails, variants: updatedVariants });
   };
 
-  const handleAttributeImageChange = (index, file) => {
-    const newAttributes = [...productDetails.attributes];
-    newAttributes[index].attributeImage = file?.url || file?.preview;
-    setProductDetails({ ...productDetails, attributes: newAttributes });
-    return false; // Prevent automatic upload
+  // Xử lý thêm ảnh biến thể
+  const handleImageChange = (index, info) => {
+    const file = info.file.originFileObj || info.file; // Đảm bảo lấy file gốc
+    const updatedVariants = [...productDetails.variants];
+    updatedVariants[index].variant_img = file; // Lưu file để gửi lên BE
+    setProductDetails({ ...productDetails, variants: updatedVariants });
   };
 
-  const handleAddProduct = (values) => {
-    const { name, category, description } = values;
+  // Gửi dữ liệu sản phẩm
+  const handleSubmit = async () => {
+    try {
+      // Validate form
+      const values = await form.validateFields();
 
-    const newProduct = {
-      name,
-      category,
-      description,
-      attributes: productDetails.attributes,
-    };
+      // Khởi tạo FormData
+      const formData = new FormData();
 
-    onSubmit(newProduct);
-    form.resetFields(); // Reset form after submission
-    setProductDetails({ attributes: [], subCategory: [] }); // Reset product details
+      // Thêm thông tin sản phẩm chính
+      formData.append("product_title", values.product_title);
+      formData.append("product_brand", values.product_brand);;
+      formData.append("product_category", values.childCategory);
+      formData.append("product_description", values.product_description);
+
+      // Thêm ảnh chính
+      if (productDetails.product_images) {
+        formData.append("product_images", productDetails.product_images);
+      }
+
+      // Xử lý biến thể
+      productDetails.variants.forEach((variant, index) => {
+        formData.append(
+          `variants[${index}][product_order_type]`,
+          variant.product_order_type
+        );
+        formData.append(
+          `variants[${index}][product_price]`,
+          variant.product_price
+        );
+        formData.append(
+          `variants[${index}][product_countInStock]`,
+          variant.product_countInStock
+        );
+
+        // Thêm ảnh biến thể
+        if (variant.variant_img) {
+          formData.append(`variant_img_${index}`, variant.variant_img);
+        }
+      });
+
+      // Debug FormData để kiểm tra dữ liệu trước khi gửi
+      console.log("FormData Debug:");
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}:`, pair[1]);
+      }
+
+      // Gọi API tạo sản phẩm bằng async/await
+      const response = await createProduct(formData);
+
+      // Kiểm tra phản hồi từ API
+      if (response) {
+        console.log("Product created successfully:", response);
+        alert("Sản phẩm đã được tạo thành công!");
+
+        // Reset form và dữ liệu sản phẩm
+        form.resetFields();
+        setProductDetails({ product_images: null, variants: [] });
+
+        // Gửi dữ liệu lên parent component
+        onSubmit(response);
+      } else {
+        throw new Error("Không nhận được phản hồi từ server.");
+      }
+    } catch (error) {
+      // Xử lý lỗi
+      console.error("Error creating product:", error);
+      alert("Đã xảy ra lỗi khi tạo sản phẩm! Vui lòng thử lại.");
+    }
   };
 
-  // Reset form khi `visible` thay đổi
   useEffect(() => {
     if (visible) {
       form.resetFields();
@@ -118,38 +189,34 @@ const ProductModal = ({
       title="Thêm sản phẩm mới"
       visible={visible}
       onCancel={onCancel}
-      footer={null}
-      centered
+      onOk={handleSubmit}
     >
-      <Form
-        form={form}
-        onFinish={handleAddProduct}
-        layout="vertical"
-        onValuesChange={() => {
-          form
-            .validateFields()
-            .then(() => setIsFormValid(true))
-            .catch(() => setIsFormValid(false));
-        }}
-      >
+      <Form form={form} layout="vertical">
+        {/* Tên sản phẩm */}
         <Form.Item
           label="Tên sản phẩm"
-          name="name"
-          required
-          rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm" }]}
+          name="product_title"
+          rules={[{ required: true }]}
         >
-          <Input placeholder="Tên sản phẩm" />
+          <Input placeholder="Nhập tên sản phẩm" />
         </Form.Item>
 
+        {/* Thương hiệu */}
+        <Form.Item
+          label="Thương hiệu"
+          name="product_brand"
+          rules={[{ required: true }]}
+        >
+          <Input placeholder="Nhập tên thương hiệu" />
+        </Form.Item>
+
+        {/* Danh mục chính */}
         <Form.Item
           label="Danh mục chính"
           name="category"
-          rules={[{ required: true, message: "Vui lòng chọn danh mục chính" }]}
+          rules={[{ required: true }]}
         >
-          <Select
-            placeholder="Chọn danh mục chính"
-            onChange={handleCategoryChange}
-          >
+          <Select placeholder="Chọn danh mục" onChange={handleCategoryChange}>
             {categories.map((cat) => (
               <Select.Option key={cat.value} value={cat.value}>
                 {cat.label}
@@ -162,12 +229,11 @@ const ProductModal = ({
         <Form.Item
           label="Danh mục phụ"
           name="subCategory"
-          rules={[{ required: true, message: "Vui lòng chọn danh mục phụ" }]}
+          rules={[{ required: true }]}
         >
           <Select
             placeholder="Chọn danh mục phụ"
             onChange={handleSubCategoryChange}
-            disabled={!subCategories.length}
           >
             {subCategories.map((sub) => (
               <Select.Option key={sub.value} value={sub.value}>
@@ -181,152 +247,118 @@ const ProductModal = ({
         <Form.Item
           label="Danh mục con"
           name="childCategory"
-          rules={[{ required: true, message: "Vui lòng chọn danh mục con" }]}
+          rules={[{ required: true }]}
         >
           <Select
             placeholder="Chọn danh mục con"
             onChange={handleChildCategoryChange}
-            disabled={!childCategories.length}
           >
             {childCategories.map((child) => (
-              <Select.Option key={child} value={child}>
-                {child}
+              <Select.Option key={child.value} value={child.value}>
+                {child.label} {/* Hiển thị tên nhưng gửi ID */}
               </Select.Option>
             ))}
           </Select>
         </Form.Item>
 
-        <Form.Item label="Mô tả sản phẩm" name="description">
-          <Input placeholder="Mô tả sản phẩm" />
+        {/* Mô tả sản phẩm */}
+        <Form.Item
+          label="Mô tả sản phẩm"
+          name="product_description"
+          rules={[{ required: true }]}
+        >
+          <Input.TextArea placeholder="Nhập mô tả sản phẩm" rows={3} />
         </Form.Item>
 
-        {/* Attributes Section */}
-        <div>
-          <p style={{ display: "inline-block", marginRight: "20px" }}>
-            Thuộc tính sản phẩm
-          </p>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleAddAttribute}
-            style={{
-              display: "inline-block",
-              backgroundColor: "#cdd1ff",
-              color: "#091057",
-              border: "none",
-            }}
+        {/* Ảnh sản phẩm chính */}
+        <Form.Item label="Ảnh sản phẩm chính">
+          <Upload
+            listType="picture-card"
+            beforeUpload={() => false}
+            onChange={handleMainImageChange}
           >
-            Thêm thuộc tính
-          </Button>
-          {productDetails.attributes.map((attr, index) => (
-            <div key={index} style={{ marginBottom: "15px" }}>
-              <Row gutter={16}>
-                <Col span={24}>
-                  <Form.Item
-                    label="Loại biến thể"
-                    required
-                  >
-                    <Input
-                      name="type"
-                      value={attr.type}
-                      onChange={(e) => handleAttributeChange(index, e)}
-                      placeholder="Loại biến thể"
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Tên biến thể"
-                    required
-                  >
-                    <Input
-                      name="value"
-                      value={attr.value}
-                      onChange={(e) => handleAttributeChange(index, e)}
-                      placeholder="Tên biến thể"
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Trạng thái" name="status"
-                    required
-                  >
-                    <Select>
-                      <Select.Option value="Tồn kho">Tồn kho</Select.Option>
-                      <Select.Option value="Cần nhập">Cần nhập</Select.Option>
-                      <Select.Option value="Hết hàng">Hết hàng</Select.Option>
-                    </Select>
-                  </Form.Item>
-                  <Row gutter={16} justify="space-between">
-                    <Col span={12}>
-                      <Form.Item label="Giá" required>
-                        <InputNumber
-                          name="price"
-                          value={attr.price}
-                          onChange={(value) =>
-                            handleAttributeChange(index, {
-                              target: { name: "price", value },
-                            })
-                          }
-                          placeholder="Giá thuộc tính"
-                          min={0}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item label="Số lượng" required>
-                        <InputNumber
-                          name="quantity"
-                          value={attr.quantity}
-                          onChange={(value) =>
-                            handleAttributeChange(index, {
-                              target: { name: "quantity", value },
-                            })
-                          }
-                          placeholder="Số lượng thuộc tính"
-                          min={1}
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Form.Item label="Hình ảnh" required>
-                    <Upload
-                      listType="picture-card"
-                      fileList={
-                        attr.attributeImage
-                          ? [{ url: attr.attributeImage }]
-                          : []
-                      }
-                      onChange={(info) =>
-                        handleAttributeImageChange(index, info.file)
-                      }
-                      showUploadList={false}
-                      accept="image/*"
-                    >
-                      <PlusOutlined />
-                    </Upload>
-                  </Form.Item>
-                </Col>
-                <div className={styles.wrapdeleteBtn}>
-                  <Button
-                    type="danger"
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleDeleteAttribute(index)}
-                  >
-                    Xóa biến thể
-                  </Button>
-                </div>
-              </Row>
-            </div>
-          ))}
-        </div>
-
-        <Form.Item style={{ margin: "0", textAlign: "center", width: "100%" }}>
-          <Button
-            type="primary"
-            className={styles.addBtn}
-            disabled={!isFormValid}
-          >
-            Thêm sản phẩm
-          </Button>
+            {productDetails.product_images ? (
+              <img
+                src={URL.createObjectURL(productDetails.product_images)}
+                alt="main"
+                style={{ width: "100%" }}
+              />
+            ) : (
+              <PlusOutlined />
+            )}
+          </Upload>
         </Form.Item>
+
+        {/* Biến thể */}
+        <h4>Biến thể sản phẩm</h4>
+        <Button
+          type="dashed"
+          onClick={handleAddVariant}
+          icon={<PlusOutlined />}
+        >
+          Thêm biến thể
+        </Button>
+        {productDetails?.variants?.map((variant, index) => (
+          <Row gutter={[16, 16]} key={index} style={{ marginTop: "10px" }}>
+            <Col span={6}>
+              <Input
+                placeholder="Loại"
+                value={variant.product_order_type}
+                onChange={(e) =>
+                  handleVariantChange(
+                    index,
+                    "product_order_type",
+                    e.target.value
+                  )
+                }
+              />
+            </Col>
+            <Col span={6}>
+              <InputNumber
+                placeholder="Giá"
+                value={variant.product_price}
+                min={0}
+                onChange={(value) =>
+                  handleVariantChange(index, "product_price", value)
+                }
+              />
+            </Col>
+            <Col span={6}>
+              <InputNumber
+                placeholder="Số lượng"
+                value={variant.product_countInStock}
+                min={0}
+                onChange={(value) =>
+                  handleVariantChange(index, "product_countInStock", value)
+                }
+              />
+            </Col>
+            <Col span={4}>
+              <Upload
+                listType="picture-card"
+                beforeUpload={() => false}
+                onChange={(info) => handleImageChange(index, info)}
+              >
+                {variant.variant_img ? (
+                  <img
+                    src={URL.createObjectURL(variant.variant_img)}
+                    alt="variant"
+                    style={{ width: "100%" }}
+                  />
+                ) : (
+                  <PlusOutlined />
+                )}
+              </Upload>
+            </Col>
+            <Col span={2}>
+              <Button
+                type="danger"
+                onClick={() => handleDeleteVariant(index)}
+                icon={<DeleteOutlined />}
+              />
+            </Col>
+          </Row>
+        ))}
       </Form>
     </Modal>
   );
