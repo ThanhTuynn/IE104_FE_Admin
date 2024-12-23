@@ -499,13 +499,27 @@ const OrderProduct = () => {
               name: product?.product_id?.product_title,
             })) || [], // Các sản phẩm còn lại
         },
-        customer: order.shipping_address.full_name
+        customer: order.shipping_address.full_name,
       }));
       setOrder(orders);
 
       console.log("data nè:", orders);
     }
   }, [data]);
+
+  const filteredData = useMemo(() => {
+    return order.filter((item) => {
+      const matchesSearchQuery = item.products.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      return (
+        (filters.orderType === "Tất cả đơn hàng" ||
+          item.action === filters.orderType) &&
+        (filters.dateString ? item.date.includes(filters.dateString) : true) &&
+        matchesSearchQuery
+      );
+    });
+  }, [data, filters, searchQuery]);
   const handleDeleteSelected = () => {
     setIsModalVisible(true); // Hiển thị Modal xác nhận xóa
   };
@@ -599,7 +613,10 @@ const OrderProduct = () => {
             color: "gray",
             backgroundColor: "rgb(221, 213, 199)",
           },
-          "Đang chuẩn bị hàng": { color: "purple", backgroundColor: "rgb(175, 143, 240)" },
+          "Đang chuẩn bị hàng": {
+            color: "purple",
+            backgroundColor: "rgb(175, 143, 240)",
+          },
         };
 
         return (
@@ -661,9 +678,10 @@ const OrderProduct = () => {
             {[
               "Tất cả đơn hàng",
               "Chờ xác nhận",
+              "Đang chuẩn bị hàng",
               "Đang giao",
               "Hoàn thành",
-              "Đã hủy",
+              "Hủy hàng",
               "Hoàn hàng",
             ].map((status) => (
               <Button
@@ -697,7 +715,7 @@ const OrderProduct = () => {
         </div>
         <Table
           columns={columns}
-          dataSource={order}
+          dataSource={filteredData}
           rowKey="id"
           rowSelection={rowSelection}
           onRow={(record) => ({
@@ -705,7 +723,7 @@ const OrderProduct = () => {
           })}
           pagination={{ pageSize: 5 }}
           scroll={{ x: 400 }}
-          style={{cursor: "pointer"}}
+          style={{ cursor: "pointer" }}
         />
 
         {/* Modal xác nhận xóa */}

@@ -11,11 +11,11 @@ const DetailOrderPage = () => {
   const actionStyle = {
     "Chờ xác nhận": { color: "#E8A300", backgroundColor: "#feedc7" },
     "Đang chuẩn bị hàng": { color: "blue", backgroundColor: "rgb(215, 215, 255)" },
-    "Giao hàng thành công": { color: "green", backgroundColor: "rgb(224, 251, 224)" },
-    "Đã hủy": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
-    "Hủy hàng": {
-      color: "gray",
-      backgroundColor: "rgb(221, 213, 199)",
+    "Hoàn thành": { color: "green", backgroundColor: "rgb(224, 251, 224)" },
+    "Hủy hàng": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
+    "Đang giao": {
+      color: "purple",
+      backgroundColor: "rgb(186, 61, 153)",
     },
   };
 
