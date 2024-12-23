@@ -704,6 +704,7 @@ const OrderProduct = () => {
           })}
           pagination={{ pageSize: 5 }}
           scroll={{ x: 400 }}
+          style={{cursor: "pointer"}}
         />
 
         {/* Modal xác nhận xóa */}

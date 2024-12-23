@@ -79,7 +79,7 @@ const CustomerList = () => {
         name: customer.user_name,
         email: customer.user_email,
         phone: customer.user_phone,
-        status: !customer.is_delete? "Hoạt động": "Đã khóa",
+        status: !customer.is_delete ? "Hoạt động" : "Đã khóa",
         customerCode: customer._id,
       }));
       setCustomers(customers);
@@ -208,6 +208,7 @@ const CustomerList = () => {
               onClick: () => handleRowClick(record),
             })}
             scroll={{ x: 1000 }}
+            style={{ cursor: "pointer" }}
           />
         </div>
       </div>
