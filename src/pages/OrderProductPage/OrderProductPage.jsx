@@ -594,11 +594,12 @@ const OrderProduct = () => {
             color: "green",
             backgroundColor: "rgb(224, 251, 224)",
           },
-          "Đã hủy": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
+          "Hủy hàng": { color: "red", backgroundColor: "rgb(255, 236, 236)" },
           "Hoàn hàng": {
             color: "gray",
             backgroundColor: "rgb(221, 213, 199)",
           },
+          "Đang chuẩn bị hàng": { color: "purple", backgroundColor: "rgb(175, 143, 240)" },
         };
 
         return (
