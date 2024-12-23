@@ -435,7 +435,7 @@ const ProductList = () => {
       ),
     },
     {
-      title: "Yêu thích",
+      title: "Nổi bật",
       key: "favorite",
       render: (_, record) => (
         <span
