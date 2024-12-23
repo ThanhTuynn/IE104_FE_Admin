@@ -153,3 +153,24 @@ export const getAllProduct = async (params = {}) => {
     throw error; // Ném lại lỗi để các nơi khác có thể xử lý
   }
 };
+
+// API thêm sản phẩm mới
+export const createProduct = async (formData) => {
+  try {
+    const response = await fetch(`${API_URL}/product/create`, {
+      method: "POST",
+      body: formData, // Giữ nguyên FormData, không cần headers
+    });
+
+    // if (!response.ok) {
+    //   const errorData = await response.json();
+    //   throw new Error(errorData.message || "Failed to add product");
+    // }
+
+    const data = await response.json(); // Chuyển đổi phản hồi thành JSON
+    return data; // Trả về dữ liệu từ API
+  } catch (error) {
+    console.error("Error adding product:", error);
+    throw error; // Ném lỗi để xử lý ở phía component
+  }
+};

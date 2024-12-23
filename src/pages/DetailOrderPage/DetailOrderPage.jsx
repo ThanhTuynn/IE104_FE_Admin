@@ -126,7 +126,7 @@ const DetailOrderPage = () => {
             unitPrice: product?.product_price,
             voucherPercent: product?.product_id.product_percent_discount,
             imageUrl:
-              `data:image/jpeg;base64,${product?.product_id.product_images[0]}`
+              `${product?.product_id.product_images[0]}`
           })) || [], // Nếu không có variants thì để mảng rỗng
         feedback:
           "Sữa tắm SOS thực sự rất thơm, tắm xong mà thơm mấy ngày liền. Bé cún nhà mình có da nhạy cảm, trước đây hay bị ngứa sau khi tắm nhưng từ khi dùng SOS thì không còn bị nữa. Lông mượt mà, sạch sẽ, ôm lúc nào cũng thích!",
