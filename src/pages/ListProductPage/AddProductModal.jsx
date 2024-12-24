@@ -118,9 +118,10 @@ const ProductModal = ({
 
       // Thêm thông tin sản phẩm chính
       formData.append("product_title", values.product_title);
-      formData.append("product_brand", values.product_brand);;
+      formData.append("product_brand", values.product_brand);
       formData.append("product_category", values.childCategory);
       formData.append("product_description", values.product_description);
+      formData.append("product_percent_discount", values.product_percent_discount);
 
       // Thêm ảnh chính
       if (productDetails.product_images) {
@@ -128,21 +129,18 @@ const ProductModal = ({
       }
 
       // Xử lý biến thể
-      productDetails.variants.forEach((variant, index) => {
-        formData.append(
-          `variants[${index}][product_order_type]`,
-          variant.product_order_type
-        );
-        formData.append(
-          `variants[${index}][product_price]`,
-          variant.product_price
-        );
-        formData.append(
-          `variants[${index}][product_countInStock]`,
-          variant.product_countInStock
-        );
+      // Xử lý biến thể
+      const variantsData = productDetails?.variants?.map((variant) => ({
+        product_order_type: variant.product_order_type,
+        product_price: variant.product_price,
+        product_countInStock: variant.product_countInStock,
+      }));
 
-        // Thêm ảnh biến thể
+      // Thêm JSON chứa các trường của biến thể vào formData
+      formData.append("variants", JSON.stringify(variantsData));
+
+      // Thêm ảnh biến thể riêng lẻ
+      productDetails?.variants?.forEach((variant, index) => {
         if (variant.variant_img) {
           formData.append(`variant_img_${index}`, variant.variant_img);
         }
@@ -268,6 +266,14 @@ const ProductModal = ({
           rules={[{ required: true }]}
         >
           <Input.TextArea placeholder="Nhập mô tả sản phẩm" rows={3} />
+        </Form.Item>
+
+        <Form.Item
+          label="Phần trăm giảm giá"
+          name="product_percent_discount"
+          rules={[{ required: false }]}
+        >
+          <InputNumber placeholder="Phần trăm giảm giá"/>
         </Form.Item>
 
         {/* Ảnh sản phẩm chính */}

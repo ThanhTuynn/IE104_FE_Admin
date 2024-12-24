@@ -6,8 +6,11 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import styles from './ListEmployeePage.module.scss'
+import styles from "./ListEmployeePage.module.scss";
 import Topbar from "../../components/TopbarComponent/TopbarComponent";
+import { getAllStaff } from "../../services/staff.service";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 // Hàm khởi tạo dữ liệu mẫu cho nhân viên
 const initData = () => [
@@ -18,7 +21,7 @@ const initData = () => [
     username: "john_bushmill",
     email: "john.bushmill@example.com",
     phone: "0123456789",
-    role: "Quản lý",
+    role: "Quản lý đơn hàng",
     password: "password123", // Added password field
   },
   {
@@ -28,7 +31,7 @@ const initData = () => [
     username: "laura_prichett",
     email: "laura.prichett@example.com",
     phone: "0987654321",
-    role: "Nhân viên",
+    role: "Quản lý khách hàng",
     password: "password123", // Added password field
   },
   {
@@ -38,7 +41,7 @@ const initData = () => [
     username: "mohammad_karim",
     email: "mohammad.karim@example.com",
     phone: "0933456789",
-    role: "Nhân viên",
+    role: "Quản lý kho",
     password: "password123", // Added password field
   },
   {
@@ -48,7 +51,7 @@ const initData = () => [
     username: "sarah_connor",
     email: "sarah.connor@example.com",
     phone: "0912345678",
-    role: "Quản lý",
+    role: "Quản lý sản phẩm",
     password: "password123", // Added password field
   },
 ];
@@ -61,6 +64,46 @@ const EmployeeList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  const fetchAllStaff = async () => {
+    try {
+      const allStaff = await getAllStaff(accessToken);
+      if (!allStaff || !allStaff.data) {
+        throw new Error("No allStaff data returned from API");
+      }
+      return allStaff; // React Query tự động xử lý Promise này
+    } catch (error) {
+      console.error("Error fetching allStaff data:", error.message);
+      throw new Error("Failed to fetch allStaff data");
+    }
+  };
+
+  // Sử dụng useQuery để gọi API
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["staff-data", accessToken],
+    queryFn: fetchAllStaff,
+    refetchOnWindowFocus: false, // Không fetch lại khi đổi tab
+    keepPreviousData: true, // Giữ dữ liệu cũ trong lúc fetch mới
+  });
+
+  useEffect(() => {
+    if (data?.data) {
+      const employees = data?.data?.map((employee) => ({
+        id: employee._id,
+        username: employee.staff_name,
+        role: employee.staff_role[0],
+        phone: employee.staff_phone,
+        employeeCode: employee._id,
+        name: employee.staff_name,
+        email: employee.staff_email,
+      }));
+      setEmployees(employees);
+
+      console.log("data nè:", employees);
+    }
+  }, [data]);
 
   const handleRoleFilterChange = (value) => setFilters(value);
 
@@ -115,7 +158,23 @@ const EmployeeList = () => {
       dataIndex: "role",
       key: "role",
       render: (role) => (
-        <Tag color={role === "Quản lý" ? "blue" : "red"}>{role}</Tag>
+        <Tag
+          color={
+            role === "Quản lý sản phẩm"
+              ? "blue"
+              : role === "Quản lý kho"
+              ? "green"
+              : role === "Quản lý khách hàng"
+              ? "purple"
+              : role === "Quản lý feedback"
+              ? "orange"
+              : role === "Quản lý đơn hàng"
+              ? "red"
+              : "default" // Màu mặc định nếu role không khớp
+          }
+        >
+          {role}
+        </Tag>
       ),
     },
   ];
@@ -221,7 +280,7 @@ const EmployeeList = () => {
           footer={null}
           centered
         >
-          <Form form={form} layout="vertical" onFinish={handleAddEmployee} >
+          <Form form={form} layout="vertical" onFinish={handleAddEmployee}>
             <Form.Item
               style={{ marginBottom: "12px" }}
               label="Họ tên"

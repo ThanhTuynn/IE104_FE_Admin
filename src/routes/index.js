@@ -145,7 +145,7 @@ const routes = [
     isProtected: true, // Chỉ truy cập nếu đã đăng nhập
   },
   {
-    path: "employee-detail/1",
+    path: "employee-detail/:id",
     page: DetailEmployeePage,
     isShowHeader: true,
     isProtected: true, // Chỉ truy cập nếu đã đăng nhập
